@@ -128,6 +128,32 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .lock-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #fff; margin: 0; }
 .lock-desc { font-size: 13px; color: rgba(255,255,255,0.65); margin: 0; line-height: 1.5; }
 
+/* ── Evidence / Clue section ── */
+.evidence-section { margin-top: 20px; }
+.evidence-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
+.evidence-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.evidence-hint { font-size: 13px; color: var(--muted); margin: 0; }
+.clue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 640px) { .clue-grid { grid-template-columns: 1fr; } }
+
+.clue-card { border-radius: 16px; border: 1.5px solid var(--line); background: var(--surface); overflow: hidden; transition: border-color 0.25s, opacity 0.25s; }
+.clue-card.unlocked { border-color: var(--accent); }
+.clue-card.disabled { opacity: 0.4; pointer-events: none; }
+
+.clue-locked-view { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.clue-category-row { display: flex; align-items: center; gap: 10px; }
+.clue-icon-wrap { width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.clue-category { font-size: 14px; font-weight: 700; color: var(--ink); }
+.clue-hint-text { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0; }
+.clue-unlock-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.clue-cost-badge { font-size: 11px; font-weight: 700; color: #92400E; background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.btn-unlock { font-size: 13px; font-weight: 700; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; padding: 7px 16px; transition: background 0.15s; }
+.btn-unlock:hover { background: var(--accent-soft); }
+
+.clue-revealed-view { padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.clue-unlocked-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--warn); display: flex; align-items: center; gap: 5px; }
+.clue-finding { font-size: 14px; line-height: 1.65; color: var(--ink); margin: 0; border-left: 3px solid var(--accent); padding-left: 14px; }
+
 /* ── Score tracker ── */
 .score-tracker {
   margin-top: 20px;
@@ -152,7 +178,6 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 }
 .tracker-dot.done { background: var(--accent); border-color: var(--accent); color: #fff; }
 .tracker-dot.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-.tracker-step-info { }
 .tracker-step-name { font-size: 12px; font-weight: 700; color: var(--ink); display: block; }
 .tracker-step-pts { font-size: 11px; color: var(--muted); display: block; }
 .tracker-line { width: 32px; height: 2px; background: var(--line); margin: 0 8px; flex-shrink: 0; transition: background 0.4s; }
@@ -227,15 +252,15 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .btn-reconsider { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--warn-border); background: #fff; font-size: 13px; font-weight: 700; color: #92400E; cursor: pointer; transition: background 0.15s; }
 .btn-reconsider:hover { background: #FEF3C7; }
 
-/* ── +pts badge (spawned by JS) ── */
+/* ── Floating point badges ── */
 .pts-badge { position: fixed; z-index: 9999; pointer-events: none; font-family: 'Fraunces', Georgia, serif; font-size: 22px; font-weight: 700; color: var(--accent); background: #fff; border: 2px solid var(--accent); border-radius: 999px; padding: 6px 16px; white-space: nowrap; box-shadow: 0 4px 20px rgba(11,107,97,0.25); }
+.minus-badge { position: fixed; z-index: 9999; pointer-events: none; font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 700; color: #92400E; background: var(--warn-bg); border: 2px solid var(--warn-border); border-radius: 999px; padding: 5px 14px; white-space: nowrap; box-shadow: 0 4px 16px rgba(180,83,9,0.2); }
 
 /* ── Final scorecard ── */
 .scorecard { margin-top: 24px; background: var(--ink); border-radius: 24px; overflow: hidden; }
 .scorecard-top { padding: 40px 40px 32px; text-align: center; }
 @media (max-width: 640px) { .scorecard-top { padding: 28px 20px 24px; } }
 .scorecard-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #7EC8C0; margin: 0 0 20px; }
-.scorecard-score { font-family: 'Fraunces', Georgia, serif; font-size: clamp(72px, 12vw, 100px); font-weight: 700; line-height: 1; color: #fff; display: block; }
 .scorecard-denom { font-size: 20px; color: rgba(255,255,255,0.4); font-weight: 600; }
 .scorecard-bar-wrap { margin: 20px auto; max-width: 400px; height: 8px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
 .scorecard-bar-fill { height: 100%; background: #7EC8C0; border-radius: 999px; width: 0; transition: width 1s ease; }
@@ -246,11 +271,14 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 @media (max-width: 640px) { .scorecard-breakdown { padding: 20px; } }
 .scorecard-breakdown-title { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 0 0 16px; }
 .breakdown-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
-.breakdown-row:last-of-type { border-bottom: none; }
 .breakdown-label { font-size: 14px; color: rgba(255,255,255,0.7); flex: 1; }
 .breakdown-label strong { color: #fff; font-weight: 600; }
 .breakdown-pts { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #7EC8C0; min-width: 60px; text-align: right; }
 .breakdown-pts.zero { color: rgba(255,255,255,0.3); }
+.breakdown-pts.deduct { color: #F59E0B; }
+.breakdown-total { border-top: 1px solid rgba(255,255,255,0.2); border-bottom: none; margin-top: 4px; }
+.breakdown-total .breakdown-label { font-weight: 700; color: #fff; }
+.breakdown-total .breakdown-pts { font-size: 24px; }
 
 .scorecard-takeaway { margin-top: 20px; background: rgba(126,200,192,0.12); border: 1px solid rgba(126,200,192,0.25); border-radius: 16px; padding: 18px 20px; }
 .scorecard-takeaway p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.75); margin: 0; }
@@ -391,30 +419,113 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
     </article>
   </section>
 
+  <!-- EVIDENCE / CLUE SECTION -->
+  <div class="evidence-section anim-ready" id="evidence-section">
+    <div class="evidence-header">
+      <p class="evidence-eyebrow">Dig deeper before you decide</p>
+      <p class="evidence-hint">Each clue costs 10 pts &mdash; use only what you need.</p>
+    </div>
+    <div class="clue-grid">
+
+      <!-- Clue 1: HR Records -->
+      <div class="clue-card" id="clue-card-1">
+        <div class="clue-locked-view" id="clue-locked-1">
+          <div class="clue-category-row">
+            <span class="clue-icon-wrap">
+              <svg width="16" height="16" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <span class="clue-category">HR Records</span>
+          </div>
+          <p class="clue-hint-text">Has the team actually grown since last quarter?</p>
+          <div class="clue-unlock-row">
+            <span class="clue-cost-badge">−10 pts</span>
+            <button class="btn-unlock" id="btn-clue-1" onclick="unlockClue(1)">Unlock</button>
+          </div>
+        </div>
+        <div class="clue-revealed-view hidden" id="clue-revealed-1">
+          <span class="clue-unlocked-label">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Clue unlocked &mdash; &minus;10 pts
+          </span>
+          <p class="clue-finding">Team headcount: 198 &mdash; unchanged for 6 months. HR confirms no new joiners in Q3.</p>
+        </div>
+      </div>
+
+      <!-- Clue 2: Login Activity -->
+      <div class="clue-card" id="clue-card-2">
+        <div class="clue-locked-view" id="clue-locked-2">
+          <div class="clue-category-row">
+            <span class="clue-icon-wrap">
+              <svg width="16" height="16" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </span>
+            <span class="clue-category">Login Activity</span>
+          </div>
+          <p class="clue-hint-text">Are all 48 licenses actually being used?</p>
+          <div class="clue-unlock-row">
+            <span class="clue-cost-badge">−10 pts</span>
+            <button class="btn-unlock" id="btn-clue-2" onclick="unlockClue(2)">Unlock</button>
+          </div>
+        </div>
+        <div class="clue-revealed-view hidden" id="clue-revealed-2">
+          <span class="clue-unlocked-label">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Clue unlocked &mdash; &minus;10 pts
+          </span>
+          <p class="clue-finding">25 of 48 licenses show zero logins in the past 90 days.</p>
+        </div>
+      </div>
+
+      <!-- Clue 3: Invoice Detail -->
+      <div class="clue-card" id="clue-card-3">
+        <div class="clue-locked-view" id="clue-locked-3">
+          <div class="clue-category-row">
+            <span class="clue-icon-wrap">
+              <svg width="16" height="16" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </span>
+            <span class="clue-category">Invoice Detail</span>
+          </div>
+          <p class="clue-hint-text">What exactly changed on this month&rsquo;s bill?</p>
+          <div class="clue-unlock-row">
+            <span class="clue-cost-badge">−10 pts</span>
+            <button class="btn-unlock" id="btn-clue-3" onclick="unlockClue(3)">Unlock</button>
+          </div>
+        </div>
+        <div class="clue-revealed-view hidden" id="clue-revealed-3">
+          <span class="clue-unlocked-label">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Clue unlocked &mdash; &minus;10 pts
+          </span>
+          <p class="clue-finding">The $5,000 spike maps exactly to 25 auto-renewed licenses at $200/month. All flagged active &mdash; none confirmed by people.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- SCORE TRACKER -->
   <div class="score-tracker anim-ready" id="score-tracker">
     <div class="tracker-steps">
       <div class="tracker-step">
         <div class="tracker-dot active" id="dot-1">1</div>
-        <div class="tracker-step-info">
+        <div>
           <span class="tracker-step-name">Decision</span>
-          <span class="tracker-step-pts">up to 40 pts</span>
+          <span class="tracker-step-pts" id="step1-pts-label">up to 40 pts</span>
         </div>
       </div>
       <div class="tracker-line" id="line-1"></div>
       <div class="tracker-step">
         <div class="tracker-dot" id="dot-2">2</div>
-        <div class="tracker-step-info">
+        <div>
           <span class="tracker-step-name">Action</span>
-          <span class="tracker-step-pts">up to 40 pts</span>
+          <span class="tracker-step-pts" id="step2-pts-label">up to 40 pts</span>
         </div>
       </div>
       <div class="tracker-line" id="line-2"></div>
       <div class="tracker-step">
         <div class="tracker-dot" id="dot-3">3</div>
-        <div class="tracker-step-info">
+        <div>
           <span class="tracker-step-name">Confidence</span>
-          <span class="tracker-step-pts">20 pts</span>
+          <span class="tracker-step-pts" id="step3-pts-label">20 pts</span>
         </div>
       </div>
     </div>
@@ -422,7 +533,7 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
       <span class="score-total-label">Your score</span>
       <div>
         <span class="score-num-big font-display" id="score-display">0</span>
-        <span class="score-denom">&thinsp;/ 100</span>
+        <span class="score-denom">&thinsp;/ <span id="score-max">100</span></span>
       </div>
     </div>
   </div>
@@ -548,9 +659,17 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
         <span class="breakdown-label" id="br-step2-label"></span>
         <span class="breakdown-pts" id="br-step2-pts"></span>
       </div>
-      <div class="breakdown-row" id="br-step3">
+      <div class="breakdown-row">
         <span class="breakdown-label"><strong>Step 3:</strong> Confidence check</span>
         <span class="breakdown-pts">+20</span>
+      </div>
+      <div class="breakdown-row hidden" id="br-clues">
+        <span class="breakdown-label" id="br-clues-label"></span>
+        <span class="breakdown-pts deduct" id="br-clues-pts"></span>
+      </div>
+      <div class="breakdown-row breakdown-total hidden" id="br-total">
+        <span class="breakdown-label"><strong>Total</strong></span>
+        <span class="breakdown-pts" id="br-total-pts"></span>
       </div>
 
       <div class="scorecard-takeaway" id="scorecard-takeaway">
@@ -580,10 +699,11 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 
 <script>
 /* ─── State ─── */
-var score = 0;
+var score = 0;        /* earned points only */
+var cluesUsed = 0;    /* number of clues unlocked (each costs 10 pts) */
 var step1Pts = 0;
 var step2Pts = 0;
-var step3Pts = 0;
+var step3Pts = 20;
 var decision = null;
 var actionChoice = null;
 var confidence = null;
@@ -600,11 +720,23 @@ var ACTION_FEEDBACK = {
 };
 
 var TIERS = [
-  { min: 100, label: "Full marks", desc: "Perfect sequence — you read the data, caught the gap, and chose the right action." },
-  { min: 80,  label: "Strong call", desc: "Right instinct, one step off on the action. The direction was correct." },
-  { min: 60,  label: "Right direction", desc: "Good instinct on the core call. The follow-through needed one more check." },
-  { min: 0,   label: "On the right track", desc: "Right instinct on the decision — refine the action next time." }
+  { min: 95, label: "Full marks",    desc: "No clues needed. You read the data, trusted your read, and acted on it cleanly." },
+  { min: 80, label: "Sharp eye",     desc: "Right call, right action. You used evidence wisely and kept your score high." },
+  { min: 65, label: "Strong call",   desc: "Right direction. The clues helped — just trust your read a step earlier next time." },
+  { min: 0,  label: "Right track",   desc: "Good instinct on the core call. The follow-through needed one more check." }
 ];
+
+/* ─── Helpers ─── */
+function getFinalScore() { return Math.max(0, score - cluesUsed * 10); }
+
+function updateMaxDisplay() {
+  var maxEl = document.getElementById('score-max');
+  var max = 100 - cluesUsed * 10;
+  gsap.to({ v: parseInt(maxEl.textContent) || 100 }, {
+    v: max, duration: 0.5, ease: 'power2.out',
+    onUpdate: function() { maxEl.textContent = Math.round(this.targets()[0].v); }
+  });
+}
 
 /* ─── Animations ─── */
 function revealEl(el, opts) {
@@ -634,11 +766,19 @@ function spawnPtsBadge(pts, refEl) {
   var cx = rect.left + rect.width / 2;
   var cy = rect.top + rect.height / 2;
   gsap.set(badge, { left: cx, top: cy + window.scrollY, xPercent: -50, yPercent: -50 });
-  gsap.to(badge, {
-    y: -70, opacity: 0, scale: 1.1, duration: 1.4,
-    ease: 'power2.out',
-    onComplete: function() { badge.remove(); }
-  });
+  gsap.to(badge, { y: -70, opacity: 0, scale: 1.1, duration: 1.4, ease: 'power2.out', onComplete: function() { badge.remove(); } });
+}
+
+function spawnMinusBadge(pts, refEl) {
+  var badge = document.createElement('div');
+  badge.className = 'minus-badge';
+  badge.textContent = '−' + pts + ' pts';
+  document.body.appendChild(badge);
+  var rect = refEl.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2;
+  var cy = rect.top + rect.height / 2;
+  gsap.set(badge, { left: cx, top: cy + window.scrollY, xPercent: -50, yPercent: -50 });
+  gsap.to(badge, { y: 55, opacity: 0, scale: 0.9, duration: 1.2, ease: 'power2.in', onComplete: function() { badge.remove(); } });
 }
 
 function animateScore(from, to) {
@@ -657,7 +797,6 @@ function unlockHumanLens() {
     opacity: 0, scale: 1.04, duration: 0.55, ease: 'power2.in',
     onComplete: function() { overlay.style.display = 'none'; }
   });
-  /* brief teal glow on the card */
   var card = document.getElementById('human-lens-card');
   gsap.fromTo(card,
     { boxShadow: '0 0 0 0 rgba(11,107,97,0)' },
@@ -677,19 +816,42 @@ function markTrackerStep(step, pts) {
       dot.innerHTML = '<svg width="14" height="14" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
     }
   });
-  if (line) {
-    gsap.to(line, { backgroundColor: '#0B6B61', duration: 0.5, delay: 0.2 });
-    line.classList.add('done');
+  if (line) { gsap.to(line, { backgroundColor: '#0B6B61', duration: 0.5, delay: 0.2 }); line.classList.add('done'); }
+  if (nextDot) { gsap.delayedCall(0.4, function() { nextDot.classList.add('active'); }); }
+  var ptLabels = ['step1-pts-label', 'step2-pts-label', 'step3-pts-label'];
+  var el = document.getElementById(ptLabels[step - 1]);
+  if (el) {
+    el.textContent = pts > 0 ? '+' + pts + ' pts' : '0 pts';
+    gsap.fromTo(el, { color: '#0B6B61' }, { color: '#5E6E7B', duration: 1.5, delay: 0.5 });
   }
-  if (nextDot) {
-    gsap.delayedCall(0.4, function() { nextDot.classList.add('active'); });
-  }
-  /* update step pts label */
-  var stepInfo = dot.parentElement.querySelector('.tracker-step-pts');
-  if (stepInfo) {
-    stepInfo.textContent = '+' + pts + ' pts';
-    gsap.fromTo(stepInfo, { color: '#0B6B61', fontWeight: 700 }, { color: '#5E6E7B', fontWeight: 400, duration: 1.5, delay: 0.5 });
-  }
+}
+
+/* ─── Clue unlock ─── */
+function unlockClue(n) {
+  var card = document.getElementById('clue-card-' + n);
+  var locked = document.getElementById('clue-locked-' + n);
+  var revealed = document.getElementById('clue-revealed-' + n);
+  if (!card || card.classList.contains('unlocked')) return;
+  if (decision) return; /* disabled after Step 1 is answered */
+
+  cluesUsed++;
+  card.classList.add('unlocked');
+  updateMaxDisplay();
+
+  var btn = document.getElementById('btn-clue-' + n);
+  spawnMinusBadge(10, btn);
+
+  gsap.to(locked, { opacity: 0, y: -6, duration: 0.2, ease: 'power2.in', onComplete: function() {
+    locked.classList.add('hidden');
+    revealEl(revealed, { y: 8, dur: 0.35 });
+  }});
+}
+
+function lockAllRemainingClues() {
+  [1,2,3].forEach(function(n) {
+    var card = document.getElementById('clue-card-' + n);
+    if (card && !card.classList.contains('unlocked')) card.classList.add('disabled');
+  });
 }
 
 /* ─── Timer ─── */
@@ -721,6 +883,7 @@ function chooseDecision(choice) {
   if (decision === choice) return;
   decision = choice;
   actionChoice = null; confidence = null;
+  lockAllRemainingClues();
 
   var keepBtn = document.getElementById('btn-keep');
   var overBtn = document.getElementById('btn-overrule');
@@ -731,7 +894,6 @@ function chooseDecision(choice) {
   overBtn.className = 'choice-btn' + (choice === 'overrule' ? ' selected' : '');
 
   if (choice === 'overrule') {
-    /* ✅ Correct */
     step1Pts = 40;
     var prevScore = score;
     score += 40;
@@ -740,7 +902,7 @@ function chooseDecision(choice) {
     document.getElementById('step1-icon').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
     document.getElementById('step1-label').textContent = 'Good call — +40 pts';
     document.getElementById('step1-title').textContent = 'You looked past the data and caught what the AI missed. The count was correct. The meaning was not.';
-    document.getElementById('step1-desc').textContent = 'That gap — between what AI counted and what actually happened — is exactly what today\'s session is about.';
+    document.getElementById('step1-desc').textContent = 'That gap — between what AI counted and what actually happened — is exactly what today’s session is about.';
     revealEl(fb);
     nudge.classList.add('hidden');
 
@@ -749,7 +911,6 @@ function chooseDecision(choice) {
     markTrackerStep(1, 40);
     unlockHumanLens();
 
-    /* Show step 2 */
     document.getElementById('cost-box').innerHTML = '<strong>Now you need to act.</strong> You can recover <strong>$2,000 a month, $24,000 a year</strong> in wasted spend — but you need to verify with HR first. You do not want to cancel a license someone still actually needs.';
     resetStep2UI(); resetStep3UI();
     document.getElementById('step3').classList.add('hidden');
@@ -760,7 +921,6 @@ function chooseDecision(choice) {
     }, 600);
 
   } else {
-    /* ❌ Wrong */
     step1Pts = 0;
     fb.className = 'feedback-box warn-bg';
     document.getElementById('step1-icon').innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
@@ -780,6 +940,11 @@ function chooseDecision(choice) {
 
 function reconsider() {
   decision = null;
+  /* Re-enable any locked (not yet unlocked) clue cards */
+  [1,2,3].forEach(function(n) {
+    var card = document.getElementById('clue-card-' + n);
+    if (card && !card.classList.contains('unlocked')) card.classList.remove('disabled');
+  });
   document.getElementById('btn-keep').className = 'choice-btn';
   document.getElementById('btn-overrule').className = 'choice-btn';
   hideEl(document.getElementById('step1-feedback'));
@@ -811,14 +976,12 @@ function chooseAction(key) {
   score += step2Pts;
 
   ['a','b','c'].forEach(function(k) {
-    var isSelected = k.toUpperCase() === key;
-    document.getElementById('btn-'+k).className = 'action-btn' + (isSelected ? ' selected' : '');
+    document.getElementById('btn-'+k).className = 'action-btn' + (k.toUpperCase()===key ? ' selected' : '');
     document.getElementById('key-'+k).className = 'action-key';
   });
 
-  var fb = document.getElementById('step2-feedback');
   document.getElementById('step2-text').textContent = ACTION_FEEDBACK[key];
-  revealEl(fb, { y: 10 });
+  revealEl(document.getElementById('step2-feedback'), { y: 10 });
 
   if (step2Pts > 0) {
     spawnPtsBadge(step2Pts, document.getElementById('btn-'+key.toLowerCase()));
@@ -846,7 +1009,6 @@ function resetStep3UI() {
 function chooseConfidence(choice) {
   if (!decision || !actionChoice || confidence === choice) return;
   confidence = choice;
-  step3Pts = 20;
   var prevScore = score;
   score += 20;
 
@@ -865,21 +1027,22 @@ function showScorecard() {
   var sc = document.getElementById('scorecard');
   revealEl(sc, { y: 32, dur: 0.6 });
 
-  var tier = TIERS.find(function(t) { return score >= t.min; }) || TIERS[TIERS.length-1];
+  var finalScore = getFinalScore();
+  var cluePenalty = cluesUsed * 10;
+
+  var tier = TIERS.find(function(t) { return finalScore >= t.min; }) || TIERS[TIERS.length-1];
   document.getElementById('scorecard-tier').textContent = tier.label;
   document.getElementById('scorecard-tier-desc').textContent = tier.desc;
 
   /* Animate final score number */
   var finalEl = document.getElementById('final-score-num');
   gsap.to({ v: 0 }, {
-    v: score, duration: 1.4, ease: 'power2.out', delay: 0.3,
+    v: finalScore, duration: 1.4, ease: 'power2.out', delay: 0.3,
     onUpdate: function() { finalEl.textContent = Math.round(this.targets()[0].v); }
   });
 
-  /* Animate bar */
   setTimeout(function() {
-    var bar = document.getElementById('score-bar');
-    bar.style.width = score + '%';
+    document.getElementById('score-bar').style.width = finalScore + '%';
   }, 400);
 
   /* Breakdown */
@@ -894,31 +1057,48 @@ function showScorecard() {
   document.getElementById('br-step2-pts').textContent = step2Pts > 0 ? '+'+step2Pts : '0';
   document.getElementById('br-step2-pts').className = 'breakdown-pts' + (step2Pts===0 ? ' zero' : '');
 
+  /* Clue penalty row */
+  if (cluePenalty > 0) {
+    var plural = cluesUsed === 1 ? 'clue' : 'clues';
+    document.getElementById('br-clues-label').innerHTML = '<strong>Clues used:</strong> ' + cluesUsed + ' ' + plural + ' &times; &minus;10 pts';
+    document.getElementById('br-clues-pts').textContent = '−' + cluePenalty;
+    document.getElementById('br-clues').classList.remove('hidden');
+    /* Total row */
+    document.getElementById('br-total-pts').textContent = finalScore;
+    document.getElementById('br-total').classList.remove('hidden');
+  } else {
+    document.getElementById('br-clues').classList.add('hidden');
+    document.getElementById('br-total').classList.add('hidden');
+  }
+
   /* Takeaway */
-  var takeawayTexts = {
-    100: '<strong>Perfect sequence.</strong> You identified the gap in the AI\'s data, acted on the human finding, and chose the most defensible path forward. This is the human-in-the-loop in practice.',
-    80:  '<strong>Right instinct, one step off.</strong> You correctly overruled the AI — but asking the vendor is not your first move. HR confirms who actually needs those licenses. The vendor has an incentive to keep them active.',
-    60:  '<strong>Right direction, one step off.</strong> You correctly overruled the AI. Next time: go to HR first to verify before asking the vendor or cancelling.',
-    40:  '<strong>Right call on the core decision.</strong> You identified the waste. The follow-through needed one more check — verify with HR before any cancellation to avoid disrupting active users.'
-  };
-  document.getElementById('scorecard-takeaway-text').innerHTML = takeawayTexts[score] || takeawayTexts[40];
+  var takeaway;
+  if (finalScore >= 95) {
+    takeaway = '<strong>Perfect sequence, no clues needed.</strong> You identified the gap in the AI’s data, acted on the human finding, and chose the most defensible path forward. This is the human-in-the-loop in practice.';
+  } else if (finalScore >= 80) {
+    takeaway = '<strong>Right call, right action.</strong> You verified before you acted and kept your score high. The clue cost was worth it — better to confirm than guess at $2,000/month.';
+  } else if (finalScore >= 65) {
+    takeaway = '<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.';
+  } else {
+    takeaway = '<strong>Right instinct on the core call.</strong> You spotted the waste. The follow-through needed one more check — verify with HR before any cancellation to avoid disrupting active users.';
+  }
+  document.getElementById('scorecard-takeaway-text').innerHTML = takeaway;
 
-  /* Stagger breakdown rows in */
-  gsap.fromTo('.breakdown-row', { opacity: 0, x: -12 }, { opacity: 1, x: 0, stagger: 0.12, duration: 0.4, delay: 0.8, ease: 'power2.out' });
-  gsap.fromTo('.scorecard-takeaway', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, delay: 1.4, ease: 'power2.out' });
+  gsap.fromTo('.breakdown-row', { opacity: 0, x: -12 }, { opacity: 1, x: 0, stagger: 0.1, duration: 0.4, delay: 0.8, ease: 'power2.out' });
+  gsap.fromTo('.scorecard-takeaway', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, delay: 1.5, ease: 'power2.out' });
 
-  setTimeout(function() {
-    sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 300);
+  setTimeout(function() { sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 300);
 }
 
 /* ─── Reset ─── */
 function resetActivity() {
   resetTimer();
-  score = 0; step1Pts = 0; step2Pts = 0; step3Pts = 0;
+  score = 0; cluesUsed = 0;
+  step1Pts = 0; step2Pts = 0;
   decision = null; actionChoice = null; confidence = null; humanUnlocked = false;
 
   document.getElementById('score-display').textContent = '0';
+  document.getElementById('score-max').textContent = '100';
   document.getElementById('btn-keep').className = 'choice-btn';
   document.getElementById('btn-overrule').className = 'choice-btn';
   document.getElementById('step1-feedback').className = 'feedback-box hidden';
@@ -926,7 +1106,19 @@ function resetActivity() {
   document.getElementById('step2').classList.add('hidden');
   document.getElementById('step3').classList.add('hidden');
   document.getElementById('scorecard').classList.add('hidden');
+  document.getElementById('br-clues').classList.add('hidden');
+  document.getElementById('br-total').classList.add('hidden');
   resetStep2UI(); resetStep3UI();
+
+  /* Reset clue cards */
+  [1,2,3].forEach(function(n) {
+    var card = document.getElementById('clue-card-' + n);
+    var locked = document.getElementById('clue-locked-' + n);
+    var revealed = document.getElementById('clue-revealed-' + n);
+    if (card) { card.classList.remove('unlocked', 'disabled'); }
+    if (locked) { locked.classList.remove('hidden'); gsap.set(locked, { opacity: 1, y: 0 }); }
+    if (revealed) { revealed.classList.add('hidden'); }
+  });
 
   /* Restore lock overlay */
   var overlay = document.getElementById('human-lock');
@@ -939,11 +1131,11 @@ function resetActivity() {
     var dot = document.getElementById('dot-'+n);
     dot.classList.remove('done', 'active');
     dot.innerHTML = n;
-    var stepInfo = dot.parentElement.querySelector('.tracker-step-pts');
-    var defaults = ['up to 40 pts', 'up to 40 pts', '20 pts'];
-    if (stepInfo) stepInfo.textContent = defaults[n-1];
   });
   document.getElementById('dot-1').classList.add('active');
+  document.getElementById('step1-pts-label').textContent = 'up to 40 pts';
+  document.getElementById('step2-pts-label').textContent = 'up to 40 pts';
+  document.getElementById('step3-pts-label').textContent = '20 pts';
   [1,2].forEach(function(n) {
     var line = document.getElementById('line-'+n);
     if (line) { line.classList.remove('done'); line.style.backgroundColor = ''; }
@@ -956,21 +1148,19 @@ function resetActivity() {
 window.addEventListener('DOMContentLoaded', function() {
   syncTimer();
 
-  /* Sequential entrance */
-  gsap.to('#anim-header',   { opacity:1, y:0, duration:0.6, ease:'power2.out', delay:0.1 });
-  gsap.to('#anim-context',  { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.25 });
-  gsap.to('#anim-timer',    { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.35 });
-  gsap.to('#anim-scenario', { opacity:1, y:0, duration:0.55, ease:'power2.out', delay:0.45 });
-  gsap.to('#score-tracker', { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.55 });
+  gsap.set(['#anim-header','#anim-context','#anim-timer','#anim-scenario','#evidence-section','#score-tracker'], { y: 20 });
+  gsap.set(['#ai-row-1','#ai-row-2','#ai-row-3','#ai-row-4'], { x: -16 });
 
-  /* AI rows stagger */
+  gsap.to('#anim-header',      { opacity:1, y:0, duration:0.6, ease:'power2.out', delay:0.1 });
+  gsap.to('#anim-context',     { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.25 });
+  gsap.to('#anim-timer',       { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.35 });
+  gsap.to('#anim-scenario',    { opacity:1, y:0, duration:0.55, ease:'power2.out', delay:0.45 });
+  gsap.to('#evidence-section', { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.6 });
+  gsap.to('#score-tracker',    { opacity:1, y:0, duration:0.5, ease:'power2.out', delay:0.7 });
+
   gsap.to(['#ai-row-1','#ai-row-2','#ai-row-3','#ai-row-4'], {
     opacity:1, x:0, stagger:0.1, duration:0.45, ease:'power2.out', delay:0.65
   });
-
-  /* Set initial positions */
-  gsap.set(['#anim-header','#anim-context','#anim-timer','#anim-scenario','#score-tracker'], { y: 20 });
-  gsap.set(['#ai-row-1','#ai-row-2','#ai-row-3','#ai-row-4'], { x: -16 });
 });
 </script>
 </body>
