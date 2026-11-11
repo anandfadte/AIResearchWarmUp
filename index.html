@@ -224,7 +224,6 @@ body {
   border: 1px solid var(--border-soft);
   border-radius: 10px;
   padding: 1.25rem;
-  position: relative;
 }
 .step-num {
   width: 32px;
@@ -383,7 +382,6 @@ body {
   color: var(--muted);
   line-height: 1.65;
   font-style: italic;
-  padding-top: 0.25rem;
   border-top: 1px solid var(--border-soft);
   padding-top: 0.875rem;
 }
@@ -418,21 +416,28 @@ body {
   transform: none;
 }
 
-/* Trace Container */
+/* ═══════════════════════════════════════════
+   TRACE TABLE — IMPROVED
+═══════════════════════════════════════════ */
 .trace-container {
   margin: 0 1.75rem 1.25rem;
   background: var(--trace-bg);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 .trace-header {
-  padding: 1rem 1.25rem 0.625rem;
+  padding: 1.125rem 1.5rem 0.875rem;
   border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
+.trace-header-left { flex: 1; min-width: 0; }
 .trace-title {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -440,48 +445,79 @@ body {
   margin-bottom: 0.3rem;
 }
 .trace-subtitle {
-  font-size: 12.5px;
-  color: rgba(240,235,224,0.6);
-  line-height: 1.55;
+  font-size: 13px;
+  color: rgba(240,235,224,0.55);
+  line-height: 1.5;
 }
-.trace-table-wrap { overflow-x: auto; padding: 0.25rem 1.25rem; }
+.trace-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--trace-text);
-  margin-bottom: 0.5rem;
+}
+thead tr {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 th {
   text-align: left;
-  padding: 0.6rem 0.875rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0.875rem 1.25rem;
   font-weight: 700;
   font-size: 11px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(240,235,224,0.6);
+  color: rgba(240,235,224,0.5);
   white-space: nowrap;
 }
-td {
-  padding: 0.6rem 0.875rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  vertical-align: top;
-  line-height: 1.55;
+th:first-child { width: 22%; min-width: 180px; }
+tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.045);
+  transition: background 0.1s;
 }
-tr:hover td { background: rgba(255,255,255,0.025); }
-tr:last-child td { border-bottom: none; }
-td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.018); }
+tbody tr:hover { background: rgba(255,255,255,0.045); }
+td {
+  padding: 0.875rem 1.25rem;
+  vertical-align: top;
+  line-height: 1.6;
+  font-size: 13.5px;
+}
+td:first-child {
+  font-weight: 700;
+  color: rgba(240,235,224,0.95);
+  font-size: 13px;
+}
+td:not(:first-child) {
+  color: rgba(240,235,224,0.75);
+}
+td:last-child {
+  color: rgba(240,235,224,0.55);
+  font-size: 12.5px;
+  font-style: italic;
+}
 .trace-note {
-  margin: 0.25rem 1.25rem 0.875rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-  padding: 0.6rem 0.875rem;
-  font-size: 12px;
-  color: rgba(240,235,224,0.6);
-  line-height: 1.55;
+  margin: 0;
+  padding: 0.875rem 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(232, 144, 42, 0.07);
+  font-size: 12.5px;
+  color: rgba(232, 144, 42, 0.85);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+.trace-note::before {
+  content: '◆';
+  font-size: 8px;
+  margin-top: 4px;
+  flex-shrink: 0;
+  opacity: 0.7;
 }
 
 /* ═══════════════════════════════════════════
@@ -497,13 +533,9 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   align-items: center;
   gap: 0.75rem;
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.65;
 }
-.lock-icon {
-  font-size: 28px;
-  line-height: 1;
-  filter: grayscale(1);
-}
+.lock-icon { font-size: 28px; line-height: 1; filter: grayscale(1); }
 .lock-eyebrow {
   font-size: 11px;
   font-weight: 800;
@@ -545,14 +577,11 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   flex-shrink: 0;
 }
 .decision-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   font-size: 12px;
+  font-weight: 800;
   color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .decision-choices {
   display: grid;
@@ -568,7 +597,6 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.1s;
   user-select: none;
-  position: relative;
 }
 .choice-card:hover {
   background: var(--surface-alt);
@@ -586,11 +614,7 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   background: var(--red-soft);
   box-shadow: 0 0 0 1px var(--red), 0 4px 12px rgba(240,112,112,0.12);
 }
-.choice-icon {
-  font-size: 18px;
-  margin-bottom: 0.5rem;
-  line-height: 1;
-}
+.choice-icon { font-size: 18px; margin-bottom: 0.5rem; line-height: 1; }
 .choice-label {
   font-size: 15px;
   font-weight: 800;
@@ -601,33 +625,56 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
 }
 .choice-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-/* Hold Reasons */
-.hold-reasons { margin-bottom: 1.125rem; }
-.hold-reasons-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 0.6rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+/* Reasons panel */
+.reasons-panel {
+  margin-bottom: 1.125rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  overflow: hidden;
 }
+.reasons-header {
+  padding: 0.75rem 1.125rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.reasons-header-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.reasons-header-dot.green { background: var(--green); }
+.reasons-header-dot.red { background: var(--red); }
+.reasons-header-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.reasons-list { padding: 0.5rem 0.875rem 0.75rem; }
 .reason-option {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border-soft);
+  padding: 0.75rem 0.875rem;
+  border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.375rem;
   transition: background 0.1s, border-color 0.1s;
   user-select: none;
 }
-.reason-option:hover { background: var(--surface-alt); }
-.reason-option.selected { background: var(--accent-soft); border-color: var(--accent); }
+.reason-option:last-child { margin-bottom: 0; }
+.reason-option:hover { background: var(--surface); border-color: var(--border-soft); }
+.reason-option.selected-green { background: var(--green-soft); border-color: var(--green); }
+.reason-option.selected-amber { background: var(--accent-soft); border-color: var(--accent); }
 .reason-radio {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border: 2px solid var(--border);
   border-radius: 50%;
   flex-shrink: 0;
@@ -647,12 +694,11 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   background: #fff;
   transition: transform 0.15s;
 }
-.reason-option.selected .reason-radio {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-.reason-option.selected .reason-radio::after { transform: translate(-50%,-50%) scale(1); }
-.reason-text { font-size: 14px; color: var(--text); line-height: 1.55; }
+.reason-option.selected-green .reason-radio { border-color: var(--green); background: var(--green); }
+.reason-option.selected-amber .reason-radio { border-color: var(--accent); background: var(--accent); }
+.reason-option.selected-green .reason-radio::after,
+.reason-option.selected-amber .reason-radio::after { transform: translate(-50%,-50%) scale(1); }
+.reason-text { font-size: 14px; color: var(--text); line-height: 1.6; }
 
 /* Confirm Button */
 .confirm-btn {
@@ -675,11 +721,7 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   box-shadow: 0 4px 14px rgba(200,104,26,0.35);
 }
 .confirm-btn:active:not(:disabled) { transform: translateY(0); }
-.confirm-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  box-shadow: none;
-}
+.confirm-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
 
 /* ═══════════════════════════════════════════
    VERDICT
@@ -691,14 +733,8 @@ td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
   border: 1.5px solid;
   box-shadow: var(--shadow-md);
 }
-.verdict-card.ok {
-  border-color: var(--green);
-  background: var(--green-soft);
-}
-.verdict-card.bad {
-  border-color: var(--red);
-  background: var(--red-soft);
-}
+.verdict-card.ok { border-color: var(--green); background: var(--green-soft); }
+.verdict-card.bad { border-color: var(--red); background: var(--red-soft); }
 .verdict-tag {
   display: inline-flex;
   align-items: center;
@@ -951,6 +987,11 @@ var PROPOSALS = [
     traceNote: "System Note: The AI assistant handled simple inquiries only; any follow-up email from the same customer opened a new Ticket ID in the counter.",
     approveLabel: "Approve $280K Rollout",
     approveDesc: "A 36% speed gain, 4.2/5 rating, and 1 fewer staff member show the pilot is ready to scale.",
+    approveReasons: [
+      { text: "The 36% speed gain and steady 4.2/5 satisfaction score show the AI is delivering clear, measurable value", correct: false },
+      { text: "One fewer headcount means payroll savings offset the AI licence fee — the numbers net out positively", correct: false },
+      { text: "With inbound demand flat and satisfaction holding, scaling to three hubs is the logical next step", correct: false }
+    ],
     holdLabel: "Hold Funding & Reject Scaling Now",
     holdDesc: "The data shows mixed signals — hold the $280K rollout until the underlying numbers reconcile.",
     holdReasons: [
@@ -962,7 +1003,7 @@ var PROPOSALS = [
     verdictSuccess: "Sound executive judgment — you held back $280K until real economics are fixed.",
     verdictFail: "Trap hit — positive-looking pilot ratings masked rising total monthly spend ($210K → $215K).",
     explanation: "Look at the balanced picture: the AI wasn't useless (4.2/5 rating on solved simple cases, payroll dipped $3.5K/mo). Yet scaling $280K right now fails the commercial test: 29% repeat contacts (~1,800/mo) re-opened as new fast Ticket IDs, human complex time crept up (18.1 → 21.4 min), overtime rose (120 → 195 hrs), and adding the $8.5K/mo AI fee raised total spend from $210K to $215K/mo instead of saving $420K/yr.",
-    promptTip: "Exclude re-opened repeat contacts within 24 hours, compare total monthly payroll + license cost before vs. during trial, and test whether $420K/yr savings actually exist in cash."
+    promptTip: "Exclude re-opened repeat contacts within 24 hours, compare total monthly payroll + licence cost before vs. during trial, and test whether $420K/yr savings actually exist in cash."
   },
   {
     id: "sample",
@@ -988,6 +1029,11 @@ var PROPOSALS = [
     traceNote: "Note: All three teams met contractual on-time delivery targets (95%–97%) throughout the quarter.",
     approveLabel: "Approve $350K Fee Discount",
     approveDesc: "A 22% satisfaction drop is too risky — offer the $350K rebate immediately.",
+    approveReasons: [
+      { text: "A 22% account-wide drop is a critical warning signal — acting fast before renewal protects the $8M relationship", correct: false },
+      { text: "The discount is small relative to the contract value and shows responsiveness to client feedback", correct: false },
+      { text: "The AI flagged an urgent risk and the survey data confirms the account is unhappy across the board", correct: false }
+    ],
     holdLabel: "Hold Discount & Target the Real Issue",
     holdDesc: "Examine which team dropped and how many people actually replied before conceding $350K.",
     holdReasons: [
@@ -1026,9 +1072,18 @@ var PROPOSALS = [
     traceNote: "Note: Contract allows a +2.0% ($0.36) annual adjustment; the remaining $2.19/claim comes from an unlisted surcharge.",
     approveLabel: "Approve Billing Audit",
     approveDesc: "The data checks out cleanly — pause automatic payments and challenge the unapproved surcharge.",
+    approveReasons: [
+      { text: "Volume, difficulty mix, and currency all matched — only an unlisted $2.19/claim surcharge on actual invoices explains the remaining gap beyond the 2% inflation cap", correct: true },
+      { text: "A 14% cost increase is within typical annual market variation for outsourced claims services", correct: false },
+      { text: "The supplier has a good track record so the increase is likely a one-time operational adjustment that will normalise", correct: false }
+    ],
     holdLabel: "Hold & Dismiss Report",
-    holdDesc: "Assume the 14% cost jump is just a normal inflation or data error and keep paying as-is.",
-    holdReasons: [],
+    holdDesc: "Assume the 14% cost jump is a normal data error and keep paying the supplier as-is.",
+    holdReasons: [
+      { text: "AI cost-analysis tools frequently flag routine inflation as anomalies — this is likely a false positive", correct: false },
+      { text: "Pausing auto-pay risks damaging the supplier relationship before the facts are confirmed", correct: false },
+      { text: "The 14% increase could reflect legitimate new service requirements agreed verbally with the team", correct: false }
+    ],
     correctDecision: "approve",
     verdictSuccess: "Excellent balance — good skepticism verifies facts rather than rejecting valid findings. You approved a real $320K recovery audit.",
     verdictFail: "Missed opportunity — volume, complexity mix, and currency matched, and real invoices showed an unlisted $2.19/claim surcharge beyond the 2% inflation cap.",
@@ -1045,7 +1100,7 @@ function newState() {
   return {
     round: 0,
     rounds: PROPOSALS.map(function() {
-      return { inspected: false, chosen: null, holdReasonIdx: null, confirmed: false };
+      return { inspected: false, chosen: null, approveReasonIdx: null, holdReasonIdx: null, confirmed: false };
     }),
     timerLeft: 240,
     timerInterval: null,
@@ -1111,9 +1166,15 @@ function selectChoice(i, choice) {
   if (state.rounds[i].confirmed) return;
   state.rounds[i].chosen = choice;
   if (choice === 'approve') state.rounds[i].holdReasonIdx = null;
+  if (choice === 'hold') state.rounds[i].approveReasonIdx = null;
   patchRound(i);
 }
-function selectReason(i, idx) {
+function selectApproveReason(i, idx) {
+  if (state.rounds[i].confirmed) return;
+  state.rounds[i].approveReasonIdx = idx;
+  patchRound(i);
+}
+function selectHoldReason(i, idx) {
   if (state.rounds[i].confirmed) return;
   state.rounds[i].holdReasonIdx = idx;
   patchRound(i);
@@ -1122,6 +1183,7 @@ function confirmDecision(i) {
   var r = state.rounds[i];
   var p = PROPOSALS[i];
   if (!r.chosen) return;
+  if (r.chosen === 'approve' && p.approveReasons.length > 0 && r.approveReasonIdx === null) return;
   if (r.chosen === 'hold' && p.holdReasons.length > 0 && r.holdReasonIdx === null) return;
   r.confirmed = true;
   patchRound(i);
@@ -1150,6 +1212,24 @@ function esc(s) {
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
+}
+function buildReasonsList(i, reasons, selectedIdx, fnName, dotColor, label) {
+  if (!reasons || reasons.length === 0) return '';
+  var selClass = dotColor === 'green' ? 'selected-green' : 'selected-amber';
+  var items = reasons.map(function(reason, idx) {
+    var sel = selectedIdx === idx ? (' ' + selClass) : '';
+    return '<div class="reason-option' + sel + '" onclick="' + fnName + '(' + i + ',' + idx + ')">'
+      + '<div class="reason-radio"></div>'
+      + '<div class="reason-text">' + esc(reason.text) + '</div>'
+      + '</div>';
+  }).join('');
+  return '<div class="reasons-panel">'
+    + '<div class="reasons-header">'
+      + '<div class="reasons-header-dot ' + dotColor + '"></div>'
+      + '<div class="reasons-header-label">' + esc(label) + '</div>'
+    + '</div>'
+    + '<div class="reasons-list">' + items + '</div>'
+    + '</div>';
 }
 
 // ═══════════════════════════════════════════
@@ -1186,8 +1266,12 @@ function buildProposal(i) {
 
   var traceHtml = r.inspected
     ? '<div class="trace-container">'
-        + '<div class="trace-header"><div class="trace-title">Raw Operational &amp; Financial Parameters</div>'
-        + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div></div>'
+        + '<div class="trace-header">'
+          + '<div class="trace-header-left">'
+            + '<div class="trace-title">Raw Operational &amp; Financial Parameters</div>'
+            + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div>'
+          + '</div>'
+        + '</div>'
         + '<div class="trace-table-wrap"><table><thead><tr>' + thHtml + '</tr></thead><tbody>' + tbHtml + '</tbody></table></div>'
         + '<div class="trace-note">' + esc(p.traceNote) + '</div>'
       + '</div>'
@@ -1197,16 +1281,20 @@ function buildProposal(i) {
     ? '<div class="trace-btn-wrap"><button class="trace-btn revealed">✓&nbsp;&nbsp;Underlying Parameters Revealed</button></div>'
     : '<div class="trace-btn-wrap"><button class="trace-btn" onclick="revealTrace(' + i + ')">&#128269;&nbsp;&nbsp;Step 2: Inspect the Underlying Parameters (15 sec)</button></div>';
 
-  // Step 3: locked if not yet inspected and not confirmed
   var bottomHtml;
   if (r.confirmed) {
-    var isCorrect = r.chosen === p.correctDecision
-      && (r.chosen !== 'hold' || p.holdReasons.length === 0
-          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
+    var isCorrect = r.chosen === p.correctDecision;
+    if (isCorrect) {
+      if (r.chosen === 'approve' && p.approveReasons.length > 0) {
+        isCorrect = r.approveReasonIdx !== null && p.approveReasons[r.approveReasonIdx].correct;
+      } else if (r.chosen === 'hold' && p.holdReasons.length > 0) {
+        isCorrect = r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct;
+      }
+    }
     var vClass  = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
     var vTag    = isCorrect ? '✓ Sound Decision' : '✗ Missed Signal';
     var vHead   = isCorrect ? p.verdictSuccess : p.verdictFail;
-    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard →' : 'Next Proposal →';
+    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard' : 'Next Proposal';
 
     bottomHtml = '<div class="verdict-wrap"><div class="' + vClass + '">'
       + '<div class="verdict-tag">' + vTag + '</div>'
@@ -1228,19 +1316,17 @@ function buildProposal(i) {
     var holdClass    = 'choice-card' + (r.chosen === 'hold'    ? ' selected-hold'    : '');
 
     var reasonsHtml = '';
-    if (r.chosen === 'hold' && p.holdReasons.length > 0) {
-      var items = p.holdReasons.map(function(reason, idx) {
-        var sel = r.holdReasonIdx === idx ? ' selected' : '';
-        return '<div class="reason-option' + sel + '" onclick="selectReason(' + i + ',' + idx + ')">'
-          + '<div class="reason-radio"></div>'
-          + '<div class="reason-text">' + esc(reason.text) + '</div>'
-          + '</div>';
-      }).join('');
-      reasonsHtml = '<div class="hold-reasons"><div class="hold-reasons-title">What is the primary reason to hold?</div>' + items + '</div>';
+    if (r.chosen === 'approve') {
+      reasonsHtml = buildReasonsList(i, p.approveReasons, r.approveReasonIdx, 'selectApproveReason', 'green', 'Primary reason to approve:');
+    } else if (r.chosen === 'hold') {
+      reasonsHtml = buildReasonsList(i, p.holdReasons, r.holdReasonIdx, 'selectHoldReason', 'red', 'Primary reason to hold:');
     }
 
     var isValid = r.chosen === 'approve'
-      || (r.chosen === 'hold' && (p.holdReasons.length === 0 || r.holdReasonIdx !== null));
+        ? (p.approveReasons.length === 0 || r.approveReasonIdx !== null)
+        : r.chosen === 'hold'
+          ? (p.holdReasons.length === 0 || r.holdReasonIdx !== null)
+          : false;
 
     bottomHtml = '<div class="decision-section">'
       + '<div class="decision-eyebrow">'
@@ -1288,9 +1374,14 @@ function buildScorecard() {
   var correctCount = 0, money = 0, inspected = 0;
   PROPOSALS.forEach(function(p, i) {
     var r = state.rounds[i];
-    var ok = r.chosen === p.correctDecision
-      && (r.chosen !== 'hold' || p.holdReasons.length === 0
-          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
+    var ok = r.chosen === p.correctDecision;
+    if (ok) {
+      if (r.chosen === 'approve' && p.approveReasons.length > 0) {
+        ok = r.approveReasonIdx !== null && p.approveReasons[r.approveReasonIdx].correct;
+      } else if (r.chosen === 'hold' && p.holdReasons.length > 0) {
+        ok = r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct;
+      }
+    }
     if (ok) { correctCount++; money += p.stakeK; }
     if (r.inspected) inspected++;
   });
@@ -1310,7 +1401,7 @@ function buildScorecard() {
       + '</div>'
       + '<div class="habits-title">3 Habits to Carry Into Today\'s Workshop</div>'
       + '<div class="habit-card"><strong>1. Look Underneath Averages</strong> — Positive pilot ratings or fast average times can hide mix shifts and repeat work. Check all parameters side by side.</div>'
-      + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts</strong> — Check net spend (payroll + overtime + license fees) and verify how many people or tickets were actually counted.</div>'
+      + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts</strong> — Check net spend (payroll + overtime + licence fees) and verify how many people or tickets were actually counted.</div>'
       + '<div class="habit-card"><strong>3. Verify Before Approving — Don\'t Reject Everything</strong> — Pause 15 seconds to connect the raw data points. Hold shaky rollouts, and back solid cases when evidence holds up.</div>'
       + '<div class="sc-actions">'
         + '<button class="reset-btn" onclick="resetAll()">↺ Try Again</button>'
