@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warm-Up 1: Approve or Hold? — Executive AI Check</title>
+<style>
+/* ── CSS VARIABLES ── */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --border: #cbd5e1;
+  --border-soft: #e2e8f0;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #d97706;
+  --accent-hover: #b45309;
+  --accent-soft: rgba(217, 119, 6, 0.12);
+  --green: #059669;
+  --green-soft: rgba(5, 150, 105, 0.12);
+  --red: #dc2626;
+  --red-soft: rgba(220, 38, 38, 0.11);
+  --brief-bg: #fffbeb;
+  --brief-border: #f59e0b;
+  --trace-bg: #0f172a;
+  --trace-text: #e2e8f0;
+}
+html.dark {
+  --bg: #0b0e14;
+  --surface: #131722;
+  --surface-alt: #1b2130;
+  --border: #334155;
+  --border-soft: #252e42;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-soft: rgba(245, 158, 11, 0.14);
+  --green: #34d399;
+  --green-soft: rgba(16, 185, 129, 0.14);
+  --red: #f87171;
+  --red-soft: rgba(239, 68, 68, 0.14);
+  --brief-bg: #1e1910;
+  --brief-border: #f59e0b;
+  --trace-bg: #0a0c10;
+  --trace-text: #e2e8f0;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+}
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.back-link:hover { color: var(--accent); }
+.topbar-sep {
+  color: var(--border);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+.pill {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.timer {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 3.5ch;
+  text-align: right;
+  transition: color 0.3s;
+}
+.timer.done { color: var(--muted); }
+.timer.urgent { color: var(--red); }
+.theme-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.theme-btn:hover { background: var(--border); }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── ONBOARDING ── */
+.onboarding {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+.onboarding-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.onboarding-intro {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.65;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
+.step-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 1rem;
+}
+.step-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.03em;
+}
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── PROPOSAL CARD ── */
+.proposal-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Context strip */
+.context-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border-soft);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.context-tag { font-size: 12px; color: var(--muted); font-weight: 500; }
+.stake-badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Situation */
+.situation {
+  padding: 1.25rem;
+  font-size: 14px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-soft);
+  line-height: 1.65;
+}
+
+/* AI Brief */
+.ai-brief {
+  background: var(--brief-bg);
+  border-left: 4px solid var(--brief-border);
+  margin: 1.25rem;
+  border-radius: 0 8px 8px 0;
+}
+.ai-brief-header {
+  background: var(--accent-soft);
+  padding: 0.5rem 1rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  border-radius: 0 8px 0 0;
+}
+.ai-brief-body { padding: 1rem; }
+.ai-headline {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 600px) { .metrics-grid { grid-template-columns: 1fr; } }
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.metric-k { font-size: 11px; color: var(--muted); margin-bottom: 0.25rem; font-weight: 500; }
+.metric-v {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+}
+.metric-sub { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.ai-summary { font-size: 13px; color: var(--muted); line-height: 1.6; font-style: italic; }
+
+/* Trace Button */
+.trace-btn-wrap { padding: 0 1.25rem 1.25rem; }
+.trace-btn {
+  width: 100%;
+  background: transparent;
+  border: 2px dashed var(--accent);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: center;
+}
+.trace-btn:hover { background: var(--accent-soft); }
+.trace-btn.revealed {
+  border-style: solid;
+  border-width: 1px;
+  background: var(--accent-soft);
+  cursor: default;
+}
+
+/* Trace Container */
+.trace-container {
+  margin: 0 1.25rem 1.25rem;
+  background: var(--trace-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.trace-header { padding: 0.75rem 1rem 0.5rem; }
+.trace-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--trace-text);
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+.trace-subtitle { font-size: 12px; color: var(--trace-text); opacity: 0.7; line-height: 1.5; }
+.trace-table-wrap { overflow-x: auto; padding: 0 1rem; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; color: var(--trace-text); margin-bottom: 0.75rem; }
+th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-weight: 600;
+  opacity: 0.9;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tr:last-child td { border-bottom: none; }
+.trace-note {
+  margin: 0.5rem 1rem 0.75rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 11px;
+  color: var(--trace-text);
+  opacity: 0.75;
+  line-height: 1.5;
+}
+
+/* Decision Section */
+.decision-section {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-soft);
+}
+.decision-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+.decision-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 500px) { .decision-choices { grid-template-columns: 1fr; } }
+.choice-card {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.choice-card:hover { background: var(--surface-alt); }
+.choice-card.selected-approve { border-color: var(--green); background: var(--green-soft); }
+.choice-card.selected-hold { border-color: var(--red); background: var(--red-soft); }
+.choice-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+.choice-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* Hold Reasons */
+.hold-reasons { margin-bottom: 1rem; }
+.hold-reasons-title { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+.reason-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.4rem;
+  transition: background 0.1s;
+  user-select: none;
+}
+.reason-option:hover { background: var(--surface-alt); }
+.reason-option.selected { background: var(--accent-soft); border-color: var(--accent); }
+.reason-radio {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: border-color 0.1s, background 0.1s;
+}
+.reason-option.selected .reason-radio { border-color: var(--accent); background: var(--accent); }
+.reason-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* Confirm Button */
+.confirm-btn {
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.confirm-btn:hover:not(:disabled) { background: var(--accent-hover); }
+.confirm-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Verdict */
+.verdict-card {
+  margin: 1.25rem;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1.5px solid;
+}
+.verdict-card.ok { border-color: var(--green); background: var(--green-soft); }
+.verdict-card.bad { border-color: var(--red); background: var(--red-soft); }
+.verdict-headline {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.verdict-card.ok .verdict-headline { color: var(--green); }
+.verdict-card.bad .verdict-headline { color: var(--red); }
+.verdict-explanation { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+.prompt-tip {
+  background: var(--trace-bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+.prompt-tip-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.prompt-tip-text { font-size: 12px; color: var(--trace-text); line-height: 1.6; }
+.next-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.next-btn:hover { background: var(--accent-hover); }
+
+/* ── SCORECARD ── */
+.scorecard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+}
+.sc-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.sc-title { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 0.4rem; }
+.sc-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.5; }
+.sc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 550px) { .sc-stats { grid-template-columns: 1fr; } }
+.sc-stat {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 1.25rem;
+  text-align: center;
+}
+.sc-stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sc-stat-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 28px;
+  font-weight: 800;
+}
+.sc-stat.green .sc-stat-value { color: var(--green); }
+.sc-stat.amber .sc-stat-value { color: var(--accent); }
+.habits-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+.habit-card {
+  border-left: 4px solid var(--accent);
+  background: var(--brief-bg);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.habit-card strong { color: var(--text); font-weight: 700; }
+.sc-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.reset-btn {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reset-btn:hover { background: var(--border); }
+.warmup2-link {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  transition: background 0.15s;
+}
+.warmup2-link:hover { background: var(--accent-hover); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="/" class="back-link">← Warm-Ups</a>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-title">Sign Off or Send Back?</span>
+  </div>
+  <div class="topbar-right">
+    <span class="pill" id="pill">Proposal 1 of 3</span>
+    <span class="timer" id="timer">04:00</span>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+  </div>
+</div>
+
+<div class="container" id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// PROPOSALS DATA
+// ═══════════════════════════════════════════
+var PROPOSALS = [
+  {
+    id: "mix",
+    context: "Technology Rollout Decision · Customer Support Hubs",
+    stake: "$280K Budget Request",
+    stakeK: 280,
+    situation: "Your team tested an AI reply assistant for 90 days to answer incoming customer emails faster. Some pilot metrics look encouraging, yet leadership needs a hard-nosed commercial check before approving $280,000 to roll it out across three more offices.",
+    headline: "AI Support Assistant Cut Average Reply Time 36% — Approve $280K Rollout",
+    metrics: [
+      { k: "Before AI Trial", v: "14.2 min", sub: "Average time to close a request" },
+      { k: "During AI Trial", v: "9.1 min (−36%)", sub: "Reported average across all requests" },
+      { k: "Projected Yearly Savings", v: "$420,000 / yr", sub: "Based on time saved per reply" }
+    ],
+    recommendation: "AI Proposal Summary: Reply speed jumped 36% while customer satisfaction held steady. Recommend approving $280K to scale across three more support hubs.",
+    traceSubtitle: "Compare all 7 operational metrics from the 90-day pilot log and monthly finance ledger:",
+    traceCols: ["Operational Parameter", "90 Days Before Trial", "During 90-Day Trial", "Notes from System Log"],
+    traceRows: [
+      ["Total Monthly Tickets Logged", "10,000 / mo", "11,800 / mo (+18%)", "Inbound customer demand was flat; logging system assigns a new Ticket ID whenever a customer re-opens an issue"],
+      ["Simple Requests (status checks, password resets)", "6,200 / mo · 8.0 min avg", "6,200 / mo · 3.8 min avg (AI)", "Solved on first reply: 71% · Customer wrote back within 24h: 29% (was 6% pre-trial)"],
+      ["Complex Requests (billing disputes, exceptions)", "3,800 / mo · 18.1 min avg", "3,800 / mo · 21.4 min avg (Staff)", "Customer satisfaction on complex cases: 4.3 / 5.0 (unchanged vs. pre-trial)"],
+      ["Pilot Satisfaction Score (Simple Replies)", "4.3 / 5.0", "4.2 / 5.0", "Customers liked fast responses when their issue was resolved on the first try"],
+      ["Support Team Staffing", "45 agents", "44 agents", "1 natural departure not replaced; no layoffs"],
+      ["Monthly Staff Overtime Hours", "120 hrs / mo", "195 hrs / mo", "Used to handle escalated follow-ups and peak evening queues"],
+      ["Monthly Cost (Payroll + AI Software)", "$210,000 / mo payroll", "$206,500 payroll + $8,500 AI fee", "Total monthly run-rate: $210,000 before → $215,000 during trial"]
+    ],
+    traceNote: "System Note: The AI assistant handled simple inquiries only; any follow-up email from the same customer opened a new Ticket ID in the counter.",
+    approveLabel: "Approve $280K Rollout",
+    approveDesc: "A 36% speed gain, 4.2/5 rating, and 1 fewer staff member show the pilot is ready to scale.",
+    holdLabel: "Hold Funding & Reject Scaling Now",
+    holdDesc: "The data shows mixed signals — hold the $280K rollout until the underlying numbers reconcile.",
+    holdReasons: [
+      { text: "Repeat contacts (29% on AI) inflated ticket volume as 'new solved tickets', overtime rose, and total monthly cost went UP ($210K → $215K)", correct: true },
+      { text: "Customer satisfaction collapsed completely across both simple and complex requests", correct: false },
+      { text: "The trial mixed up foreign currencies when estimating payroll costs", correct: false }
+    ],
+    correctDecision: "hold",
+    verdictSuccess: "Sound executive judgment — you held back $280K until real economics are fixed.",
+    verdictFail: "Trap hit — positive-looking pilot ratings masked rising total monthly spend ($210K → $215K).",
+    explanation: "Look at the balanced picture: the AI wasn't useless (4.2/5 rating on solved simple cases, payroll dipped $3.5K/mo). Yet scaling $280K right now fails the commercial test: 29% repeat contacts (~1,800/mo) re-opened as new fast Ticket IDs, human complex time crept up (18.1 → 21.4 min), overtime rose (120 → 195 hrs), and adding the $8.5K/mo AI fee raised total spend from $210K to $215K/mo instead of saving $420K/yr.",
+    promptTip: "Exclude re-opened repeat contacts within 24 hours, compare total monthly payroll + license cost before vs. during trial, and test whether $420K/yr savings actually exist in cash."
+  },
+  {
+    id: "sample",
+    context: "Client Relationship Review · Account Leadership",
+    stake: "$350K Fee Rebate Ask",
+    stakeK: 350,
+    situation: "An AI summary of quarterly client survey scores warns that a key $8M client account is deeply unhappy and recommends offering a $350,000 goodwill fee discount right away to protect the renewal.",
+    headline: "Client Satisfaction Dropped 22% — Approve $350K Fee Discount to Keep Account",
+    metrics: [
+      { k: "Last Quarter Score", v: "8.4 / 10", sub: "Client satisfaction rating" },
+      { k: "This Quarter Score", v: "6.5 / 10 (−22%)", sub: "Reported account average" },
+      { k: "Proposed Discount", v: "$350,000", sub: "One-time fee rebate" }
+    ],
+    recommendation: "AI Proposal Summary: Satisfaction fell sharply across the account. Offering an immediate $350K discount is advised before renewal talks start.",
+    traceSubtitle: "Review the service-by-service survey counts, contract sizes, and delivery performance:",
+    traceCols: ["Service Team", "Annual Contract Size", "Survey Replies Received", "Score (Q1 → Q2)", "On-Time Delivery & Operational Notes"],
+    traceRows: [
+      ["Core Finance Processing", "$4.8M / yr (60%)", "41 of 50 contacts (82%)", "8.5 → 8.4", "97% on-time · Zero escalations"],
+      ["Customer Support Desk", "$2.7M / yr (34%)", "28 of 36 contacts (78%)", "8.3 → 8.3", "96% on-time · Positive QBR feedback"],
+      ["Monthly Custom Reports", "$0.5M / yr (6%)", "2 of 25 contacts (8%)", "8.4 → 3.0", "95% on-time · 2 manual dashboard delays in May"],
+      ["Blended Calculation Method", "All 3 teams combined", "71 total replies across account", "Unweighted mean: 6.57", "Equal 1/3 weight applied to each team score regardless of contract value or reply count"]
+    ],
+    traceNote: "Note: All three teams met contractual on-time delivery targets (95%–97%) throughout the quarter.",
+    approveLabel: "Approve $350K Fee Discount",
+    approveDesc: "A 22% satisfaction drop is too risky — offer the $350K rebate immediately.",
+    holdLabel: "Hold Discount & Target the Real Issue",
+    holdDesc: "Examine which team dropped and how many people actually replied before conceding $350K.",
+    holdReasons: [
+      { text: "An unweighted average let just 2 survey replies in a tiny 6% reporting team create a false account-wide crisis", correct: true },
+      { text: "Core Finance and Support teams missed their delivery deadlines across the board", correct: false },
+      { text: "The survey numbers were copied from a different client account", correct: false }
+    ],
+    correctDecision: "hold",
+    verdictSuccess: "Great call — you protected $350K in margin instead of reacting to 2 noisy survey replies.",
+    verdictFail: "Trap hit — you gave away $350K when 94% of the client's teams rated delivery 8.3–8.4 out of 10.",
+    explanation: "Never treat an unweighted average as the truth. Two unhappy replies out of 25 contacts in a small reporting group (6% of contract value) pulled the unweighted average to 6.57, even though the revenue-weighted score is ~8.0 and core delivery stayed at 96–97%.",
+    promptTip: "Show the score and number of survey replies for each service team separately, weighted by contract value."
+  },
+  {
+    id: "valid",
+    context: "Supplier Cost Review · Claims Processing",
+    stake: "$320K Billing Audit",
+    stakeK: 320,
+    situation: "Not every AI report is wrong. Here, an AI invoice check flagged that an external supplier's processing cost per insurance claim jumped 14% last quarter and recommends pausing automatic payments to audit their bills.",
+    headline: "Cost Per Claim Jumped 14% Under Same Workload — Pause Auto-Pay & Audit Bills",
+    metrics: [
+      { k: "Jan–Mar Cost / Claim", v: "$18.20", sub: "Baseline contract rate" },
+      { k: "Apr–Jun Cost / Claim", v: "$20.75 (+14.0%)", sub: "Billed average" },
+      { k: "Extra Spend at Stake", v: "$320,000 / yr", sub: "Estimated overbilling" }
+    ],
+    recommendation: "AI Proposal Summary: Claim volume and complexity stayed unchanged while cost per claim rose $2.55. Recommend holding auto-payment and auditing invoices.",
+    traceSubtitle: "Compare all 5 underlying billing and workload checks from Jan–Mar vs. Apr–Jun:",
+    traceCols: ["Verification Parameter", "Jan–Mar Baseline", "Apr–Jun Actual", "Supporting Detail"],
+    traceRows: [
+      ["Total Claims Processed", "24,100 claims", "23,980 claims (−0.5%)", "Monthly claim throughput remained flat"],
+      ["Claim Difficulty Mix", "62% simple / 38% complex", "62% simple / 38% complex", "No shift toward higher-cost complex claims"],
+      ["Currency & Billing Units", "USD · per processed claim", "USD · per processed claim", "All invoices issued in US Dollars"],
+      ["Annual Contract Inflation Clause", "Scheduled CPI cap: +2.0%", "Applied +2.0% ($0.36/claim)", "Accounts for $0.36 of the $2.55 increase"],
+      ["Sampled Monthly Invoices (3 of 3)", "Base fee only", "Includes new 'Priority Handling' line ($2.19/claim)", "Not listed in signed contract rate schedule"]
+    ],
+    traceNote: "Note: Contract allows a +2.0% ($0.36) annual adjustment; the remaining $2.19/claim comes from an unlisted surcharge.",
+    approveLabel: "Approve Billing Audit",
+    approveDesc: "The data checks out cleanly — pause automatic payments and challenge the unapproved surcharge.",
+    holdLabel: "Hold & Dismiss Report",
+    holdDesc: "Assume the 14% cost jump is just a normal inflation or data error and keep paying as-is.",
+    holdReasons: [],
+    correctDecision: "approve",
+    verdictSuccess: "Excellent balance — good skepticism verifies facts rather than rejecting valid findings. You approved a real $320K recovery audit.",
+    verdictFail: "Missed opportunity — volume, complexity mix, and currency matched, and real invoices showed an unlisted $2.19/claim surcharge beyond the 2% inflation cap.",
+    explanation: "Unlike Proposals 1 and 2, this analysis held up across workload volume, difficulty mix, currency, and inflation benchmarks — and pointed directly to an uncontracted surcharge on actual invoices.",
+    promptTip: "Verify the underlying parameters for 15 seconds — hold back weak proposals, and act decisively when real evidence holds up."
+  }
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+var state = newState();
+
+function newState() {
+  return {
+    round: 0,
+    rounds: PROPOSALS.map(function() {
+      return { inspected: false, chosen: null, holdReasonIdx: null, confirmed: false };
+    }),
+    timerLeft: 240,
+    timerInterval: null,
+    showScorecard: false
+  };
+}
+
+function resetAll() {
+  clearInterval(state.timerInterval);
+  state = newState();
+  startTimer();
+  render();
+}
+
+// ═══════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════
+function fmt(s) {
+  return String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
+}
+
+function startTimer() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(function() {
+    if (state.timerLeft > 0) {
+      state.timerLeft--;
+      syncTimer();
+    } else {
+      clearInterval(state.timerInterval);
+      syncTimer();
+    }
+  }, 1000);
+}
+
+function syncTimer() {
+  var el = document.getElementById('timer');
+  if (!el) return;
+  if (state.showScorecard) {
+    el.textContent = '';
+    el.className = 'timer done';
+    return;
+  }
+  el.textContent = fmt(state.timerLeft);
+  el.className = state.timerLeft === 0 ? 'timer done' : (state.timerLeft <= 30 ? 'timer urgent' : 'timer');
+}
+
+function syncPill() {
+  var el = document.getElementById('pill');
+  if (!el) return;
+  el.textContent = state.showScorecard ? 'Complete' : ('Proposal ' + (state.round + 1) + ' of 3');
+}
+
+// ═══════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════
+function toggleTheme() {
+  var html = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  if (html.classList.contains('dark')) {
+    html.classList.remove('dark');
+    btn.textContent = 'Dark Mode';
+  } else {
+    html.classList.add('dark');
+    btn.textContent = 'Light Mode';
+  }
+}
+
+// ═══════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════
+function revealTrace(i) {
+  state.rounds[i].inspected = true;
+  patchRound(i);
+}
+
+function selectChoice(i, choice) {
+  if (state.rounds[i].confirmed) return;
+  state.rounds[i].chosen = choice;
+  if (choice === 'approve') state.rounds[i].holdReasonIdx = null;
+  patchRound(i);
+}
+
+function selectReason(i, idx) {
+  if (state.rounds[i].confirmed) return;
+  state.rounds[i].holdReasonIdx = idx;
+  patchRound(i);
+}
+
+function confirm(i) {
+  var r = state.rounds[i];
+  var p = PROPOSALS[i];
+  if (!r.chosen) return;
+  if (r.chosen === 'hold' && p.holdReasons.length > 0 && r.holdReasonIdx === null) return;
+  r.confirmed = true;
+  patchRound(i);
+}
+
+function advance() {
+  if (state.round < PROPOSALS.length - 1) {
+    state.round++;
+    syncPill();
+    render();
+  } else {
+    state.showScorecard = true;
+    clearInterval(state.timerInterval);
+    syncPill();
+    syncTimer();
+    render();
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════
+// SAFE HTML
+// ═══════════════════════════════════════════
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════
+// BUILD HTML
+// ═══════════════════════════════════════════
+function buildOnboarding() {
+  return '<div class="onboarding">'
+    + '<div class="onboarding-heading">HOW THIS 4-MINUTE ACTIVITY WORKS</div>'
+    + '<p class="onboarding-intro">Imagine an AI assistant just prepared 3 business proposals for your approval. Look closely at all the operational parameters — some metrics look positive while others hide costly flaws. Test your judgment:</p>'
+    + '<div class="steps-grid">'
+    + '<div class="step-card"><div class="step-label">Step 1 · Read the Proposal</div><div class="step-desc">Check the headline numbers and what funding or action the AI wants you to sign off on.</div></div>'
+    + '<div class="step-card"><div class="step-label">Step 2 · Inspect the Raw Parameters</div><div class="step-desc">Click the dashed button below to weigh the full set of operational &amp; cost numbers yourself.</div></div>'
+    + '<div class="step-card"><div class="step-label">Step 3 · Approve or Hold</div><div class="step-desc">Approve if the math genuinely holds up — or hold funding and justify why.</div></div>'
+    + '</div></div>';
+}
+
+function buildProposal(i) {
+  var p = PROPOSALS[i];
+  var r = state.rounds[i];
+
+  // ── Metric cards
+  var metricsHtml = p.metrics.map(function(m) {
+    return '<div class="metric-card">'
+      + '<div class="metric-k">' + esc(m.k) + '</div>'
+      + '<div class="metric-v">' + esc(m.v) + '</div>'
+      + '<div class="metric-sub">' + esc(m.sub) + '</div>'
+      + '</div>';
+  }).join('');
+
+  // ── Trace table
+  var thHtml = p.traceCols.map(function(c) { return '<th>' + esc(c) + '</th>'; }).join('');
+  var tbHtml = p.traceRows.map(function(row) {
+    return '<tr>' + row.map(function(cell) { return '<td>' + esc(cell) + '</td>'; }).join('') + '</tr>';
+  }).join('');
+
+  var traceHtml = r.inspected
+    ? '<div class="trace-container">'
+        + '<div class="trace-header">'
+          + '<div class="trace-title">RAW OPERATIONAL &amp; FINANCIAL PARAMETERS</div>'
+          + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div>'
+        + '</div>'
+        + '<div class="trace-table-wrap"><table><thead><tr>' + thHtml + '</tr></thead><tbody>' + tbHtml + '</tbody></table></div>'
+        + '<div class="trace-note">' + esc(p.traceNote) + '</div>'
+      + '</div>'
+    : '';
+
+  var traceBtnHtml = r.inspected
+    ? '<div class="trace-btn-wrap"><button class="trace-btn revealed">✓ Underlying Operational Parameters Revealed</button></div>'
+    : '<div class="trace-btn-wrap"><button class="trace-btn" onclick="revealTrace(' + i + ')">Step 2: Inspect the Underlying Parameters (15 sec)</button></div>';
+
+  // ── Decision or Verdict
+  var bottomHtml;
+  if (!r.confirmed) {
+    var approveClass = 'choice-card' + (r.chosen === 'approve' ? ' selected-approve' : '');
+    var holdClass    = 'choice-card' + (r.chosen === 'hold'    ? ' selected-hold'    : '');
+
+    var reasonsHtml = '';
+    if (r.chosen === 'hold' && p.holdReasons.length > 0) {
+      var items = p.holdReasons.map(function(reason, idx) {
+        var sel = r.holdReasonIdx === idx ? ' selected' : '';
+        return '<div class="reason-option' + sel + '" onclick="selectReason(' + i + ',' + idx + ')">'
+          + '<div class="reason-radio"></div>'
+          + '<div class="reason-text">' + esc(reason.text) + '</div>'
+          + '</div>';
+      }).join('');
+      reasonsHtml = '<div class="hold-reasons"><div class="hold-reasons-title">What is the primary reason to hold?</div>' + items + '</div>';
+    }
+
+    var isValid = r.chosen === 'approve'
+      || (r.chosen === 'hold' && (p.holdReasons.length === 0 || r.holdReasonIdx !== null));
+
+    bottomHtml = '<div class="decision-section">'
+      + '<div class="decision-title">Step 3: What is your executive decision?</div>'
+      + '<div class="decision-choices">'
+        + '<div class="' + approveClass + '" onclick="selectChoice(' + i + ',\'approve\')">'
+          + '<div class="choice-label">✓ ' + esc(p.approveLabel) + '</div>'
+          + '<div class="choice-desc">' + esc(p.approveDesc) + '</div>'
+        + '</div>'
+        + '<div class="' + holdClass + '" onclick="selectChoice(' + i + ',\'hold\')">'
+          + '<div class="choice-label">✗ ' + esc(p.holdLabel) + '</div>'
+          + '<div class="choice-desc">' + esc(p.holdDesc) + '</div>'
+        + '</div>'
+      + '</div>'
+      + reasonsHtml
+      + '<button class="confirm-btn" onclick="confirm(' + i + ')" ' + (isValid ? '' : 'disabled') + '>Confirm My Decision</button>'
+      + '</div>';
+  } else {
+    var isCorrect = r.chosen === p.correctDecision
+      && (r.chosen !== 'hold' || p.holdReasons.length === 0
+          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
+
+    var vClass    = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
+    var vHeadline = isCorrect ? p.verdictSuccess : p.verdictFail;
+    var nextLabel = (i === PROPOSALS.length - 1) ? 'See Final Scorecard →' : 'Next Proposal →';
+
+    bottomHtml = '<div class="' + vClass + '">'
+      + '<div class="verdict-headline">' + esc(vHeadline) + '</div>'
+      + '<div class="verdict-explanation">' + esc(p.explanation) + '</div>'
+      + '<div class="prompt-tip">'
+        + '<div class="prompt-tip-label">What to ask AI next time:</div>'
+        + '<div class="prompt-tip-text">' + esc(p.promptTip) + '</div>'
+      + '</div>'
+      + '<button class="next-btn" onclick="advance()">' + nextLabel + '</button>'
+      + '</div>';
+  }
+
+  return '<div class="proposal-wrap">'
+    + '<div class="context-strip">'
+      + '<span class="context-tag">' + esc(p.context) + '</span>'
+      + '<span class="stake-badge">' + esc(p.stake) + '</span>'
+    + '</div>'
+    + '<div class="situation">' + esc(p.situation) + '</div>'
+    + '<div class="ai-brief">'
+      + '<div class="ai-brief-header">AI-GENERATED PROPOSAL · WAITING FOR YOUR DECISION</div>'
+      + '<div class="ai-brief-body">'
+        + '<div class="ai-headline">' + esc(p.headline) + '</div>'
+        + '<div class="metrics-grid">' + metricsHtml + '</div>'
+        + '<div class="ai-summary">' + esc(p.recommendation) + '</div>'
+      + '</div>'
+    + '</div>'
+    + traceBtnHtml
+    + traceHtml
+    + bottomHtml
+    + '</div>';
+}
+
+function buildScorecard() {
+  var correctCount = 0, money = 0, inspected = 0;
+  PROPOSALS.forEach(function(p, i) {
+    var r = state.rounds[i];
+    var ok = r.chosen === p.correctDecision
+      && (r.chosen !== 'hold' || p.holdReasons.length === 0
+          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
+    if (ok) { correctCount++; money += p.stakeK; }
+    if (r.inspected) inspected++;
+  });
+
+  var moneyStr = money >= 1000
+    ? '$' + (money / 1000).toFixed(1).replace('.0','') + 'M'
+    : '$' + money + 'K';
+
+  return '<div class="scorecard">'
+    + '<div class="sc-eyebrow">YOUR 4-MINUTE EXECUTIVE SUMMARY</div>'
+    + '<div class="sc-title">Warm-Up Complete</div>'
+    + '<div class="sc-subtitle">You reviewed three AI-prepared business proposals totaling $950K in decisions.</div>'
+    + '<div class="sc-stats">'
+      + '<div class="sc-stat green"><div class="sc-stat-label">Sound Decisions</div><div class="sc-stat-value">' + correctCount + ' / 3</div></div>'
+      + '<div class="sc-stat amber"><div class="sc-stat-label">Money Protected / Recovered</div><div class="sc-stat-value">' + moneyStr + '</div></div>'
+      + '<div class="sc-stat green"><div class="sc-stat-label">Raw Data Checked</div><div class="sc-stat-value">' + inspected + ' / 3</div></div>'
+    + '</div>'
+    + '<div class="habits-title">3 Simple Habits to Carry Into Today\'s Workshop</div>'
+    + '<div class="habit-card"><strong>1. Look Underneath Averages:</strong> Positive pilot ratings or fast average times can hide mix shifts and repeat work. Check all parameters side by side.</div>'
+    + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts:</strong> Check net spend (payroll + overtime + license fees) and verify how many people or tickets were actually counted.</div>'
+    + '<div class="habit-card"><strong>3. Verify Before Approving — Don\'t Reject Everything:</strong> Pause 15 seconds to connect the raw data points. Hold shaky rollouts, and back solid cases when evidence holds up.</div>'
+    + '<div class="sc-actions">'
+      + '<button class="reset-btn" onclick="resetAll()">Try Again</button>'
+      + '<a href="/two-truths/" class="warmup2-link">Try Warm-Up 2 →</a>'
+    + '</div>'
+    + '</div>';
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function render() {
+  var app = document.getElementById('app');
+  if (!app) return;
+  if (state.showScorecard) {
+    app.innerHTML = buildScorecard();
+  } else {
+    app.innerHTML = buildOnboarding()
+      + '<div id="round-slot">' + buildProposal(state.round) + '</div>';
+  }
+  syncTimer();
+  syncPill();
+}
+
+function patchRound(i) {
+  var slot = document.getElementById('round-slot');
+  if (slot) slot.innerHTML = buildProposal(i);
+}
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  render();
+  startTimer();
+});
+</script>
+</body>
+</html>
