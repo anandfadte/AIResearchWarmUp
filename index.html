@@ -1,1472 +1,1102 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Warm-Up 1: Approve or Hold? — Executive AI Check</title>
+<title>Which Lens Decides? — Warm-Up</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════
-   CSS VARIABLES
-═══════════════════════════════════════════ */
 :root {
-  --bg: #f5f4f1;
-  --surface: #ffffff;
-  --surface-alt: #f0ede8;
-  --surface-alt2: #e8e4dd;
-  --border: #d4cec5;
-  --border-soft: #e4e0d9;
-  --text: #0f0f0e;
-  --text-secondary: #2d2b28;
-  --muted: #5c5852;
-  --accent: #c8681a;
-  --accent-hover: #a8540f;
-  --accent-soft: rgba(200, 104, 26, 0.10);
-  --accent-bright: #e07820;
-  --green: #0a7c4e;
-  --green-soft: rgba(10, 124, 78, 0.10);
-  --red: #c0352a;
-  --red-soft: rgba(192, 53, 42, 0.10);
-  --brief-bg: #fdf8f0;
-  --brief-border: #c8681a;
-  --trace-bg: #0f0e0d;
-  --trace-text: #e8e4dc;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 4px 10px rgba(0,0,0,0.06);
-}
-html.dark {
-  --bg: #0b0d0f;
-  --surface: #131519;
-  --surface-alt: #1a1d22;
-  --surface-alt2: #21252c;
-  --border: #2e3340;
-  --border-soft: #242830;
-  --text: #f0ede8;
-  --text-secondary: #d0ccc4;
-  --muted: #8a8a8a;
-  --accent: #e8902a;
-  --accent-hover: #d07820;
-  --accent-soft: rgba(232, 144, 42, 0.12);
-  --accent-bright: #f0a030;
-  --green: #2ecc8a;
-  --green-soft: rgba(46, 204, 138, 0.12);
-  --red: #f07070;
-  --red-soft: rgba(240, 112, 112, 0.12);
-  --brief-bg: #1c1810;
-  --brief-border: #e8902a;
-  --trace-bg: #09090b;
-  --trace-text: #e0dbd2;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.35);
+  --bg: #FAF9F6;
+  --surface: #FFFFFF;
+  --surface-2: #F1F1ED;
+  --ink: #172A3A;
+  --muted: #5E6E7B;
+  --line: #E2E2DC;
+  --accent: #0B6B61;
+  --accent-2: #0E8578;
+  --accent-soft: #E7F2F0;
+  --accent-soft-2: #D7E9E5;
 }
 
-/* ═══════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+
 html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
   background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 16px;
-  line-height: 1.65;
-  transition: background 0.25s, color 0.25s;
+  color: var(--ink);
+  font-family: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ═══════════════════════════════════════════
-   TOP BAR
-═══════════════════════════════════════════ */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  height: 62px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  box-shadow: var(--shadow-sm);
-}
-.topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  min-width: 0;
-}
-.back-link {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  transition: color 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.back-link:hover { color: var(--accent); }
-.topbar-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
-.topbar-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.01em;
-}
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-shrink: 0;
-}
-.pill {
-  background: var(--accent-soft);
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  padding: 3px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-.timer {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 16px;
-  font-weight: 800;
-  color: var(--accent);
-  min-width: 3.5ch;
-  text-align: right;
-  transition: color 0.3s;
-  letter-spacing: 0.03em;
-}
-.timer.done { color: var(--muted); }
-.timer.urgent { color: var(--red); }
-.theme-btn {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  letter-spacing: 0.02em;
-}
-.theme-btn:hover { background: var(--border); color: var(--text); }
-
-/* ═══════════════════════════════════════════
-   CONTAINER
-═══════════════════════════════════════════ */
-.container {
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 2.5rem 1.75rem 5rem;
-}
-
-/* ═══════════════════════════════════════════
-   ONBOARDING
-═══════════════════════════════════════════ */
-.onboarding {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
-}
-.onboarding-eyebrow {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-}
-.onboarding-heading {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 0.6rem;
-  letter-spacing: -0.02em;
-  line-height: 1.3;
-}
-.onboarding-intro {
-  font-size: 15px;
-  color: var(--muted);
-  margin-bottom: 1.75rem;
-  line-height: 1.7;
-  max-width: 700px;
-}
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-@media (max-width: 640px) { .steps-grid { grid-template-columns: 1fr; } }
-.step-card {
-  background: var(--surface-alt);
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 1.25rem;
-}
-.step-num {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-soft);
-  border: 1.5px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--accent);
-  margin-bottom: 0.75rem;
-}
-.step-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.01em;
-}
-.step-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-/* ═══════════════════════════════════════════
-   PROPOSAL CARD
-═══════════════════════════════════════════ */
-.proposal-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-
-/* Context strip */
-.context-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.75rem;
-  background: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.context-tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.stake-badge {
-  background: var(--accent-soft);
-  color: var(--accent);
-  border: 1.5px solid var(--accent);
-  border-radius: 999px;
-  padding: 4px 14px;
-  font-size: 12px;
-  font-weight: 800;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-}
-
-/* Situation */
-.situation {
-  padding: 1.5rem 1.75rem;
-  font-size: 15px;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border-soft);
-  line-height: 1.75;
-}
-
-/* AI Brief */
-.ai-brief {
-  margin: 1.5rem 1.75rem;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--brief-border);
-  box-shadow: 0 0 0 1px var(--accent-soft);
-}
-.ai-brief-header {
-  background: var(--accent-soft);
-  padding: 0.6rem 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--accent-soft);
-}
-.ai-brief-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.ai-brief-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  text-transform: uppercase;
-}
-.ai-brief-body {
-  background: var(--brief-bg);
-  padding: 1.5rem 1.25rem;
-}
-.ai-headline {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 1.25rem;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
-}
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.875rem;
-  margin-bottom: 1.25rem;
-}
-@media (max-width: 600px) { .metrics-grid { grid-template-columns: 1fr; } }
-.metric-card {
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  padding: 1rem 1.125rem;
-  box-shadow: var(--shadow-sm);
-}
-.metric-k {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.metric-v {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.1;
-  margin-bottom: 0.3rem;
-  letter-spacing: -0.02em;
-}
-.metric-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
-.ai-summary {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.65;
-  font-style: italic;
-  border-top: 1px solid var(--border-soft);
-  padding-top: 0.875rem;
-}
-
-/* Trace Button */
-.trace-btn-wrap { padding: 0 1.75rem 1.25rem; }
-.trace-btn {
-  width: 100%;
-  background: transparent;
-  border: 2px dashed var(--accent);
-  color: var(--accent);
-  border-radius: 10px;
-  padding: 0.875rem 1rem;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  text-align: center;
-  letter-spacing: 0.01em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-.trace-btn:hover { background: var(--accent-soft); transform: translateY(-1px); }
-.trace-btn:active { transform: translateY(0); }
-.trace-btn.revealed {
-  border-style: solid;
-  border-width: 1px;
-  background: var(--accent-soft);
-  cursor: default;
-  transform: none;
-}
-
-/* ═══════════════════════════════════════════
-   TRACE TABLE — IMPROVED
-═══════════════════════════════════════════ */
-.trace-container {
-  margin: 0 1.75rem 1.25rem;
-  background: var(--trace-bg);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.07);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.trace-header {
-  padding: 1.125rem 1.5rem 0.875rem;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.trace-header-left { flex: 1; min-width: 0; }
-.trace-title {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.3rem;
-}
-.trace-subtitle {
-  font-size: 13px;
-  color: rgba(240,235,224,0.55);
   line-height: 1.5;
 }
-.trace-table-wrap {
-  overflow: hidden;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-  color: var(--trace-text);
-  table-layout: fixed;
-}
-thead tr {
-  background: rgba(255,255,255,0.04);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-th {
-  text-align: left;
-  padding: 0.875rem 1.25rem;
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(240,235,224,0.5);
-  word-break: break-word;
-}
-th:first-child { width: 20%; }
-th:last-child { width: 28%; }
-tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.045);
-  transition: background 0.1s;
-}
-tbody tr:last-child { border-bottom: none; }
-tbody tr:nth-child(even) { background: rgba(255,255,255,0.018); }
-tbody tr:hover { background: rgba(255,255,255,0.045); }
-td {
-  padding: 0.875rem 1.25rem;
-  vertical-align: top;
-  line-height: 1.6;
-  font-size: 13.5px;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-td:first-child {
-  font-weight: 700;
-  color: rgba(240,235,224,0.95);
-  font-size: 13px;
-}
-td:not(:first-child) {
-  color: rgba(240,235,224,0.75);
-}
-td:last-child {
-  color: rgba(240,235,224,0.55);
-  font-size: 12.5px;
-  font-style: italic;
-}
-.trace-note {
-  margin: 0;
-  padding: 0.875rem 1.5rem;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  background: rgba(232, 144, 42, 0.07);
-  font-size: 12.5px;
-  color: rgba(232, 144, 42, 0.85);
-  line-height: 1.6;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-}
-.trace-note::before {
-  content: '◆';
-  font-size: 8px;
-  margin-top: 4px;
-  flex-shrink: 0;
-  opacity: 0.7;
+
+.font-display {
+  font-family: 'Fraunces', Georgia, serif;
 }
 
-/* ═══════════════════════════════════════════
-   STEP 3 LOCKED
-═══════════════════════════════════════════ */
-.decision-locked {
-  margin: 0 1.75rem 1.75rem;
-  border: 2px dashed var(--border);
-  border-radius: 10px;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  text-align: center;
-  opacity: 0.65;
-}
-.lock-icon { font-size: 28px; line-height: 1; filter: grayscale(1); }
-.lock-eyebrow {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.lock-text {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 400px;
-}
-
-/* ═══════════════════════════════════════════
-   DECISION SECTION
-═══════════════════════════════════════════ */
-.decision-section {
-  padding: 1.75rem;
-  border-top: 1px solid var(--border-soft);
-}
-.decision-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-.decision-step-badge {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  color: #fff;
-  flex-shrink: 0;
-}
-.decision-title {
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.decision-choices {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.875rem;
-  margin-bottom: 1.125rem;
-}
-@media (max-width: 520px) { .decision-choices { grid-template-columns: 1fr; } }
-.choice-card {
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  padding: 1.25rem;
+button {
+  font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.1s;
-  user-select: none;
-}
-.choice-card:hover {
-  background: var(--surface-alt);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-.choice-card:active { transform: translateY(0); }
-.choice-card.selected-approve {
-  border-color: var(--green);
-  background: var(--green-soft);
-  box-shadow: 0 0 0 1px var(--green), 0 4px 12px rgba(46,204,138,0.12);
-}
-.choice-card.selected-hold {
-  border-color: var(--red);
-  background: var(--red-soft);
-  box-shadow: 0 0 0 1px var(--red), 0 4px 12px rgba(240,112,112,0.12);
-}
-.choice-icon { font-size: 18px; margin-bottom: 0.5rem; line-height: 1; }
-.choice-label {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-.choice-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-/* Reasons panel */
-.reasons-panel {
-  margin-bottom: 1.125rem;
-  background: var(--surface-alt);
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.reasons-header {
-  padding: 0.75rem 1.125rem;
-  border-bottom: 1px solid var(--border-soft);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.reasons-header-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.reasons-header-dot.green { background: var(--green); }
-.reasons-header-dot.red { background: var(--red); }
-.reasons-header-label {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.reasons-list { padding: 0.5rem 0.875rem 0.75rem; }
-.reason-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem 0.875rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 0.375rem;
-  transition: background 0.1s, border-color 0.1s;
-  user-select: none;
-}
-.reason-option:last-child { margin-bottom: 0; }
-.reason-option:hover { background: var(--surface); border-color: var(--border-soft); }
-.reason-option.selected-green { background: var(--green-soft); border-color: var(--green); }
-.reason-option.selected-amber { background: var(--accent-soft); border-color: var(--accent); }
-.reason-radio {
-  width: 17px;
-  height: 17px;
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 2px;
-  transition: border-color 0.1s, background 0.1s;
-  position: relative;
-}
-.reason-radio::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%) scale(0);
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.15s;
-}
-.reason-option.selected-green .reason-radio { border-color: var(--green); background: var(--green); }
-.reason-option.selected-amber .reason-radio { border-color: var(--accent); background: var(--accent); }
-.reason-option.selected-green .reason-radio::after,
-.reason-option.selected-amber .reason-radio::after { transform: translate(-50%,-50%) scale(1); }
-.reason-text { font-size: 14px; color: var(--text); line-height: 1.6; }
-
-/* Confirm Button */
-.confirm-btn {
-  width: 100%;
-  background: var(--accent);
-  color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 1rem;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: background 0.15s, opacity 0.15s, transform 0.1s, box-shadow 0.15s;
-  letter-spacing: 0.01em;
-  box-shadow: 0 2px 8px rgba(200,104,26,0.3);
+  background: none;
 }
-.confirm-btn:hover:not(:disabled) {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(200,104,26,0.35);
-}
-.confirm-btn:active:not(:disabled) { transform: translateY(0); }
-.confirm-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
 
-/* ═══════════════════════════════════════════
-   VERDICT
-═══════════════════════════════════════════ */
-.verdict-wrap { margin: 1.75rem; }
-.verdict-card {
+button:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
   border-radius: 10px;
-  padding: 1.5rem;
-  border: 1.5px solid;
-  box-shadow: var(--shadow-md);
 }
-.verdict-card.ok { border-color: var(--green); background: var(--green-soft); }
-.verdict-card.bad { border-color: var(--red); background: var(--red-soft); }
-.verdict-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+
+/* ── Layout ── */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+@media (max-width: 640px) {
+  .page { padding: 32px 20px 48px; }
+}
+
+/* ── Header ── */
+.header { max-width: 760px; }
+
+.eyebrow {
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-.verdict-card.ok .verdict-tag { color: var(--green); background: var(--green-soft); border: 1px solid var(--green); }
-.verdict-card.bad .verdict-tag { color: var(--red); background: var(--red-soft); border: 1px solid var(--red); }
-.verdict-headline {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-}
-.verdict-card.ok .verdict-headline { color: var(--green); }
-.verdict-card.bad .verdict-headline { color: var(--red); }
-.verdict-explanation {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 1.25rem;
-}
-.prompt-tip {
-  background: var(--trace-bg);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 8px 8px 0;
-  padding: 1rem 1.125rem;
-  margin-bottom: 1.25rem;
-}
-.prompt-tip-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.4rem;
+  margin: 0 0 16px;
 }
-.prompt-tip-text {
+
+.title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(38px, 6vw, 62px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.subtitle {
+  font-size: clamp(17px, 2.5vw, 21px);
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Context Bar ── */
+.context-bar {
+  margin-top: 32px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.context-bar strong { color: var(--ink); }
+
+/* ── Timer ── */
+.timer-row {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.timer-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
-  color: var(--trace-text);
-  line-height: 1.65;
-  opacity: 0.85;
+  font-weight: 600;
+  color: var(--muted);
 }
-.next-btn {
+
+.timer-label svg { opacity: 0.7; }
+
+.timer-display {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  min-width: 62px;
+  text-align: center;
+  color: var(--ink);
+}
+
+.timer-display.urgent { color: #B54708; }
+.timer-display.done { color: var(--muted); }
+
+.timer-status {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.timer-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-primary {
   background: var(--accent);
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  letter-spacing: 0.01em;
-  box-shadow: 0 2px 8px rgba(200,104,26,0.28);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.next-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
-.retry-btn {
-  background: transparent;
-  color: var(--muted);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  font-size: 14px;
   font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, transform 0.1s;
-  letter-spacing: 0.01em;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  transition: opacity 0.15s;
 }
-.retry-btn:hover { background: var(--surface-alt); color: var(--text); transform: translateY(-1px); }
-.scenario-counter {
+
+.btn-primary:disabled { opacity: 0.45; cursor: default; }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  transition: border-color 0.15s;
+}
+
+.btn-secondary:hover { border-color: var(--accent); }
+
+/* ── Split View ── */
+.split-view {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 700px) {
+  .split-view { grid-template-columns: 1fr; }
+}
+
+.lens-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.lens-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.lens-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lens-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 11px;
   font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.lens-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--ink);
+}
+
+.basis-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
   white-space: nowrap;
 }
 
-/* ═══════════════════════════════════════════
-   SCORECARD
-═══════════════════════════════════════════ */
-.scorecard {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-.scorecard-header {
-  background: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
-  padding: 2rem 2rem 1.5rem;
-}
-.sc-eyebrow {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.basis-badge.teal {
+  background: var(--accent-soft);
   color: var(--accent);
-  margin-bottom: 0.5rem;
 }
-.sc-title {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.03em;
-}
-.sc-subtitle { font-size: 15px; color: var(--muted); line-height: 1.6; }
-.sc-body { padding: 2rem; }
-.sc-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-@media (max-width: 580px) { .sc-stats { grid-template-columns: 1fr; } }
-.sc-stat {
-  background: var(--surface-alt);
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 1.5rem 1.25rem;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
-}
-.sc-stat::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-}
-.sc-stat.green::before { background: var(--green); }
-.sc-stat.amber::before { background: var(--accent); }
-.sc-stat-label {
-  font-size: 11px;
-  font-weight: 700;
+
+.basis-badge.grey {
+  background: var(--surface);
+  border: 1px solid var(--line);
   color: var(--muted);
-  margin-bottom: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
-.sc-stat-value {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 36px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+
+/* AI Lens list */
+.ai-list { padding: 12px 16px; }
+
+.ai-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 12px;
+  border-radius: 16px;
+}
+
+.ai-row.top { background: var(--accent-soft); }
+
+.rank-badge {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.rank-badge.top { background: var(--accent); color: #fff; }
+.rank-badge.other { background: var(--surface-2); color: var(--ink); }
+
+.ai-row-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-row-name .name { font-size: 17px; font-weight: 700; line-height: 1.2; }
+.ai-row-name .top-badge {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ai-score-block {
+  text-align: right;
+}
+
+.ai-score-block .score-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ai-score-block .score-num {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
   line-height: 1;
 }
-.sc-stat.green .sc-stat-value { color: var(--green); }
-.sc-stat.amber .sc-stat-value { color: var(--accent); }
-.habits-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 1.125rem;
-  letter-spacing: -0.02em;
+
+.lens-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  background: var(--surface-2);
+  padding: 16px 28px;
 }
-.habit-card {
-  border-left: 4px solid var(--accent);
-  background: var(--brief-bg);
-  border-radius: 0 10px 10px 0;
-  padding: 1rem 1.25rem;
-  margin-bottom: 0.875rem;
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.65;
-  box-shadow: var(--shadow-sm);
-}
-.habit-card strong { color: var(--text); font-weight: 800; }
-.sc-actions {
+
+.lens-footer .footer-title { font-size: 14px; font-weight: 700; color: var(--accent); margin: 0 0 4px; }
+.lens-footer .footer-desc { font-size: 13px; line-height: 1.5; color: var(--muted); margin: 0; }
+
+/* Human Lens */
+.human-body {
+  flex: 1;
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-soft);
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px;
 }
-.reset-btn {
-  background: var(--surface-alt);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
+
+.human-quote {
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin: 0 0 24px;
+}
+
+.human-quote p {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+  color: var(--ink);
+}
+
+.human-note {
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+.human-note strong { color: var(--ink); }
+
+.human-lens-footer {
+  border-top: 1px solid var(--line);
+  padding: 16px 28px;
+}
+
+.human-lens-footer p {
+  margin: 0;
   font-size: 14px;
   font-weight: 700;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  letter-spacing: 0.01em;
+  color: var(--ink);
 }
-.reset-btn:hover { background: var(--border); transform: translateY(-1px); }
-.warmup2-link {
-  display: inline-flex;
+
+/* ── Section ── */
+.section {
+  margin-top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 32px;
+}
+
+@media (max-width: 640px) {
+  .section { padding: 20px; }
+}
+
+.step-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.section-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+
+.section-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-header-row .section-title { margin: 0; }
+
+.section-hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Choice Buttons ── */
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 540px) {
+  .choice-grid { grid-template-columns: 1fr; }
+}
+
+.choice-btn {
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.choice-btn:hover:not(:disabled) { border-color: var(--accent); }
+
+.choice-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.choice-btn-top {
+  display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.choice-btn-label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.choice-btn-arrow {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.choice-btn-desc {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Action Buttons (A/B/C) ── */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .action-grid { grid-template-columns: 1fr; }
+}
+
+.action-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.action-btn:hover:not(:disabled) { border-color: var(--accent); }
+
+.action-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.action-key {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--ink);
+  transition: background 0.15s, color 0.15s;
+}
+
+.action-btn.selected .action-key {
   background: var(--accent);
   color: #fff;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 800;
-  padding: 0.75rem 1.5rem;
-  transition: background 0.15s, transform 0.1s;
-  letter-spacing: 0.01em;
-  box-shadow: 0 2px 8px rgba(200,104,26,0.28);
 }
-.warmup2-link:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+.action-btn-label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* ── Feedback / Result Boxes ── */
+.feedback-box {
+  margin-top: 20px;
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.feedback-box.accent-bg {
+  background: var(--accent);
+  color: #fff;
+}
+
+.feedback-box.soft-bg {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.feedback-box .fb-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  opacity: 0.85;
+}
+
+.feedback-box.accent-bg .fb-eyebrow { color: rgba(255,255,255,0.9); }
+.feedback-box.soft-bg .fb-eyebrow { color: var(--accent); opacity: 1; }
+
+.feedback-box .fb-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(18px, 2.5vw, 23px);
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 8px;
+}
+
+.feedback-box .fb-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.feedback-box.soft-bg .fb-desc { color: var(--muted); opacity: 1; }
+
+/* Cost box */
+.cost-box {
+  background: var(--accent-soft);
+  border-radius: 16px;
+  padding: 20px 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.cost-box strong { font-weight: 700; }
+
+/* ── Footer / Debrief Strip ── */
+.debrief-strip {
+  margin-top: 32px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.debrief-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.debrief-steps li { margin: 0; }
+.debrief-dot { color: var(--muted); font-size: 11px; }
+
+.debrief-quote {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ── Reset ── */
+.reset-row {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+
+.btn-reset:hover { border-color: var(--accent); }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
+
+.h3-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="topbar-left">
-    <a href="/" class="back-link">← Warm-Ups</a>
-    <div class="topbar-sep"></div>
-    <span class="topbar-title">Sign Off or Send Back?</span>
-  </div>
-  <div class="topbar-right">
-    <span class="timer" id="timer">04:00</span>
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
-  </div>
-</div>
+<div class="page">
 
-<div class="container" id="app"></div>
+  <!-- 1. HEADER -->
+  <header class="header">
+    <p class="eyebrow">Warm-Up &middot; 3 Minutes &middot; AI for Research &amp; Analytics</p>
+    <h1 class="title font-display">Which lens decides?</h1>
+    <p class="subtitle">AI can rank. Human must validate. Set the context for today&rsquo;s workshop.</p>
+  </header>
+
+  <!-- 2. CONTEXT BAR -->
+  <div class="context-bar">
+    <strong>Context:</strong> Monthly operating cost is up for one team. You asked AI to research why.
+  </div>
+
+  <!-- 3. TIMER -->
+  <div class="timer-row">
+    <span class="timer-label">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Timer
+    </span>
+    <span class="timer-display" id="timer-display">3:00</span>
+    <span class="timer-status" id="timer-status">Ready when you are</span>
+    <span class="timer-buttons">
+      <button class="btn-primary" id="btn-start" onclick="startTimer()">Start Timer</button>
+      <button class="btn-secondary" onclick="resetTimer()">Reset</button>
+    </span>
+  </div>
+
+  <!-- 4. SPLIT VIEW -->
+  <section class="split-view" aria-label="AI lens versus human lens">
+
+    <!-- AI LENS -->
+    <article class="lens-card">
+      <div class="lens-header">
+        <div class="lens-header-row">
+          <div>
+            <p class="lens-label">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              AI Lens
+            </p>
+            <h2 class="lens-title font-display">What can be counted</h2>
+          </div>
+          <span class="basis-badge teal">Basis: Invoices + license count</span>
+        </div>
+      </div>
+
+      <div class="ai-list">
+        <div class="ai-row top">
+          <span class="rank-badge top">1</span>
+          <span class="ai-row-name">
+            <span class="name">More users</span>
+            <span class="top-badge">AI Top Choice</span>
+          </span>
+          <span class="ai-score-block">
+            <span class="score-label">AI Score</span>
+            <span class="score-num font-display">91</span>
+          </span>
+        </div>
+        <div class="ai-row">
+          <span class="rank-badge other">2</span>
+          <span class="ai-row-name"><span class="name">Price hike</span></span>
+          <span class="ai-score-block">
+            <span class="score-label">AI Score</span>
+            <span class="score-num font-display">83</span>
+          </span>
+        </div>
+        <div class="ai-row">
+          <span class="rank-badge other">3</span>
+          <span class="ai-row-name"><span class="name">Overuse</span></span>
+          <span class="ai-score-block">
+            <span class="score-label">AI Score</span>
+            <span class="score-num font-display">72</span>
+          </span>
+        </div>
+        <div class="ai-row">
+          <span class="rank-badge other">4</span>
+          <span class="ai-row-name"><span class="name">New tools</span></span>
+          <span class="ai-score-block">
+            <span class="score-label">AI Score</span>
+            <span class="score-num font-display">65</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="lens-footer">
+        <p class="footer-title">AI Top Choice: 1. More users</p>
+        <p class="footer-desc">The ranking follows the numbers it could see.</p>
+      </div>
+    </article>
+
+    <!-- HUMAN LENS -->
+    <article class="lens-card">
+      <div class="lens-header">
+        <div class="lens-header-row">
+          <div>
+            <p class="lens-label">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Human Lens
+            </p>
+            <h2 class="lens-title font-display">What happened on the ground</h2>
+          </div>
+          <span class="basis-badge grey">Basis: People + process check</span>
+        </div>
+      </div>
+
+      <div class="human-body">
+        <blockquote class="human-quote">
+          <p class="font-display">25 licenses belong to people who left 3 months ago and are still auto-renewing. Usage per active user is flat.</p>
+        </blockquote>
+        <p class="human-note">
+          <strong>AI counted licenses.</strong> Human checked who actually uses them.
+        </p>
+      </div>
+
+      <div class="human-lens-footer">
+        <p>The count was correct. The meaning was not.</p>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- 5. STEP 1 — DECISION -->
+  <section class="section" id="step1" aria-label="Step 1 decision">
+    <div class="section-header-row">
+      <div>
+        <p class="step-eyebrow">Step 1 &middot; Decision</p>
+        <h2 class="section-title font-display">Which lens decides?</h2>
+      </div>
+      <p class="section-hint">One choice. No perfect answer without the human check.</p>
+    </div>
+
+    <div class="choice-grid">
+      <button class="choice-btn" id="btn-keep" onclick="chooseDecision('keep')" aria-pressed="false">
+        <span class="choice-btn-top">
+          <span class="choice-btn-label">Keep AI&rsquo;s No.1 &mdash; More users</span>
+          <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+        <span class="choice-btn-desc">Trust the ranking.</span>
+      </button>
+      <button class="choice-btn" id="btn-overrule" onclick="chooseDecision('overrule')" aria-pressed="false">
+        <span class="choice-btn-top">
+          <span class="choice-btn-label">Overrule to Human View &mdash; Waste</span>
+          <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+        <span class="choice-btn-desc">Act on the ground check.</span>
+      </button>
+    </div>
+
+    <div id="step1-feedback" class="feedback-box accent-bg hidden" role="status">
+      <p class="fb-eyebrow">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="step1-feedback-label"></span>
+      </p>
+      <p class="fb-title font-display" id="step1-feedback-title"></p>
+      <p class="fb-desc" id="step1-feedback-desc"></p>
+    </div>
+  </section>
+
+  <!-- 6. STEP 2 — COST + ACTION -->
+  <section class="section hidden" id="step2" aria-label="Step 2 cost of being wrong and action decision">
+    <p class="step-eyebrow">Step 2 &middot; Cost of Being Wrong</p>
+    <h2 class="section-title font-display">What is the cost of being wrong?</h2>
+
+    <div class="cost-box" id="cost-box"></div>
+
+    <p class="h3-label">What do you do next?</p>
+
+    <div class="action-grid">
+      <button class="action-btn" id="btn-a" onclick="chooseAction('A')" aria-pressed="false">
+        <span class="action-key" id="key-a">A</span>
+        <span class="action-btn-label">Cancel the 25 licenses now</span>
+      </button>
+      <button class="action-btn" id="btn-b" onclick="chooseAction('B')" aria-pressed="false">
+        <span class="action-key" id="key-b">B</span>
+        <span class="action-btn-label">Audit all teams first, then cancel</span>
+      </button>
+      <button class="action-btn" id="btn-c" onclick="chooseAction('C')" aria-pressed="false">
+        <span class="action-key" id="key-c">C</span>
+        <span class="action-btn-label">Ask vendor for a usage report</span>
+      </button>
+    </div>
+
+    <div id="step2-feedback" class="feedback-box soft-bg hidden" role="status">
+      <p class="fb-eyebrow">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        Your action
+      </p>
+      <p class="fb-desc" id="step2-feedback-text" style="color:var(--ink);font-size:15px;line-height:1.6;"></p>
+    </div>
+  </section>
+
+  <!-- 7. STEP 3 — CONFIDENCE -->
+  <section class="section hidden" id="step3" aria-label="Step 3 confidence">
+    <p class="step-eyebrow">Step 3 &middot; Confidence</p>
+    <h2 class="section-title font-display">How confident are you in your decision?</h2>
+
+    <div class="choice-grid">
+      <button class="choice-btn" id="btn-high" onclick="chooseConfidence('high')" aria-pressed="false">
+        <span class="choice-btn-top">
+          <span class="choice-btn-label">High Confidence</span>
+          <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+        <span class="choice-btn-desc">The evidence and next step are clear.</span>
+      </button>
+      <button class="choice-btn" id="btn-low" onclick="chooseConfidence('low')" aria-pressed="false">
+        <span class="choice-btn-top">
+          <span class="choice-btn-label">Low Confidence</span>
+          <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+        <span class="choice-btn-desc">I still need a check before acting.</span>
+      </button>
+    </div>
+
+    <div id="step3-feedback" class="feedback-box accent-bg hidden" role="status">
+      <p class="fb-eyebrow" style="opacity:0.85;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        Final debrief
+      </p>
+      <p class="fb-title font-display">AI ranked what it could count. Human added what it could not see. Then human chose the action and owned the risk. That is the human-in-the-loop.</p>
+      <p class="fb-desc">Best sequence in this case: Overrule to Human View + Audit all teams first + Verify with HR.</p>
+    </div>
+  </section>
+
+  <!-- 8. FOOTER -->
+  <div class="debrief-strip">
+    <ol class="debrief-steps">
+      <li>AI Drafts</li>
+      <li class="debrief-dot" aria-hidden="true">&bull;</li>
+      <li>Human Checks</li>
+      <li class="debrief-dot" aria-hidden="true">&bull;</li>
+      <li>Human Decides</li>
+    </ol>
+    <p class="debrief-quote">&ldquo;Confidence is not accuracy.&rdquo;</p>
+  </div>
+
+  <div class="reset-row">
+    <button class="btn-reset" onclick="resetActivity()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+      Reset Activity
+    </button>
+  </div>
+
+</div><!-- /page -->
 
 <script>
-// ═══════════════════════════════════════════
-// PROPOSALS DATA
-// ═══════════════════════════════════════════
-var PROPOSALS = [
-  {
-    id: "mix",
-    context: "Technology Rollout Decision · Customer Support Hubs",
-    stake: "$280K Budget Request",
-    stakeK: 280,
-    situation: "Your team tested an AI reply assistant for 90 days to answer incoming customer emails faster. Some pilot metrics look encouraging, yet leadership needs a hard-nosed commercial check before approving $280,000 to roll it out across three more offices.",
-    headline: "AI Support Assistant Cut Average Reply Time 36% — Approve $280K Rollout",
-    metrics: [
-      { k: "Before AI Trial", v: "14.2 min", sub: "Average time to close a request" },
-      { k: "During AI Trial", v: "9.1 min (−36%)", sub: "Reported average across all requests" },
-      { k: "Projected Yearly Savings", v: "$420,000 / yr", sub: "Based on time saved per reply" }
-    ],
-    recommendation: "AI Proposal Summary: Reply speed jumped 36% while customer satisfaction held steady. Recommend approving $280K to scale across three more support hubs.",
-    traceSubtitle: "Compare all 7 operational metrics from the 90-day pilot log and monthly finance ledger:",
-    traceCols: ["Operational Parameter", "90 Days Before Trial", "During 90-Day Trial", "Notes from System Log"],
-    traceRows: [
-      ["Total Monthly Tickets Logged", "10,000 / mo", "11,800 / mo (+18%)", "Inbound customer demand was flat; logging system assigns a new Ticket ID whenever a customer re-opens an issue"],
-      ["Simple Requests (status checks, password resets)", "6,200 / mo · 8.0 min avg", "6,200 / mo · 3.8 min avg (AI)", "Solved on first reply: 71% · Customer wrote back within 24h: 29% (was 6% pre-trial)"],
-      ["Complex Requests (billing disputes, exceptions)", "3,800 / mo · 18.1 min avg", "3,800 / mo · 21.4 min avg (Staff)", "Customer satisfaction on complex cases: 4.3 / 5.0 (unchanged vs. pre-trial)"],
-      ["Pilot Satisfaction Score (Simple Replies)", "4.3 / 5.0", "4.2 / 5.0", "Customers liked fast responses when their issue was resolved on the first try"],
-      ["Support Team Staffing", "45 agents", "44 agents", "1 natural departure not replaced; no layoffs"],
-      ["Monthly Staff Overtime Hours", "120 hrs / mo", "195 hrs / mo", "Used to handle escalated follow-ups and peak evening queues"],
-      ["Monthly Cost (Payroll + AI Software)", "$210,000 / mo payroll", "$206,500 payroll + $8,500 AI fee", "Total monthly run-rate: $210,000 before → $215,000 during trial"]
-    ],
-    traceNote: "System Note: The AI assistant handled simple inquiries only; any follow-up email from the same customer opened a new Ticket ID in the counter.",
-    approveLabel: "Approve $280K Rollout",
-    approveDesc: "A 36% speed gain, 4.2/5 rating, and 1 fewer staff member show the pilot is ready to scale.",
-    approveReasons: [
-      { text: "The 36% speed gain and steady 4.2/5 satisfaction score show the AI is delivering clear, measurable value", correct: false },
-      { text: "One fewer headcount means payroll savings offset the AI licence fee — the numbers net out positively", correct: false },
-      { text: "With inbound demand flat and satisfaction holding, scaling to three hubs is the logical next step", correct: false }
-    ],
-    holdLabel: "Hold Funding & Reject Scaling Now",
-    holdDesc: "The data shows mixed signals — hold the $280K rollout until the underlying numbers reconcile.",
-    holdReasons: [
-      { text: "Repeat contacts (29% on AI) inflated ticket volume as 'new solved tickets', overtime rose, and total monthly cost went UP ($210K → $215K)", correct: true },
-      { text: "Customer satisfaction collapsed completely across both simple and complex requests", correct: false },
-      { text: "The trial mixed up foreign currencies when estimating payroll costs", correct: false }
-    ],
-    correctDecision: "hold",
-    verdictSuccess: "Sound executive judgment — you held back $280K until real economics are fixed.",
-    verdictFail: "Trap hit — positive-looking pilot ratings masked rising total monthly spend ($210K → $215K).",
-    explanation: "Look at the balanced picture: the AI wasn't useless (4.2/5 rating on solved simple cases, payroll dipped $3.5K/mo). Yet scaling $280K right now fails the commercial test: 29% repeat contacts (~1,800/mo) re-opened as new fast Ticket IDs, human complex time crept up (18.1 → 21.4 min), overtime rose (120 → 195 hrs), and adding the $8.5K/mo AI fee raised total spend from $210K to $215K/mo instead of saving $420K/yr.",
-    promptTip: "Exclude re-opened repeat contacts within 24 hours, compare total monthly payroll + licence cost before vs. during trial, and test whether $420K/yr savings actually exist in cash."
-  },
-  {
-    id: "sample",
-    context: "Client Relationship Review · Account Leadership",
-    stake: "$350K Fee Rebate Ask",
-    stakeK: 350,
-    situation: "An AI summary of quarterly client survey scores warns that a key $8M client account is deeply unhappy and recommends offering a $350,000 goodwill fee discount right away to protect the renewal.",
-    headline: "Client Satisfaction Dropped 22% — Approve $350K Fee Discount to Keep Account",
-    metrics: [
-      { k: "Last Quarter Score", v: "8.4 / 10", sub: "Client satisfaction rating" },
-      { k: "This Quarter Score", v: "6.5 / 10 (−22%)", sub: "Reported account average" },
-      { k: "Proposed Discount", v: "$350,000", sub: "One-time fee rebate" }
-    ],
-    recommendation: "AI Proposal Summary: Satisfaction fell sharply across the account. Offering an immediate $350K discount is advised before renewal talks start.",
-    traceSubtitle: "Review the service-by-service survey counts, contract sizes, and delivery performance:",
-    traceCols: ["Service Team", "Annual Contract Size", "Survey Replies Received", "Score (Q1 → Q2)", "On-Time Delivery & Operational Notes"],
-    traceRows: [
-      ["Core Finance Processing", "$4.8M / yr (60%)", "41 of 50 contacts (82%)", "8.5 → 8.4", "97% on-time · Zero escalations"],
-      ["Customer Support Desk", "$2.7M / yr (34%)", "28 of 36 contacts (78%)", "8.3 → 8.3", "96% on-time · Positive QBR feedback"],
-      ["Monthly Custom Reports", "$0.5M / yr (6%)", "2 of 25 contacts (8%)", "8.4 → 3.0", "95% on-time · 2 manual dashboard delays in May"],
-      ["Blended Calculation Method", "All 3 teams combined", "71 total replies across account", "Unweighted mean: 6.57", "Equal 1/3 weight applied to each team score regardless of contract value or reply count"]
-    ],
-    traceNote: "Note: All three teams met contractual on-time delivery targets (95%–97%) throughout the quarter.",
-    approveLabel: "Approve $350K Fee Discount",
-    approveDesc: "A 22% satisfaction drop is too risky — offer the $350K rebate immediately.",
-    approveReasons: [
-      { text: "A 22% account-wide drop is a critical warning signal — acting fast before renewal protects the $8M relationship", correct: false },
-      { text: "The discount is small relative to the contract value and shows responsiveness to client feedback", correct: false },
-      { text: "The AI flagged an urgent risk and the survey data confirms the account is unhappy across the board", correct: false }
-    ],
-    holdLabel: "Hold Discount & Target the Real Issue",
-    holdDesc: "Examine which team dropped and how many people actually replied before conceding $350K.",
-    holdReasons: [
-      { text: "An unweighted average let just 2 survey replies in a tiny 6% reporting team create a false account-wide crisis", correct: true },
-      { text: "Core Finance and Support teams missed their delivery deadlines across the board", correct: false },
-      { text: "The survey numbers were copied from a different client account", correct: false }
-    ],
-    correctDecision: "hold",
-    verdictSuccess: "Great call — you protected $350K in margin instead of reacting to 2 noisy survey replies.",
-    verdictFail: "Trap hit — you gave away $350K when 94% of the client's teams rated delivery 8.3–8.4 out of 10.",
-    explanation: "Never treat an unweighted average as the truth. Two unhappy replies out of 25 contacts in a small reporting group (6% of contract value) pulled the unweighted average to 6.57, even though the revenue-weighted score is ~8.0 and core delivery stayed at 96–97%.",
-    promptTip: "Show the score and number of survey replies for each service team separately, weighted by contract value."
-  },
-  {
-    id: "valid",
-    context: "Supplier Cost Review · Claims Processing",
-    stake: "$320K Billing Audit",
-    stakeK: 320,
-    situation: "Not every AI report is wrong. Here, an AI invoice check flagged that an external supplier's processing cost per insurance claim jumped 14% last quarter and recommends pausing automatic payments to audit their bills.",
-    headline: "Cost Per Claim Jumped 14% Under Same Workload — Pause Auto-Pay & Audit Bills",
-    metrics: [
-      { k: "Jan–Mar Cost / Claim", v: "$18.20", sub: "Baseline contract rate" },
-      { k: "Apr–Jun Cost / Claim", v: "$20.75 (+14.0%)", sub: "Billed average" },
-      { k: "Extra Spend at Stake", v: "$320,000 / yr", sub: "Estimated overbilling" }
-    ],
-    recommendation: "AI Proposal Summary: Claim volume and complexity stayed unchanged while cost per claim rose $2.55. Recommend holding auto-payment and auditing invoices.",
-    traceSubtitle: "Compare all 5 underlying billing and workload checks from Jan–Mar vs. Apr–Jun:",
-    traceCols: ["Verification Parameter", "Jan–Mar Baseline", "Apr–Jun Actual", "Supporting Detail"],
-    traceRows: [
-      ["Total Claims Processed", "24,100 claims", "23,980 claims (−0.5%)", "Monthly claim throughput remained flat"],
-      ["Claim Difficulty Mix", "62% simple / 38% complex", "62% simple / 38% complex", "No shift toward higher-cost complex claims"],
-      ["Currency & Billing Units", "USD · per processed claim", "USD · per processed claim", "All invoices issued in US Dollars"],
-      ["Annual Contract Inflation Clause", "Scheduled CPI cap: +2.0%", "Applied +2.0% ($0.36/claim)", "Accounts for $0.36 of the $2.55 increase"],
-      ["Sampled Monthly Invoices (3 of 3)", "Base fee only", "Includes new 'Priority Handling' line ($2.19/claim)", "Not listed in signed contract rate schedule"]
-    ],
-    traceNote: "Note: Contract allows a +2.0% ($0.36) annual adjustment; the remaining $2.19/claim comes from an unlisted surcharge.",
-    approveLabel: "Approve Billing Audit",
-    approveDesc: "The data checks out cleanly — pause automatic payments and challenge the unapproved surcharge.",
-    approveReasons: [
-      { text: "Volume, difficulty mix, and currency all matched — only an unlisted $2.19/claim surcharge on actual invoices explains the remaining gap beyond the 2% inflation cap", correct: true },
-      { text: "A 14% cost increase is within typical annual market variation for outsourced claims services", correct: false },
-      { text: "The supplier has a good track record so the increase is likely a one-time operational adjustment that will normalise", correct: false }
-    ],
-    holdLabel: "Hold & Dismiss Report",
-    holdDesc: "Assume the 14% cost jump is a normal data error and keep paying the supplier as-is.",
-    holdReasons: [
-      { text: "AI cost-analysis tools frequently flag routine inflation as anomalies — this is likely a false positive", correct: false },
-      { text: "Pausing auto-pay risks damaging the supplier relationship before the facts are confirmed", correct: false },
-      { text: "The 14% increase could reflect legitimate new service requirements agreed verbally with the team", correct: false }
-    ],
-    correctDecision: "approve",
-    verdictSuccess: "Excellent balance — good skepticism verifies facts rather than rejecting valid findings. You approved a real $320K recovery audit.",
-    verdictFail: "Missed opportunity — volume, complexity mix, and currency matched, and real invoices showed an unlisted $2.19/claim surcharge beyond the 2% inflation cap.",
-    explanation: "Unlike Proposals 1 and 2, this analysis held up across workload volume, difficulty mix, currency, and inflation benchmarks — and pointed directly to an uncontracted surcharge on actual invoices.",
-    promptTip: "Verify the underlying parameters for 15 seconds — hold back weak proposals, and act decisively when real evidence holds up."
+var timerInterval = null;
+var timerSeconds = 180;
+var timerRunning = false;
+var decision = null;
+var actionChoice = null;
+var confidence = null;
+
+var ACTION_FEEDBACK = {
+  A: "Fast, but risky. You have not verified with HR. In consulting, speed without verification creates a new problem.",
+  B: "Best consulting move. You check if the problem is bigger than one team, then cancel with evidence. This is Insight to Action.",
+  C: "Slow, and vendor has an incentive to keep licenses. Useful as a cross-check, not as the first action."
+};
+
+function formatTime(s) {
+  var m = Math.floor(s / 60);
+  var sec = s % 60;
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function syncTimer() {
+  var el = document.getElementById('timer-display');
+  var status = document.getElementById('timer-status');
+  var startBtn = document.getElementById('btn-start');
+  el.textContent = formatTime(timerSeconds);
+  el.className = 'timer-display' + (timerSeconds === 0 ? ' done' : timerSeconds <= 30 && timerRunning ? ' urgent' : '');
+  if (timerSeconds === 0) {
+    status.textContent = "Time’s up — make the call";
+    startBtn.disabled = true;
+  } else if (timerRunning) {
+    status.textContent = "Time is running";
+    startBtn.disabled = true;
+  } else {
+    status.textContent = "Ready when you are";
+    startBtn.disabled = false;
   }
-];
-
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-var state = newState();
-function newState() {
-  return {
-    round: 0,
-    rounds: PROPOSALS.map(function() {
-      return { inspected: false, chosen: null, approveReasonIdx: null, holdReasonIdx: null, confirmed: false };
-    }),
-    timerLeft: 240,
-    timerInterval: null,
-    showScorecard: false
-  };
-}
-function resetAll() {
-  clearInterval(state.timerInterval);
-  state = newState();
-  startTimer();
-  render();
 }
 
-// ═══════════════════════════════════════════
-// TIMER
-// ═══════════════════════════════════════════
-function fmt(s) {
-  return String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
-}
 function startTimer() {
-  if (state.timerInterval) clearInterval(state.timerInterval);
-  state.timerInterval = setInterval(function() {
-    if (state.timerLeft > 0) { state.timerLeft--; syncTimer(); }
-    else { clearInterval(state.timerInterval); syncTimer(); }
+  if (timerRunning || timerSeconds === 0) return;
+  timerRunning = true;
+  syncTimer();
+  timerInterval = setInterval(function() {
+    timerSeconds -= 1;
+    if (timerSeconds <= 0) {
+      timerSeconds = 0;
+      timerRunning = false;
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    syncTimer();
   }, 1000);
 }
-function syncTimer() {
-  var el = document.getElementById('timer');
-  if (!el) return;
-  if (state.showScorecard) { el.textContent = ''; el.className = 'timer done'; return; }
-  el.textContent = fmt(state.timerLeft);
-  el.className = state.timerLeft === 0 ? 'timer done' : (state.timerLeft <= 30 ? 'timer urgent' : 'timer');
-}
-function syncPill() { /* pill removed from top bar */ }
 
-// ═══════════════════════════════════════════
-// THEME
-// ═══════════════════════════════════════════
-function toggleTheme() {
-  var html = document.documentElement;
-  var btn = document.getElementById('themeBtn');
-  if (html.classList.contains('dark')) {
-    html.classList.remove('dark');
-    btn.textContent = 'Dark Mode';
-  } else {
-    html.classList.add('dark');
-    btn.textContent = 'Light Mode';
-  }
-}
-
-// ═══════════════════════════════════════════
-// ACTIONS
-// ═══════════════════════════════════════════
-function revealTrace(i) {
-  state.rounds[i].inspected = true;
-  patchRound(i);
-}
-function selectChoice(i, choice) {
-  if (state.rounds[i].confirmed) return;
-  state.rounds[i].chosen = choice;
-  if (choice === 'approve') state.rounds[i].holdReasonIdx = null;
-  if (choice === 'hold') state.rounds[i].approveReasonIdx = null;
-  patchRound(i);
-}
-function selectApproveReason(i, idx) {
-  if (state.rounds[i].confirmed) return;
-  state.rounds[i].approveReasonIdx = idx;
-  patchRound(i);
-}
-function selectHoldReason(i, idx) {
-  if (state.rounds[i].confirmed) return;
-  state.rounds[i].holdReasonIdx = idx;
-  patchRound(i);
-}
-function confirmDecision(i) {
-  var r = state.rounds[i];
-  var p = PROPOSALS[i];
-  if (!r.chosen) return;
-  if (r.chosen === 'approve' && p.approveReasons.length > 0 && r.approveReasonIdx === null) return;
-  if (r.chosen === 'hold' && p.holdReasons.length > 0 && r.holdReasonIdx === null) return;
-  r.confirmed = true;
-  patchRound(i);
-}
-function retryRound(i) {
-  state.rounds[i] = { inspected: false, chosen: null, approveReasonIdx: null, holdReasonIdx: null, confirmed: false };
-  patchRound(i);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-function advance() {
-  if (state.round < PROPOSALS.length - 1) {
-    state.round++;
-    syncPill();
-    render();
-  } else {
-    state.showScorecard = true;
-    clearInterval(state.timerInterval);
-    syncPill();
-    syncTimer();
-    render();
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ═══════════════════════════════════════════
-// HTML HELPERS
-// ═══════════════════════════════════════════
-function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-function buildReasonsList(i, reasons, selectedIdx, fnName, dotColor, label) {
-  if (!reasons || reasons.length === 0) return '';
-  var selClass = dotColor === 'green' ? 'selected-green' : 'selected-amber';
-  var items = reasons.map(function(reason, idx) {
-    var sel = selectedIdx === idx ? (' ' + selClass) : '';
-    return '<div class="reason-option' + sel + '" onclick="' + fnName + '(' + i + ',' + idx + ')">'
-      + '<div class="reason-radio"></div>'
-      + '<div class="reason-text">' + esc(reason.text) + '</div>'
-      + '</div>';
-  }).join('');
-  return '<div class="reasons-panel">'
-    + '<div class="reasons-header">'
-      + '<div class="reasons-header-dot ' + dotColor + '"></div>'
-      + '<div class="reasons-header-label">' + esc(label) + '</div>'
-    + '</div>'
-    + '<div class="reasons-list">' + items + '</div>'
-    + '</div>';
-}
-
-// ═══════════════════════════════════════════
-// BUILD HTML
-// ═══════════════════════════════════════════
-function buildOnboarding() {
-  return '<div class="onboarding">'
-    + '<div class="onboarding-eyebrow">Executive AI Training · 4-Minute Warm-Up</div>'
-    + '<div class="onboarding-heading">How This Activity Works</div>'
-    + '<p class="onboarding-intro">An AI assistant has prepared <strong>3 business scenarios</strong> for your sign-off. Some headline metrics look positive — others hide costly flaws. Work through each scenario below, inspect the raw data, and make the call.</p>'
-    + '<div class="steps-grid">'
-    + '<div class="step-card"><div class="step-num">1</div><div class="step-label">Read the Proposal</div><div class="step-desc">Review the headline numbers and what funding or action the AI is recommending.</div></div>'
-    + '<div class="step-card"><div class="step-num">2</div><div class="step-label">Inspect the Raw Data</div><div class="step-desc">Click the button to examine the full set of operational and cost parameters.</div></div>'
-    + '<div class="step-card"><div class="step-num">3</div><div class="step-label">Approve or Hold</div><div class="step-desc">Unlocks after Step 2. Approve if the numbers hold — or hold funding and say why.</div></div>'
-    + '</div></div>';
-}
-
-function buildProposal(i) {
-  var p = PROPOSALS[i];
-  var r = state.rounds[i];
-
-  var metricsHtml = p.metrics.map(function(m) {
-    return '<div class="metric-card">'
-      + '<div class="metric-k">' + esc(m.k) + '</div>'
-      + '<div class="metric-v">' + esc(m.v) + '</div>'
-      + '<div class="metric-sub">' + esc(m.sub) + '</div>'
-      + '</div>';
-  }).join('');
-
-  var thHtml = p.traceCols.map(function(c) { return '<th>' + esc(c) + '</th>'; }).join('');
-  var tbHtml = p.traceRows.map(function(row) {
-    return '<tr>' + row.map(function(cell) { return '<td>' + esc(cell) + '</td>'; }).join('') + '</tr>';
-  }).join('');
-
-  var traceHtml = r.inspected
-    ? '<div class="trace-container">'
-        + '<div class="trace-header">'
-          + '<div class="trace-header-left">'
-            + '<div class="trace-title">Raw Operational &amp; Financial Parameters</div>'
-            + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div>'
-          + '</div>'
-        + '</div>'
-        + '<div class="trace-table-wrap"><table><thead><tr>' + thHtml + '</tr></thead><tbody>' + tbHtml + '</tbody></table></div>'
-        + '<div class="trace-note">' + esc(p.traceNote) + '</div>'
-      + '</div>'
-    : '';
-
-  var traceBtnHtml = r.inspected
-    ? '<div class="trace-btn-wrap"><button class="trace-btn revealed">✓&nbsp;&nbsp;Underlying Parameters Revealed</button></div>'
-    : '<div class="trace-btn-wrap"><button class="trace-btn" onclick="revealTrace(' + i + ')">&#128269;&nbsp;&nbsp;Step 2: Inspect the Underlying Parameters (15 sec)</button></div>';
-
-  var bottomHtml;
-  if (r.confirmed) {
-    var isCorrect = r.chosen === p.correctDecision;
-    if (isCorrect) {
-      if (r.chosen === 'approve' && p.approveReasons.length > 0) {
-        isCorrect = r.approveReasonIdx !== null && p.approveReasons[r.approveReasonIdx].correct;
-      } else if (r.chosen === 'hold' && p.holdReasons.length > 0) {
-        isCorrect = r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct;
-      }
-    }
-    var vClass  = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
-    var vTag    = isCorrect ? '✓ Sound Decision' : '✗ Missed Signal';
-    var vHead   = isCorrect ? p.verdictSuccess : p.verdictFail;
-    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard' : 'Next Scenario';
-
-    bottomHtml = '<div class="verdict-wrap"><div class="' + vClass + '">'
-      + '<div class="verdict-tag">' + vTag + '</div>'
-      + '<div class="verdict-headline">' + esc(vHead) + '</div>'
-      + '<div class="verdict-explanation">' + esc(p.explanation) + '</div>'
-      + '<div class="prompt-tip"><div class="prompt-tip-label">What to ask AI next time:</div><div class="prompt-tip-text">' + esc(p.promptTip) + '</div></div>'
-      + '<div style="display:flex;gap:0.75rem;flex-wrap:wrap;">'
-        + '<button class="next-btn" onclick="advance()">' + nextLbl + ' →</button>'
-        + '<button class="retry-btn" onclick="retryRound(' + i + ')">↺ Try Again</button>'
-      + '</div>'
-      + '</div></div>';
-
-  } else if (!r.inspected) {
-    bottomHtml = '<div class="decision-locked">'
-      + '<div class="lock-icon">🔒</div>'
-      + '<div class="lock-eyebrow">Step 3 · Decision Locked</div>'
-      + '<div class="lock-text">Review the underlying data first — click <strong>Step 2</strong> above to unlock your decision options.</div>'
-      + '</div>';
-
-  } else {
-    var approveClass = 'choice-card' + (r.chosen === 'approve' ? ' selected-approve' : '');
-    var holdClass    = 'choice-card' + (r.chosen === 'hold'    ? ' selected-hold'    : '');
-
-    var reasonsHtml = '';
-    if (r.chosen === 'approve') {
-      reasonsHtml = buildReasonsList(i, p.approveReasons, r.approveReasonIdx, 'selectApproveReason', 'green', 'Primary reason to approve:');
-    } else if (r.chosen === 'hold') {
-      reasonsHtml = buildReasonsList(i, p.holdReasons, r.holdReasonIdx, 'selectHoldReason', 'red', 'Primary reason to hold:');
-    }
-
-    var isValid = r.chosen === 'approve'
-        ? (p.approveReasons.length === 0 || r.approveReasonIdx !== null)
-        : r.chosen === 'hold'
-          ? (p.holdReasons.length === 0 || r.holdReasonIdx !== null)
-          : false;
-
-    bottomHtml = '<div class="decision-section">'
-      + '<div class="decision-eyebrow">'
-        + '<div class="decision-step-badge">3</div>'
-        + '<div class="decision-title">What is your executive decision?</div>'
-      + '</div>'
-      + '<div class="decision-choices">'
-        + '<div class="' + approveClass + '" onclick="selectChoice(' + i + ',\'approve\')">'
-          + '<div class="choice-icon">✅</div>'
-          + '<div class="choice-label">' + esc(p.approveLabel) + '</div>'
-          + '<div class="choice-desc">' + esc(p.approveDesc) + '</div>'
-        + '</div>'
-        + '<div class="' + holdClass + '" onclick="selectChoice(' + i + ',\'hold\')">'
-          + '<div class="choice-icon">🛑</div>'
-          + '<div class="choice-label">' + esc(p.holdLabel) + '</div>'
-          + '<div class="choice-desc">' + esc(p.holdDesc) + '</div>'
-        + '</div>'
-      + '</div>'
-      + reasonsHtml
-      + '<button class="confirm-btn" onclick="confirmDecision(' + i + ')" ' + (isValid ? '' : 'disabled') + '>Confirm My Decision</button>'
-      + '</div>';
-  }
-
-  return '<div class="proposal-wrap">'
-    + '<div class="context-strip">'
-      + '<span class="context-tag">' + esc(p.context) + '</span>'
-      + '<div style="display:flex;align-items:center;gap:0.625rem;flex-shrink:0;">'
-        + '<span class="scenario-counter">Scenario ' + (i + 1) + ' of ' + PROPOSALS.length + '</span>'
-        + '<span class="stake-badge">' + esc(p.stake) + '</span>'
-      + '</div>'
-    + '</div>'
-    + '<div class="situation">' + esc(p.situation) + '</div>'
-    + '<div class="ai-brief">'
-      + '<div class="ai-brief-header"><div class="ai-brief-dot"></div><div class="ai-brief-label">AI-Generated Proposal · Awaiting Decision</div></div>'
-      + '<div class="ai-brief-body">'
-        + '<div class="ai-headline">' + esc(p.headline) + '</div>'
-        + '<div class="metrics-grid">' + metricsHtml + '</div>'
-        + '<div class="ai-summary">' + esc(p.recommendation) + '</div>'
-      + '</div>'
-    + '</div>'
-    + traceBtnHtml
-    + traceHtml
-    + bottomHtml
-    + '</div>';
-}
-
-function buildScorecard() {
-  var correctCount = 0, money = 0, inspected = 0;
-  PROPOSALS.forEach(function(p, i) {
-    var r = state.rounds[i];
-    var ok = r.chosen === p.correctDecision;
-    if (ok) {
-      if (r.chosen === 'approve' && p.approveReasons.length > 0) {
-        ok = r.approveReasonIdx !== null && p.approveReasons[r.approveReasonIdx].correct;
-      } else if (r.chosen === 'hold' && p.holdReasons.length > 0) {
-        ok = r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct;
-      }
-    }
-    if (ok) { correctCount++; money += p.stakeK; }
-    if (r.inspected) inspected++;
-  });
-  var moneyStr = money >= 1000 ? '$' + (money/1000).toFixed(1).replace('.0','') + 'M' : '$' + money + 'K';
-
-  return '<div class="scorecard">'
-    + '<div class="scorecard-header">'
-      + '<div class="sc-eyebrow">Your 4-Minute Executive Summary</div>'
-      + '<div class="sc-title">Warm-Up Complete</div>'
-      + '<div class="sc-subtitle">You reviewed three AI-prepared business proposals totalling $950K in decisions.</div>'
-    + '</div>'
-    + '<div class="sc-body">'
-      + '<div class="sc-stats">'
-        + '<div class="sc-stat green"><div class="sc-stat-label">Sound Decisions</div><div class="sc-stat-value">' + correctCount + ' / 3</div></div>'
-        + '<div class="sc-stat amber"><div class="sc-stat-label">Money Protected / Recovered</div><div class="sc-stat-value">' + moneyStr + '</div></div>'
-        + '<div class="sc-stat green"><div class="sc-stat-label">Raw Data Checked</div><div class="sc-stat-value">' + inspected + ' / 3</div></div>'
-      + '</div>'
-      + '<div class="habits-title">3 Habits to Carry Into Today\'s Workshop</div>'
-      + '<div class="habit-card"><strong>1. Look Underneath Averages</strong> — Positive pilot ratings or fast average times can hide mix shifts and repeat work. Check all parameters side by side.</div>'
-      + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts</strong> — Check net spend (payroll + overtime + licence fees) and verify how many people or tickets were actually counted.</div>'
-      + '<div class="habit-card"><strong>3. Verify Before Approving — Don\'t Reject Everything</strong> — Pause 15 seconds to connect the raw data points. Hold shaky rollouts, and back solid cases when evidence holds up.</div>'
-      + '<div class="sc-actions">'
-        + '<button class="reset-btn" onclick="resetAll()">↺ Try Again</button>'
-        + '<a href="/two-truths/" class="warmup2-link">Try Warm-Up 2 →</a>'
-      + '</div>'
-    + '</div>'
-    + '</div>';
-}
-
-// ═══════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════
-function render() {
-  var app = document.getElementById('app');
-  if (!app) return;
-  if (state.showScorecard) {
-    app.innerHTML = buildScorecard();
-  } else {
-    app.innerHTML = buildOnboarding() + '<div id="round-slot">' + buildProposal(state.round) + '</div>';
-  }
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  timerRunning = false;
+  timerSeconds = 180;
   syncTimer();
-  syncPill();
-}
-function patchRound(i) {
-  var slot = document.getElementById('round-slot');
-  if (slot) slot.innerHTML = buildProposal(i);
 }
 
-// ═══════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
-  render();
-  startTimer();
-});
+function chooseDecision(choice) {
+  decision = choice;
+  actionChoice = null;
+  confidence = null;
+
+  // Update button states
+  document.getElementById('btn-keep').className = 'choice-btn' + (choice === 'keep' ? ' selected' : '');
+  document.getElementById('btn-keep').setAttribute('aria-pressed', choice === 'keep' ? 'true' : 'false');
+  document.getElementById('btn-overrule').className = 'choice-btn' + (choice === 'overrule' ? ' selected' : '');
+  document.getElementById('btn-overrule').setAttribute('aria-pressed', choice === 'overrule' ? 'true' : 'false');
+
+  // Show feedback
+  var fb = document.getElementById('step1-feedback');
+  var label = document.getElementById('step1-feedback-label');
+  var title = document.getElementById('step1-feedback-title');
+  var desc = document.getElementById('step1-feedback-desc');
+  fb.classList.remove('hidden');
+
+  if (choice === 'overrule') {
+    label.textContent = 'Correct';
+    title.textContent = 'Correct: You overruled. Human check reveals waste from orphan licenses.';
+  } else {
+    label.textContent = 'Check';
+    title.textContent = 'Check: You kept the AI ranking. The human check shows the cost is waste, not growth.';
+  }
+  desc.textContent = 'AI ranked what it could count. Human added what it could not see.';
+
+  // Show step 2, fill cost box, reset step 2 and 3 state
+  var costBox = document.getElementById('cost-box');
+  if (choice === 'keep') {
+    costBox.innerHTML = '<strong>If you keep AI:</strong> You keep paying for 25 unused licenses. At $80 per license, that is <strong>$2,000 per month, $24,000 per year</strong>, and you miss the waste.';
+  } else {
+    costBox.innerHTML = '<strong>If you overrule:</strong> You can save <strong>$2,000 per month, $24,000 per year</strong>, but you must verify with HR before cancelling, so you do not cancel a license someone still needs.';
+  }
+
+  resetStep2UI();
+  resetStep3UI();
+  document.getElementById('step2').classList.remove('hidden');
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetStep2UI() {
+  ['a','b','c'].forEach(function(k) {
+    document.getElementById('btn-' + k).className = 'action-btn';
+    document.getElementById('btn-' + k).setAttribute('aria-pressed', 'false');
+    document.getElementById('key-' + k).className = 'action-key';
+  });
+  document.getElementById('step2-feedback').classList.add('hidden');
+  actionChoice = null;
+}
+
+function resetStep3UI() {
+  document.getElementById('btn-high').className = 'choice-btn';
+  document.getElementById('btn-high').setAttribute('aria-pressed', 'false');
+  document.getElementById('btn-low').className = 'choice-btn';
+  document.getElementById('btn-low').setAttribute('aria-pressed', 'false');
+  document.getElementById('step3-feedback').classList.add('hidden');
+  confidence = null;
+}
+
+function chooseAction(key) {
+  if (!decision) return;
+  actionChoice = key;
+
+  ['a','b','c'].forEach(function(k) {
+    var isSelected = k.toUpperCase() === key;
+    document.getElementById('btn-' + k).className = 'action-btn' + (isSelected ? ' selected' : '');
+    document.getElementById('btn-' + k).setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+    document.getElementById('key-' + k).className = 'action-key' + (isSelected ? '' : '');
+  });
+
+  var fb = document.getElementById('step2-feedback');
+  document.getElementById('step2-feedback-text').textContent = ACTION_FEEDBACK[key];
+  fb.classList.remove('hidden');
+
+  // Show step 3
+  resetStep3UI();
+  document.getElementById('step3').classList.remove('hidden');
+  setTimeout(function() {
+    document.getElementById('step3').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function chooseConfidence(choice) {
+  if (!decision || !actionChoice) return;
+  confidence = choice;
+
+  document.getElementById('btn-high').className = 'choice-btn' + (choice === 'high' ? ' selected' : '');
+  document.getElementById('btn-high').setAttribute('aria-pressed', choice === 'high' ? 'true' : 'false');
+  document.getElementById('btn-low').className = 'choice-btn' + (choice === 'low' ? ' selected' : '');
+  document.getElementById('btn-low').setAttribute('aria-pressed', choice === 'low' ? 'true' : 'false');
+
+  document.getElementById('step3-feedback').classList.remove('hidden');
+  setTimeout(function() {
+    document.getElementById('step3-feedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function resetActivity() {
+  resetTimer();
+  decision = null;
+  actionChoice = null;
+  confidence = null;
+
+  // Step 1
+  document.getElementById('btn-keep').className = 'choice-btn';
+  document.getElementById('btn-keep').setAttribute('aria-pressed', 'false');
+  document.getElementById('btn-overrule').className = 'choice-btn';
+  document.getElementById('btn-overrule').setAttribute('aria-pressed', 'false');
+  document.getElementById('step1-feedback').classList.add('hidden');
+
+  // Step 2
+  document.getElementById('step2').classList.add('hidden');
+  resetStep2UI();
+
+  // Step 3
+  document.getElementById('step3').classList.add('hidden');
+  resetStep3UI();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+syncTimer();
 </script>
 </body>
 </html>
