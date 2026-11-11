@@ -4,110 +4,133 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Warm-Up 1: Approve or Hold? — Executive AI Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ── CSS VARIABLES ── */
+/* ═══════════════════════════════════════════
+   CSS VARIABLES
+═══════════════════════════════════════════ */
 :root {
-  --bg: #f8fafc;
+  --bg: #f5f4f1;
   --surface: #ffffff;
-  --surface-alt: #f1f5f9;
-  --border: #cbd5e1;
-  --border-soft: #e2e8f0;
-  --text: #0f172a;
-  --muted: #475569;
-  --accent: #d97706;
-  --accent-hover: #b45309;
-  --accent-soft: rgba(217, 119, 6, 0.12);
-  --green: #059669;
-  --green-soft: rgba(5, 150, 105, 0.12);
-  --red: #dc2626;
-  --red-soft: rgba(220, 38, 38, 0.11);
-  --brief-bg: #fffbeb;
-  --brief-border: #f59e0b;
-  --trace-bg: #0f172a;
-  --trace-text: #e2e8f0;
+  --surface-alt: #f0ede8;
+  --surface-alt2: #e8e4dd;
+  --border: #d4cec5;
+  --border-soft: #e4e0d9;
+  --text: #0f0f0e;
+  --text-secondary: #2d2b28;
+  --muted: #5c5852;
+  --accent: #c8681a;
+  --accent-hover: #a8540f;
+  --accent-soft: rgba(200, 104, 26, 0.10);
+  --accent-bright: #e07820;
+  --green: #0a7c4e;
+  --green-soft: rgba(10, 124, 78, 0.10);
+  --red: #c0352a;
+  --red-soft: rgba(192, 53, 42, 0.10);
+  --brief-bg: #fdf8f0;
+  --brief-border: #c8681a;
+  --trace-bg: #0f0e0d;
+  --trace-text: #e8e4dc;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 4px 10px rgba(0,0,0,0.06);
 }
 html.dark {
-  --bg: #0b0e14;
-  --surface: #131722;
-  --surface-alt: #1b2130;
-  --border: #334155;
-  --border-soft: #252e42;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --accent: #f59e0b;
-  --accent-hover: #d97706;
-  --accent-soft: rgba(245, 158, 11, 0.14);
-  --green: #34d399;
-  --green-soft: rgba(16, 185, 129, 0.14);
-  --red: #f87171;
-  --red-soft: rgba(239, 68, 68, 0.14);
-  --brief-bg: #1e1910;
-  --brief-border: #f59e0b;
-  --trace-bg: #0a0c10;
-  --trace-text: #e2e8f0;
+  --bg: #0b0d0f;
+  --surface: #131519;
+  --surface-alt: #1a1d22;
+  --surface-alt2: #21252c;
+  --border: #2e3340;
+  --border-soft: #242830;
+  --text: #f0ede8;
+  --text-secondary: #d0ccc4;
+  --muted: #8a8a8a;
+  --accent: #e8902a;
+  --accent-hover: #d07820;
+  --accent-soft: rgba(232, 144, 42, 0.12);
+  --accent-bright: #f0a030;
+  --green: #2ecc8a;
+  --green-soft: rgba(46, 204, 138, 0.12);
+  --red: #f07070;
+  --red-soft: rgba(240, 112, 112, 0.12);
+  --brief-bg: #1c1810;
+  --brief-border: #e8902a;
+  --trace-bg: #09090b;
+  --trace-text: #e0dbd2;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.35);
 }
 
-/* ── RESET ── */
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  font-size: 15px;
-  line-height: 1.6;
-  transition: background 0.2s, color 0.2s;
+  font-size: 16px;
+  line-height: 1.65;
+  transition: background 0.25s, color 0.25s;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── TOP BAR ── */
+/* ═══════════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════════ */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 20;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 1.5rem;
-  height: 56px;
+  padding: 0 2rem;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  box-shadow: var(--shadow-sm);
 }
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   min-width: 0;
-  flex-shrink: 1;
-  overflow: hidden;
 }
 .back-link {
   color: var(--muted);
   text-decoration: none;
   font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   white-space: nowrap;
-  flex-shrink: 0;
   transition: color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 .back-link:hover { color: var(--accent); }
-.topbar-sep {
-  color: var(--border);
-  font-size: 16px;
-  flex-shrink: 0;
-}
+.topbar-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
 .topbar-title {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   flex-shrink: 0;
 }
 .pill {
@@ -115,19 +138,21 @@ body {
   color: var(--accent);
   border: 1px solid var(--accent);
   border-radius: 999px;
-  padding: 2px 10px;
+  padding: 3px 12px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   white-space: nowrap;
 }
 .timer {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--accent);
   min-width: 3.5ch;
   text-align: right;
   transition: color 0.3s;
+  letter-spacing: 0.03em;
 }
 .timer.done { color: var(--muted); }
 .timer.urgent { color: var(--red); }
@@ -135,72 +160,104 @@ body {
   background: var(--surface-alt);
   border: 1px solid var(--border);
   border-radius: 6px;
-  color: var(--text);
+  color: var(--muted);
   font-size: 12px;
-  font-weight: 500;
-  padding: 4px 10px;
+  font-weight: 600;
+  padding: 5px 12px;
   cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.02em;
 }
-.theme-btn:hover { background: var(--border); }
+.theme-btn:hover { background: var(--border); color: var(--text); }
 
-/* ── CONTAINER ── */
+/* ═══════════════════════════════════════════
+   CONTAINER
+═══════════════════════════════════════════ */
 .container {
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: 2.5rem 1.75rem 5rem;
 }
 
-/* ── ONBOARDING ── */
+/* ═══════════════════════════════════════════
+   ONBOARDING
+═══════════════════════════════════════════ */
 .onboarding {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-bottom: 1.75rem;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+.onboarding-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
 }
 .onboarding-heading {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
 }
 .onboarding-intro {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--muted);
-  margin-bottom: 1.25rem;
-  line-height: 1.65;
+  margin-bottom: 1.75rem;
+  line-height: 1.7;
+  max-width: 700px;
 }
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
-@media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .steps-grid { grid-template-columns: 1fr; } }
 .step-card {
   background: var(--surface-alt);
   border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 1.25rem;
+  position: relative;
+}
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1.5px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
 }
 .step-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--text);
   margin-bottom: 0.4rem;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.01em;
 }
-.step-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-/* ── PROPOSAL CARD ── */
+/* ═══════════════════════════════════════════
+   PROPOSAL CARD
+═══════════════════════════════════════════ */
 .proposal-wrap {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: var(--shadow-md);
 }
 
 /* Context strip */
@@ -208,217 +265,394 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.25rem;
-  border-bottom: 1px solid var(--border-soft);
+  padding: 1rem 1.75rem;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
   gap: 1rem;
   flex-wrap: wrap;
 }
-.context-tag { font-size: 12px; color: var(--muted); font-weight: 500; }
+.context-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 .stake-badge {
   background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid var(--accent);
+  border: 1.5px solid var(--accent);
   border-radius: 999px;
-  padding: 2px 10px;
+  padding: 4px 14px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 /* Situation */
 .situation {
-  padding: 1.25rem;
-  font-size: 14px;
+  padding: 1.5rem 1.75rem;
+  font-size: 15px;
   color: var(--muted);
   border-bottom: 1px solid var(--border-soft);
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
 /* AI Brief */
 .ai-brief {
-  background: var(--brief-bg);
-  border-left: 4px solid var(--brief-border);
-  margin: 1.25rem;
-  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 1.75rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--brief-border);
+  box-shadow: 0 0 0 1px var(--accent-soft);
 }
 .ai-brief-header {
   background: var(--accent-soft);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--accent-soft);
+}
+.ai-brief-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.ai-brief-label {
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   color: var(--accent);
   text-transform: uppercase;
-  border-radius: 0 8px 0 0;
 }
-.ai-brief-body { padding: 1rem; }
+.ai-brief-body {
+  background: var(--brief-bg);
+  padding: 1.5rem 1.25rem;
+}
 .ai-headline {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--text);
-  margin-bottom: 1rem;
-  line-height: 1.4;
+  margin-bottom: 1.25rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
 }
 @media (max-width: 600px) { .metrics-grid { grid-template-columns: 1fr; } }
 .metric-card {
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: 8px;
-  padding: 0.75rem;
+  padding: 1rem 1.125rem;
+  box-shadow: var(--shadow-sm);
 }
-.metric-k { font-size: 11px; color: var(--muted); margin-bottom: 0.25rem; font-weight: 500; }
+.metric-k {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 .metric-v {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
   color: var(--text);
-  line-height: 1.2;
-  margin-bottom: 0.2rem;
+  line-height: 1.1;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.02em;
 }
-.metric-sub { font-size: 11px; color: var(--muted); line-height: 1.4; }
-.ai-summary { font-size: 13px; color: var(--muted); line-height: 1.6; font-style: italic; }
+.metric-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.ai-summary {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  font-style: italic;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 0.875rem;
+}
 
 /* Trace Button */
-.trace-btn-wrap { padding: 0 1.25rem 1.25rem; }
+.trace-btn-wrap { padding: 0 1.75rem 1.25rem; }
 .trace-btn {
   width: 100%;
   background: transparent;
   border: 2px dashed var(--accent);
   color: var(--accent);
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.1s;
   text-align: center;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
-.trace-btn:hover { background: var(--accent-soft); }
+.trace-btn:hover { background: var(--accent-soft); transform: translateY(-1px); }
+.trace-btn:active { transform: translateY(0); }
 .trace-btn.revealed {
   border-style: solid;
   border-width: 1px;
   background: var(--accent-soft);
   cursor: default;
+  transform: none;
 }
 
 /* Trace Container */
 .trace-container {
-  margin: 0 1.25rem 1.25rem;
+  margin: 0 1.75rem 1.25rem;
   background: var(--trace-bg);
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
-.trace-header { padding: 0.75rem 1rem 0.5rem; }
+.trace-header {
+  padding: 1rem 1.25rem 0.625rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
 .trace-title {
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--trace-text);
-  opacity: 0.7;
-  margin-bottom: 0.25rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
 }
-.trace-subtitle { font-size: 12px; color: var(--trace-text); opacity: 0.7; line-height: 1.5; }
-.trace-table-wrap { overflow-x: auto; padding: 0 1rem; }
-table { width: 100%; border-collapse: collapse; font-size: 12px; color: var(--trace-text); margin-bottom: 0.75rem; }
+.trace-subtitle {
+  font-size: 12.5px;
+  color: rgba(240,235,224,0.6);
+  line-height: 1.55;
+}
+.trace-table-wrap { overflow-x: auto; padding: 0.25rem 1.25rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  color: var(--trace-text);
+  margin-bottom: 0.5rem;
+}
 th {
   text-align: left;
-  padding: 0.5rem 0.75rem;
+  padding: 0.6rem 0.875rem;
   border-bottom: 1px solid rgba(255,255,255,0.1);
-  font-weight: 600;
-  opacity: 0.9;
+  font-weight: 700;
   font-size: 11px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.6);
   white-space: nowrap;
 }
 td {
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 0.6rem 0.875rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
   vertical-align: top;
-  line-height: 1.5;
+  line-height: 1.55;
 }
+tr:hover td { background: rgba(255,255,255,0.025); }
 tr:last-child td { border-bottom: none; }
+td:first-child { font-weight: 600; color: rgba(240,235,224,0.9); }
 .trace-note {
-  margin: 0.5rem 1rem 0.75rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  font-size: 11px;
-  color: var(--trace-text);
-  opacity: 0.75;
-  line-height: 1.5;
+  margin: 0.25rem 1.25rem 0.875rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 0.6rem 0.875rem;
+  font-size: 12px;
+  color: rgba(240,235,224,0.6);
+  line-height: 1.55;
 }
 
-/* Decision Section */
+/* ═══════════════════════════════════════════
+   STEP 3 LOCKED
+═══════════════════════════════════════════ */
+.decision-locked {
+  margin: 0 1.75rem 1.75rem;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  opacity: 0.7;
+}
+.lock-icon {
+  font-size: 28px;
+  line-height: 1;
+  filter: grayscale(1);
+}
+.lock-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lock-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* ═══════════════════════════════════════════
+   DECISION SECTION
+═══════════════════════════════════════════ */
 .decision-section {
-  padding: 1.25rem;
+  padding: 1.75rem;
   border-top: 1px solid var(--border-soft);
 }
-.decision-title {
+.decision-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+.decision-step-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.decision-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  color: var(--muted);
 }
 .decision-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.875rem;
+  margin-bottom: 1.125rem;
 }
-@media (max-width: 500px) { .decision-choices { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .decision-choices { grid-template-columns: 1fr; } }
 .choice-card {
   border: 2px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 1.25rem;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.1s;
   user-select: none;
+  position: relative;
 }
-.choice-card:hover { background: var(--surface-alt); }
-.choice-card.selected-approve { border-color: var(--green); background: var(--green-soft); }
-.choice-card.selected-hold { border-color: var(--red); background: var(--red-soft); }
-.choice-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-.choice-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.choice-card:hover {
+  background: var(--surface-alt);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.choice-card:active { transform: translateY(0); }
+.choice-card.selected-approve {
+  border-color: var(--green);
+  background: var(--green-soft);
+  box-shadow: 0 0 0 1px var(--green), 0 4px 12px rgba(46,204,138,0.12);
+}
+.choice-card.selected-hold {
+  border-color: var(--red);
+  background: var(--red-soft);
+  box-shadow: 0 0 0 1px var(--red), 0 4px 12px rgba(240,112,112,0.12);
+}
+.choice-icon {
+  font-size: 18px;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+.choice-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.choice-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
 /* Hold Reasons */
-.hold-reasons { margin-bottom: 1rem; }
-.hold-reasons-title { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+.hold-reasons { margin-bottom: 1.125rem; }
+.hold-reasons-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 .reason-option {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 0.4rem;
-  transition: background 0.1s;
+  margin-bottom: 0.5rem;
+  transition: background 0.1s, border-color 0.1s;
   user-select: none;
 }
 .reason-option:hover { background: var(--surface-alt); }
 .reason-option.selected { background: var(--accent-soft); border-color: var(--accent); }
 .reason-radio {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border: 2px solid var(--border);
   border-radius: 50%;
   flex-shrink: 0;
   margin-top: 2px;
   transition: border-color 0.1s, background 0.1s;
+  position: relative;
 }
-.reason-option.selected .reason-radio { border-color: var(--accent); background: var(--accent); }
-.reason-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+.reason-radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.reason-option.selected .reason-radio {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.reason-option.selected .reason-radio::after { transform: translate(-50%,-50%) scale(1); }
+.reason-text { font-size: 14px; color: var(--text); line-height: 1.55; }
 
 /* Confirm Button */
 .confirm-btn {
@@ -426,150 +660,245 @@ tr:last-child td { border-bottom: none; }
   background: var(--accent);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s, opacity 0.15s;
-}
-.confirm-btn:hover:not(:disabled) { background: var(--accent-hover); }
-.confirm-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-/* Verdict */
-.verdict-card {
-  margin: 1.25rem;
-  border-radius: 8px;
-  padding: 1.25rem;
-  border: 1.5px solid;
-}
-.verdict-card.ok { border-color: var(--green); background: var(--green-soft); }
-.verdict-card.bad { border-color: var(--red); background: var(--red-soft); }
-.verdict-headline {
+  border-radius: 10px;
+  padding: 1rem;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(200,104,26,0.3);
+}
+.confirm-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(200,104,26,0.35);
+}
+.confirm-btn:active:not(:disabled) { transform: translateY(0); }
+.confirm-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ═══════════════════════════════════════════
+   VERDICT
+═══════════════════════════════════════════ */
+.verdict-wrap { margin: 1.75rem; }
+.verdict-card {
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1.5px solid;
+  box-shadow: var(--shadow-md);
+}
+.verdict-card.ok {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+.verdict-card.bad {
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+.verdict-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   margin-bottom: 0.6rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.verdict-card.ok .verdict-tag { color: var(--green); background: var(--green-soft); border: 1px solid var(--green); }
+.verdict-card.bad .verdict-tag { color: var(--red); background: var(--red-soft); border: 1px solid var(--red); }
+.verdict-headline {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
 }
 .verdict-card.ok .verdict-headline { color: var(--green); }
 .verdict-card.bad .verdict-headline { color: var(--red); }
-.verdict-explanation { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+.verdict-explanation {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
 .prompt-tip {
   background: var(--trace-bg);
   border-left: 3px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.25rem;
 }
 .prompt-tip-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
-.prompt-tip-text { font-size: 12px; color: var(--trace-text); line-height: 1.6; }
+.prompt-tip-text {
+  font-size: 13px;
+  color: var(--trace-text);
+  line-height: 1.65;
+  opacity: 0.85;
+}
 .next-btn {
   background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 0.65rem 1.25rem;
-  font-size: 13px;
-  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  font-size: 14px;
+  font-weight: 800;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(200,104,26,0.28);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
-.next-btn:hover { background: var(--accent-hover); }
+.next-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-/* ── SCORECARD ── */
+/* ═══════════════════════════════════════════
+   SCORECARD
+═══════════════════════════════════════════ */
 .scorecard {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.scorecard-header {
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2rem 1.5rem;
 }
 .sc-eyebrow {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.4rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
 }
-.sc-title { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 0.4rem; }
-.sc-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.5; }
+.sc-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.03em;
+}
+.sc-subtitle { font-size: 15px; color: var(--muted); line-height: 1.6; }
+.sc-body { padding: 2rem; }
 .sc-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
-@media (max-width: 550px) { .sc-stats { grid-template-columns: 1fr; } }
+@media (max-width: 580px) { .sc-stats { grid-template-columns: 1fr; } }
 .sc-stat {
   background: var(--surface-alt);
   border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  padding: 1.25rem;
+  border-radius: 10px;
+  padding: 1.5rem 1.25rem;
   text-align: center;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
+.sc-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.sc-stat.green::before { background: var(--green); }
+.sc-stat.amber::before { background: var(--accent); }
 .sc-stat-label {
   font-size: 11px;
+  font-weight: 700;
   color: var(--muted);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
 }
 .sc-stat-value {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 .sc-stat.green .sc-stat-value { color: var(--green); }
 .sc-stat.amber .sc-stat-value { color: var(--accent); }
-.habits-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+.habits-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 1.125rem;
+  letter-spacing: -0.02em;
+}
 .habit-card {
   border-left: 4px solid var(--accent);
   background: var(--brief-bg);
-  border-radius: 0 8px 8px 0;
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.75rem;
-  font-size: 13px;
+  border-radius: 0 10px 10px 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.875rem;
+  font-size: 14px;
   color: var(--muted);
-  line-height: 1.6;
+  line-height: 1.65;
+  box-shadow: var(--shadow-sm);
 }
-.habit-card strong { color: var(--text); font-weight: 700; }
+.habit-card strong { color: var(--text); font-weight: 800; }
 .sc-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-soft);
   flex-wrap: wrap;
 }
 .reset-btn {
   background: var(--surface-alt);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: 8px;
   color: var(--text);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 0.65rem 1.25rem;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
 }
-.reset-btn:hover { background: var(--border); }
+.reset-btn:hover { background: var(--border); transform: translateY(-1px); }
 .warmup2-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--accent);
   color: #fff;
   text-decoration: none;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 0.65rem 1.25rem;
-  transition: background 0.15s;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 0.75rem 1.5rem;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(200,104,26,0.28);
 }
-.warmup2-link:hover { background: var(--accent-hover); }
+.warmup2-link:hover { background: var(--accent-hover); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -578,7 +907,7 @@ tr:last-child td { border-bottom: none; }
 <div class="topbar">
   <div class="topbar-left">
     <a href="/" class="back-link">← Warm-Ups</a>
-    <span class="topbar-sep">|</span>
+    <div class="topbar-sep"></div>
     <span class="topbar-title">Sign Off or Send Back?</span>
   </div>
   <div class="topbar-right">
@@ -712,7 +1041,6 @@ var PROPOSALS = [
 // STATE
 // ═══════════════════════════════════════════
 var state = newState();
-
 function newState() {
   return {
     round: 0,
@@ -724,7 +1052,6 @@ function newState() {
     showScorecard: false
   };
 }
-
 function resetAll() {
   clearInterval(state.timerInterval);
   state = newState();
@@ -738,32 +1065,20 @@ function resetAll() {
 function fmt(s) {
   return String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
 }
-
 function startTimer() {
   if (state.timerInterval) clearInterval(state.timerInterval);
   state.timerInterval = setInterval(function() {
-    if (state.timerLeft > 0) {
-      state.timerLeft--;
-      syncTimer();
-    } else {
-      clearInterval(state.timerInterval);
-      syncTimer();
-    }
+    if (state.timerLeft > 0) { state.timerLeft--; syncTimer(); }
+    else { clearInterval(state.timerInterval); syncTimer(); }
   }, 1000);
 }
-
 function syncTimer() {
   var el = document.getElementById('timer');
   if (!el) return;
-  if (state.showScorecard) {
-    el.textContent = '';
-    el.className = 'timer done';
-    return;
-  }
+  if (state.showScorecard) { el.textContent = ''; el.className = 'timer done'; return; }
   el.textContent = fmt(state.timerLeft);
   el.className = state.timerLeft === 0 ? 'timer done' : (state.timerLeft <= 30 ? 'timer urgent' : 'timer');
 }
-
 function syncPill() {
   var el = document.getElementById('pill');
   if (!el) return;
@@ -792,21 +1107,18 @@ function revealTrace(i) {
   state.rounds[i].inspected = true;
   patchRound(i);
 }
-
 function selectChoice(i, choice) {
   if (state.rounds[i].confirmed) return;
   state.rounds[i].chosen = choice;
   if (choice === 'approve') state.rounds[i].holdReasonIdx = null;
   patchRound(i);
 }
-
 function selectReason(i, idx) {
   if (state.rounds[i].confirmed) return;
   state.rounds[i].holdReasonIdx = idx;
   patchRound(i);
 }
-
-function confirm(i) {
+function confirmDecision(i) {
   var r = state.rounds[i];
   var p = PROPOSALS[i];
   if (!r.chosen) return;
@@ -814,7 +1126,6 @@ function confirm(i) {
   r.confirmed = true;
   patchRound(i);
 }
-
 function advance() {
   if (state.round < PROPOSALS.length - 1) {
     state.round++;
@@ -831,7 +1142,7 @@ function advance() {
 }
 
 // ═══════════════════════════════════════════
-// SAFE HTML
+// HTML HELPERS
 // ═══════════════════════════════════════════
 function esc(s) {
   return String(s)
@@ -846,12 +1157,13 @@ function esc(s) {
 // ═══════════════════════════════════════════
 function buildOnboarding() {
   return '<div class="onboarding">'
-    + '<div class="onboarding-heading">HOW THIS 4-MINUTE ACTIVITY WORKS</div>'
-    + '<p class="onboarding-intro">Imagine an AI assistant just prepared 3 business proposals for your approval. Look closely at all the operational parameters — some metrics look positive while others hide costly flaws. Test your judgment:</p>'
+    + '<div class="onboarding-eyebrow">Executive AI Training · 4-Minute Warm-Up</div>'
+    + '<div class="onboarding-heading">How This Activity Works</div>'
+    + '<p class="onboarding-intro">An AI assistant has prepared 3 business proposals for your approval. Some metrics look positive — others hide costly flaws. Your job: inspect the data and make the call.</p>'
     + '<div class="steps-grid">'
-    + '<div class="step-card"><div class="step-label">Step 1 · Read the Proposal</div><div class="step-desc">Check the headline numbers and what funding or action the AI wants you to sign off on.</div></div>'
-    + '<div class="step-card"><div class="step-label">Step 2 · Inspect the Raw Parameters</div><div class="step-desc">Click the dashed button below to weigh the full set of operational &amp; cost numbers yourself.</div></div>'
-    + '<div class="step-card"><div class="step-label">Step 3 · Approve or Hold</div><div class="step-desc">Approve if the math genuinely holds up — or hold funding and justify why.</div></div>'
+    + '<div class="step-card"><div class="step-num">1</div><div class="step-label">Read the Proposal</div><div class="step-desc">Review the headline numbers and what funding or action the AI is recommending.</div></div>'
+    + '<div class="step-card"><div class="step-num">2</div><div class="step-label">Inspect the Raw Data</div><div class="step-desc">Click the button to examine the full set of operational and cost parameters.</div></div>'
+    + '<div class="step-card"><div class="step-num">3</div><div class="step-label">Approve or Hold</div><div class="step-desc">Unlocks after Step 2. Approve if the numbers hold — or hold funding and say why.</div></div>'
     + '</div></div>';
 }
 
@@ -859,7 +1171,6 @@ function buildProposal(i) {
   var p = PROPOSALS[i];
   var r = state.rounds[i];
 
-  // ── Metric cards
   var metricsHtml = p.metrics.map(function(m) {
     return '<div class="metric-card">'
       + '<div class="metric-k">' + esc(m.k) + '</div>'
@@ -868,7 +1179,6 @@ function buildProposal(i) {
       + '</div>';
   }).join('');
 
-  // ── Trace table
   var thHtml = p.traceCols.map(function(c) { return '<th>' + esc(c) + '</th>'; }).join('');
   var tbHtml = p.traceRows.map(function(row) {
     return '<tr>' + row.map(function(cell) { return '<td>' + esc(cell) + '</td>'; }).join('') + '</tr>';
@@ -876,22 +1186,44 @@ function buildProposal(i) {
 
   var traceHtml = r.inspected
     ? '<div class="trace-container">'
-        + '<div class="trace-header">'
-          + '<div class="trace-title">RAW OPERATIONAL &amp; FINANCIAL PARAMETERS</div>'
-          + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div>'
-        + '</div>'
+        + '<div class="trace-header"><div class="trace-title">Raw Operational &amp; Financial Parameters</div>'
+        + '<div class="trace-subtitle">' + esc(p.traceSubtitle) + '</div></div>'
         + '<div class="trace-table-wrap"><table><thead><tr>' + thHtml + '</tr></thead><tbody>' + tbHtml + '</tbody></table></div>'
         + '<div class="trace-note">' + esc(p.traceNote) + '</div>'
       + '</div>'
     : '';
 
   var traceBtnHtml = r.inspected
-    ? '<div class="trace-btn-wrap"><button class="trace-btn revealed">✓ Underlying Operational Parameters Revealed</button></div>'
-    : '<div class="trace-btn-wrap"><button class="trace-btn" onclick="revealTrace(' + i + ')">Step 2: Inspect the Underlying Parameters (15 sec)</button></div>';
+    ? '<div class="trace-btn-wrap"><button class="trace-btn revealed">✓&nbsp;&nbsp;Underlying Parameters Revealed</button></div>'
+    : '<div class="trace-btn-wrap"><button class="trace-btn" onclick="revealTrace(' + i + ')">&#128269;&nbsp;&nbsp;Step 2: Inspect the Underlying Parameters (15 sec)</button></div>';
 
-  // ── Decision or Verdict
+  // Step 3: locked if not yet inspected and not confirmed
   var bottomHtml;
-  if (!r.confirmed) {
+  if (r.confirmed) {
+    var isCorrect = r.chosen === p.correctDecision
+      && (r.chosen !== 'hold' || p.holdReasons.length === 0
+          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
+    var vClass  = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
+    var vTag    = isCorrect ? '✓ Sound Decision' : '✗ Missed Signal';
+    var vHead   = isCorrect ? p.verdictSuccess : p.verdictFail;
+    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard →' : 'Next Proposal →';
+
+    bottomHtml = '<div class="verdict-wrap"><div class="' + vClass + '">'
+      + '<div class="verdict-tag">' + vTag + '</div>'
+      + '<div class="verdict-headline">' + esc(vHead) + '</div>'
+      + '<div class="verdict-explanation">' + esc(p.explanation) + '</div>'
+      + '<div class="prompt-tip"><div class="prompt-tip-label">What to ask AI next time:</div><div class="prompt-tip-text">' + esc(p.promptTip) + '</div></div>'
+      + '<button class="next-btn" onclick="advance()">' + nextLbl + ' →</button>'
+      + '</div></div>';
+
+  } else if (!r.inspected) {
+    bottomHtml = '<div class="decision-locked">'
+      + '<div class="lock-icon">🔒</div>'
+      + '<div class="lock-eyebrow">Step 3 · Decision Locked</div>'
+      + '<div class="lock-text">Review the underlying data first — click <strong>Step 2</strong> above to unlock your decision options.</div>'
+      + '</div>';
+
+  } else {
     var approveClass = 'choice-card' + (r.chosen === 'approve' ? ' selected-approve' : '');
     var holdClass    = 'choice-card' + (r.chosen === 'hold'    ? ' selected-hold'    : '');
 
@@ -911,37 +1243,24 @@ function buildProposal(i) {
       || (r.chosen === 'hold' && (p.holdReasons.length === 0 || r.holdReasonIdx !== null));
 
     bottomHtml = '<div class="decision-section">'
-      + '<div class="decision-title">Step 3: What is your executive decision?</div>'
+      + '<div class="decision-eyebrow">'
+        + '<div class="decision-step-badge">3</div>'
+        + '<div class="decision-title">What is your executive decision?</div>'
+      + '</div>'
       + '<div class="decision-choices">'
         + '<div class="' + approveClass + '" onclick="selectChoice(' + i + ',\'approve\')">'
-          + '<div class="choice-label">✓ ' + esc(p.approveLabel) + '</div>'
+          + '<div class="choice-icon">✅</div>'
+          + '<div class="choice-label">' + esc(p.approveLabel) + '</div>'
           + '<div class="choice-desc">' + esc(p.approveDesc) + '</div>'
         + '</div>'
         + '<div class="' + holdClass + '" onclick="selectChoice(' + i + ',\'hold\')">'
-          + '<div class="choice-label">✗ ' + esc(p.holdLabel) + '</div>'
+          + '<div class="choice-icon">🛑</div>'
+          + '<div class="choice-label">' + esc(p.holdLabel) + '</div>'
           + '<div class="choice-desc">' + esc(p.holdDesc) + '</div>'
         + '</div>'
       + '</div>'
       + reasonsHtml
-      + '<button class="confirm-btn" onclick="confirm(' + i + ')" ' + (isValid ? '' : 'disabled') + '>Confirm My Decision</button>'
-      + '</div>';
-  } else {
-    var isCorrect = r.chosen === p.correctDecision
-      && (r.chosen !== 'hold' || p.holdReasons.length === 0
-          || (r.holdReasonIdx !== null && p.holdReasons[r.holdReasonIdx].correct));
-
-    var vClass    = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
-    var vHeadline = isCorrect ? p.verdictSuccess : p.verdictFail;
-    var nextLabel = (i === PROPOSALS.length - 1) ? 'See Final Scorecard →' : 'Next Proposal →';
-
-    bottomHtml = '<div class="' + vClass + '">'
-      + '<div class="verdict-headline">' + esc(vHeadline) + '</div>'
-      + '<div class="verdict-explanation">' + esc(p.explanation) + '</div>'
-      + '<div class="prompt-tip">'
-        + '<div class="prompt-tip-label">What to ask AI next time:</div>'
-        + '<div class="prompt-tip-text">' + esc(p.promptTip) + '</div>'
-      + '</div>'
-      + '<button class="next-btn" onclick="advance()">' + nextLabel + '</button>'
+      + '<button class="confirm-btn" onclick="confirmDecision(' + i + ')" ' + (isValid ? '' : 'disabled') + '>Confirm My Decision</button>'
       + '</div>';
   }
 
@@ -952,7 +1271,7 @@ function buildProposal(i) {
     + '</div>'
     + '<div class="situation">' + esc(p.situation) + '</div>'
     + '<div class="ai-brief">'
-      + '<div class="ai-brief-header">AI-GENERATED PROPOSAL · WAITING FOR YOUR DECISION</div>'
+      + '<div class="ai-brief-header"><div class="ai-brief-dot"></div><div class="ai-brief-label">AI-Generated Proposal · Awaiting Decision</div></div>'
       + '<div class="ai-brief-body">'
         + '<div class="ai-headline">' + esc(p.headline) + '</div>'
         + '<div class="metrics-grid">' + metricsHtml + '</div>'
@@ -975,27 +1294,28 @@ function buildScorecard() {
     if (ok) { correctCount++; money += p.stakeK; }
     if (r.inspected) inspected++;
   });
-
-  var moneyStr = money >= 1000
-    ? '$' + (money / 1000).toFixed(1).replace('.0','') + 'M'
-    : '$' + money + 'K';
+  var moneyStr = money >= 1000 ? '$' + (money/1000).toFixed(1).replace('.0','') + 'M' : '$' + money + 'K';
 
   return '<div class="scorecard">'
-    + '<div class="sc-eyebrow">YOUR 4-MINUTE EXECUTIVE SUMMARY</div>'
-    + '<div class="sc-title">Warm-Up Complete</div>'
-    + '<div class="sc-subtitle">You reviewed three AI-prepared business proposals totaling $950K in decisions.</div>'
-    + '<div class="sc-stats">'
-      + '<div class="sc-stat green"><div class="sc-stat-label">Sound Decisions</div><div class="sc-stat-value">' + correctCount + ' / 3</div></div>'
-      + '<div class="sc-stat amber"><div class="sc-stat-label">Money Protected / Recovered</div><div class="sc-stat-value">' + moneyStr + '</div></div>'
-      + '<div class="sc-stat green"><div class="sc-stat-label">Raw Data Checked</div><div class="sc-stat-value">' + inspected + ' / 3</div></div>'
+    + '<div class="scorecard-header">'
+      + '<div class="sc-eyebrow">Your 4-Minute Executive Summary</div>'
+      + '<div class="sc-title">Warm-Up Complete</div>'
+      + '<div class="sc-subtitle">You reviewed three AI-prepared business proposals totalling $950K in decisions.</div>'
     + '</div>'
-    + '<div class="habits-title">3 Simple Habits to Carry Into Today\'s Workshop</div>'
-    + '<div class="habit-card"><strong>1. Look Underneath Averages:</strong> Positive pilot ratings or fast average times can hide mix shifts and repeat work. Check all parameters side by side.</div>'
-    + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts:</strong> Check net spend (payroll + overtime + license fees) and verify how many people or tickets were actually counted.</div>'
-    + '<div class="habit-card"><strong>3. Verify Before Approving — Don\'t Reject Everything:</strong> Pause 15 seconds to connect the raw data points. Hold shaky rollouts, and back solid cases when evidence holds up.</div>'
-    + '<div class="sc-actions">'
-      + '<button class="reset-btn" onclick="resetAll()">Try Again</button>'
-      + '<a href="/two-truths/" class="warmup2-link">Try Warm-Up 2 →</a>'
+    + '<div class="sc-body">'
+      + '<div class="sc-stats">'
+        + '<div class="sc-stat green"><div class="sc-stat-label">Sound Decisions</div><div class="sc-stat-value">' + correctCount + ' / 3</div></div>'
+        + '<div class="sc-stat amber"><div class="sc-stat-label">Money Protected / Recovered</div><div class="sc-stat-value">' + moneyStr + '</div></div>'
+        + '<div class="sc-stat green"><div class="sc-stat-label">Raw Data Checked</div><div class="sc-stat-value">' + inspected + ' / 3</div></div>'
+      + '</div>'
+      + '<div class="habits-title">3 Habits to Carry Into Today\'s Workshop</div>'
+      + '<div class="habit-card"><strong>1. Look Underneath Averages</strong> — Positive pilot ratings or fast average times can hide mix shifts and repeat work. Check all parameters side by side.</div>'
+      + '<div class="habit-card"><strong>2. Follow the Actual Cash &amp; Sample Counts</strong> — Check net spend (payroll + overtime + license fees) and verify how many people or tickets were actually counted.</div>'
+      + '<div class="habit-card"><strong>3. Verify Before Approving — Don\'t Reject Everything</strong> — Pause 15 seconds to connect the raw data points. Hold shaky rollouts, and back solid cases when evidence holds up.</div>'
+      + '<div class="sc-actions">'
+        + '<button class="reset-btn" onclick="resetAll()">↺ Try Again</button>'
+        + '<a href="/two-truths/" class="warmup2-link">Try Warm-Up 2 →</a>'
+      + '</div>'
     + '</div>'
     + '</div>';
 }
@@ -1009,13 +1329,11 @@ function render() {
   if (state.showScorecard) {
     app.innerHTML = buildScorecard();
   } else {
-    app.innerHTML = buildOnboarding()
-      + '<div id="round-slot">' + buildProposal(state.round) + '</div>';
+    app.innerHTML = buildOnboarding() + '<div id="round-slot">' + buildProposal(state.round) + '</div>';
   }
   syncTimer();
   syncPill();
 }
-
 function patchRound(i) {
   var slot = document.getElementById('round-slot');
   if (slot) slot.innerHTML = buildProposal(i);
