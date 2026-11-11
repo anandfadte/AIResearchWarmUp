@@ -450,14 +450,14 @@ body {
   line-height: 1.5;
 }
 .trace-table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13.5px;
   color: var(--trace-text);
+  table-layout: fixed;
 }
 thead tr {
   background: rgba(255,255,255,0.04);
@@ -471,9 +471,10 @@ th {
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: rgba(240,235,224,0.5);
-  white-space: nowrap;
+  word-break: break-word;
 }
-th:first-child { width: 22%; min-width: 180px; }
+th:first-child { width: 20%; }
+th:last-child { width: 28%; }
 tbody tr {
   border-bottom: 1px solid rgba(255,255,255,0.045);
   transition: background 0.1s;
@@ -486,6 +487,8 @@ td {
   vertical-align: top;
   line-height: 1.6;
   font-size: 13.5px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 td:first-child {
   font-weight: 700;
@@ -802,6 +805,27 @@ td:last-child {
   gap: 0.4rem;
 }
 .next-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.retry-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+.retry-btn:hover { background: var(--surface-alt); color: var(--text); transform: translateY(-1px); }
+.scenario-counter {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 
 /* ═══════════════════════════════════════════
    SCORECARD
@@ -947,7 +971,6 @@ td:last-child {
     <span class="topbar-title">Sign Off or Send Back?</span>
   </div>
   <div class="topbar-right">
-    <span class="pill" id="pill">Proposal 1 of 3</span>
     <span class="timer" id="timer">04:00</span>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
   </div>
@@ -1134,11 +1157,7 @@ function syncTimer() {
   el.textContent = fmt(state.timerLeft);
   el.className = state.timerLeft === 0 ? 'timer done' : (state.timerLeft <= 30 ? 'timer urgent' : 'timer');
 }
-function syncPill() {
-  var el = document.getElementById('pill');
-  if (!el) return;
-  el.textContent = state.showScorecard ? 'Complete' : ('Proposal ' + (state.round + 1) + ' of 3');
-}
+function syncPill() { /* pill removed from top bar */ }
 
 // ═══════════════════════════════════════════
 // THEME
@@ -1187,6 +1206,11 @@ function confirmDecision(i) {
   if (r.chosen === 'hold' && p.holdReasons.length > 0 && r.holdReasonIdx === null) return;
   r.confirmed = true;
   patchRound(i);
+}
+function retryRound(i) {
+  state.rounds[i] = { inspected: false, chosen: null, approveReasonIdx: null, holdReasonIdx: null, confirmed: false };
+  patchRound(i);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function advance() {
   if (state.round < PROPOSALS.length - 1) {
@@ -1239,7 +1263,7 @@ function buildOnboarding() {
   return '<div class="onboarding">'
     + '<div class="onboarding-eyebrow">Executive AI Training · 4-Minute Warm-Up</div>'
     + '<div class="onboarding-heading">How This Activity Works</div>'
-    + '<p class="onboarding-intro">An AI assistant has prepared 3 business proposals for your approval. Some metrics look positive — others hide costly flaws. Your job: inspect the data and make the call.</p>'
+    + '<p class="onboarding-intro">An AI assistant has prepared <strong>3 business scenarios</strong> for your sign-off. Some headline metrics look positive — others hide costly flaws. Work through each scenario below, inspect the raw data, and make the call.</p>'
     + '<div class="steps-grid">'
     + '<div class="step-card"><div class="step-num">1</div><div class="step-label">Read the Proposal</div><div class="step-desc">Review the headline numbers and what funding or action the AI is recommending.</div></div>'
     + '<div class="step-card"><div class="step-num">2</div><div class="step-label">Inspect the Raw Data</div><div class="step-desc">Click the button to examine the full set of operational and cost parameters.</div></div>'
@@ -1294,14 +1318,17 @@ function buildProposal(i) {
     var vClass  = isCorrect ? 'verdict-card ok' : 'verdict-card bad';
     var vTag    = isCorrect ? '✓ Sound Decision' : '✗ Missed Signal';
     var vHead   = isCorrect ? p.verdictSuccess : p.verdictFail;
-    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard' : 'Next Proposal';
+    var nextLbl = (i === PROPOSALS.length - 1) ? 'See Final Scorecard' : 'Next Scenario';
 
     bottomHtml = '<div class="verdict-wrap"><div class="' + vClass + '">'
       + '<div class="verdict-tag">' + vTag + '</div>'
       + '<div class="verdict-headline">' + esc(vHead) + '</div>'
       + '<div class="verdict-explanation">' + esc(p.explanation) + '</div>'
       + '<div class="prompt-tip"><div class="prompt-tip-label">What to ask AI next time:</div><div class="prompt-tip-text">' + esc(p.promptTip) + '</div></div>'
-      + '<button class="next-btn" onclick="advance()">' + nextLbl + ' →</button>'
+      + '<div style="display:flex;gap:0.75rem;flex-wrap:wrap;">'
+        + '<button class="next-btn" onclick="advance()">' + nextLbl + ' →</button>'
+        + '<button class="retry-btn" onclick="retryRound(' + i + ')">↺ Try Again</button>'
+      + '</div>'
       + '</div></div>';
 
   } else if (!r.inspected) {
@@ -1353,7 +1380,10 @@ function buildProposal(i) {
   return '<div class="proposal-wrap">'
     + '<div class="context-strip">'
       + '<span class="context-tag">' + esc(p.context) + '</span>'
-      + '<span class="stake-badge">' + esc(p.stake) + '</span>'
+      + '<div style="display:flex;align-items:center;gap:0.625rem;flex-shrink:0;">'
+        + '<span class="scenario-counter">Scenario ' + (i + 1) + ' of ' + PROPOSALS.length + '</span>'
+        + '<span class="stake-badge">' + esc(p.stake) + '</span>'
+      + '</div>'
     + '</div>'
     + '<div class="situation">' + esc(p.situation) + '</div>'
     + '<div class="ai-brief">'
