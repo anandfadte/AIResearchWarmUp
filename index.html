@@ -317,6 +317,23 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .btn-restart { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: 999px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; will-change: transform; }
 .btn-restart:hover { background: rgba(255,255,255,0.18); }
 
+/* ── Cost Reveal ── */
+.cost-reveal {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(126,200,192,0.2);
+  border-radius: 16px; padding: 22px 24px; margin-top: 20px;
+}
+.cost-reveal-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 0 0 14px; }
+.cost-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.cost-row:last-of-type { border-bottom: none; padding-bottom: 0; }
+.cost-col-label { font-size: 11px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: rgba(255,255,255,0.45); min-width: 110px; }
+.cost-col-value { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; line-height: 1; }
+.cost-col-value.teal  { color: #7EC8C0; }
+.cost-col-value.amber { color: #F59E0B; }
+.cost-col-value.red   { color: #FCA5A5; }
+.cost-col-note { font-size: 12px; color: rgba(255,255,255,0.4); flex: 1; min-width: 120px; }
+.cost-insight { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.65); margin: 14px 0 0; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+.cost-insight strong { color: #fff; }
+
 /* ── Footer ── */
 .debrief-strip { margin-top: 32px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 20px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
 .debrief-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; list-style: none; margin: 0; padding: 0; }
@@ -707,6 +724,28 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
         <p id="scorecard-takeaway-text"></p>
       </div>
     </div>
+    <div class="scorecard-breakdown" style="border-top:none;padding-top:0;">
+      <div class="cost-reveal hidden" id="cost-reveal">
+        <p class="cost-reveal-title">The cost picture</p>
+        <div class="cost-row">
+          <span class="cost-col-label">AI Analysis</span>
+          <span class="cost-col-value teal">~$0.003</span>
+          <span class="cost-col-note">3 API calls &middot; ~1,200 tokens &mdash; under a cent</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-col-label">Human review</span>
+          <span class="cost-col-value amber" id="cost-human-value">&mdash;</span>
+          <span class="cost-col-note" id="cost-human-note"></span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-col-label">Outcome</span>
+          <span class="cost-col-value" id="cost-outcome-value">&mdash;</span>
+          <span class="cost-col-note" id="cost-outcome-note"></span>
+        </div>
+        <p class="cost-insight" id="cost-insight-text"></p>
+      </div>
+    </div>
+
     <div class="scorecard-actions">
       <button class="btn-restart" onclick="resetActivity()">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
@@ -731,6 +770,7 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 /* ─── State ─── */
 var score = 0, cluesUsed = 0, step1Pts = 0, step2Pts = 0;
 var decision = null, actionChoice = null, confidence = null, humanUnlocked = false;
+var step2Marked = false, step3Marked = false;
 var timerSeconds = 180, timerRunning = false, timerInterval = null;
 
 var ACTION_FEEDBACK = {
@@ -1020,10 +1060,12 @@ function reconsider() {
 function resetStep2UI() {
   ['a','b','c'].forEach(function(k) { document.getElementById('btn-'+k).className = 'action-btn'; document.getElementById('key-'+k).className = 'action-key'; });
   document.getElementById('step2-feedback').classList.add('hidden');
-  actionChoice = null;
+  actionChoice = null; step2Pts = 0; step2Marked = false;
 }
 function chooseAction(key) {
   if (!decision || actionChoice === key) return;
+  /* Reverse previous pts before re-selecting */
+  score -= step2Pts;
   actionChoice = key; step2Pts = key==='B' ? 40 : key==='C' ? 20 : 0;
   var prev = score; score += step2Pts;
   ['a','b','c'].forEach(function(k) { document.getElementById('btn-'+k).className = 'action-btn' + (k.toUpperCase()===key ? ' selected' : ''); });
@@ -1031,7 +1073,12 @@ function chooseAction(key) {
   revealEl(document.getElementById('step2-feedback'), { y: 10 });
   if (step2Pts > 0) { spawnPtsBadge(step2Pts, document.getElementById('btn-'+key.toLowerCase())); animateScore(prev, score); }
   else shakeEl(document.getElementById('btn-'+key.toLowerCase()));
-  markTrackerStep(2, step2Pts);
+  if (!step2Marked) { step2Marked = true; markTrackerStep(2, step2Pts); }
+  else { /* update pts label only on re-pick */
+    var el = document.getElementById('step2-pts-label');
+    if (el) { el.textContent = step2Pts > 0 ? '+'+step2Pts+' pts' : '0 pts'; }
+    animateScore(score - step2Pts + step2Pts, score);
+  }
   resetStep3UI(); document.getElementById('scorecard').classList.add('hidden');
   setTimeout(function() {
     revealEl(document.getElementById('step3'), { y: 28, dur: 0.5 });
@@ -1044,16 +1091,19 @@ function chooseAction(key) {
 function resetStep3UI() {
   document.getElementById('btn-high').className = 'choice-btn';
   document.getElementById('btn-low').className  = 'choice-btn';
-  confidence = null;
+  confidence = null; step3Marked = false;
 }
 function chooseConfidence(choice) {
   if (!decision || !actionChoice || confidence === choice) return;
+  /* Reverse previous +20 if re-picking */
+  if (confidence !== null) score -= 20;
   confidence = choice;
   var prev = score; score += 20;
   document.getElementById('btn-high').className = 'choice-btn' + (choice==='high' ? ' selected' : '');
   document.getElementById('btn-low').className  = 'choice-btn' + (choice==='low'  ? ' selected' : '');
   spawnPtsBadge(20, document.getElementById('btn-'+choice));
-  animateScore(prev, score); markTrackerStep(3, 20);
+  animateScore(prev, score);
+  if (!step3Marked) { step3Marked = true; markTrackerStep(3, 20); }
   setTimeout(function() { showScorecard(); }, 700);
 }
 
@@ -1094,8 +1144,37 @@ function showScorecard() {
   else if (finalScore >= 65) takeaway = '<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.';
   else                        takeaway = '<strong>Right instinct on the core call.</strong> The follow-through needed one more check — verify with HR before any cancellation.';
   document.getElementById('scorecard-takeaway-text').innerHTML = takeaway;
+  /* Cost Reveal */
+  var humanMins = 15 + cluesUsed * 10;
+  var humanStr = humanMins + ' min';
+  document.getElementById('cost-human-value').textContent = humanStr;
+  document.getElementById('cost-human-note').textContent = cluesUsed > 0
+    ? '15 min base + ' + cluesUsed + ' clue check' + (cluesUsed > 1 ? 's' : '') + ' (×10 min each)'
+    : 'Manual audit: confirmed who actually uses which license';
+  var outcomeEl = document.getElementById('cost-outcome-value');
+  if (decision === 'overrule') {
+    outcomeEl.textContent = '$24,000 / yr saved';
+    outcomeEl.className = 'cost-col-value teal';
+    document.getElementById('cost-outcome-note').textContent = 'Cancel 25 unused licenses × $200/month';
+  } else {
+    outcomeEl.textContent = '$2,000 / mo wasted';
+    outcomeEl.className = 'cost-col-value red';
+    document.getElementById('cost-outcome-note').textContent = 'Acting on AI output unverified — licenses keep renewing';
+  }
+  var insightHtml;
+  if (decision === 'overrule' && cluesUsed === 0) {
+    insightHtml = '<strong>Optimal balance.</strong> AI did the data work in seconds for under a cent. You read the gap from the numbers alone and acted — no manual digging needed.';
+  } else if (decision === 'overrule') {
+    insightHtml = '<strong>Good balance.</strong> AI flagged the spike. The ' + humanStr + ' human check confirmed what it couldn’t see. That manual work recovered $24,000 a year.';
+  } else {
+    insightHtml = '<strong>Reframe the cost.</strong> The AI analysis cost $0.003. Acting on it unverified costs $2,000 a month. The cheap step was not the risky one — the unverified step was.';
+  }
+  document.getElementById('cost-insight-text').innerHTML = insightHtml;
+
   gsap.fromTo('.breakdown-row', { opacity: 0, x: -14 }, { opacity: 1, x: 0, stagger: 0.1, duration: 0.4, delay: 0.8, ease: 'power2.out' });
   gsap.fromTo('.scorecard-takeaway', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, delay: 1.5, ease: 'power2.out' });
+  document.getElementById('cost-reveal').classList.remove('hidden');
+  gsap.fromTo('#cost-reveal', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, delay: 1.8, ease: 'back.out(1.3)' });
   setTimeout(function() { sc.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 300);
 }
 
@@ -1104,6 +1183,7 @@ function resetActivity() {
   resetTimer();
   score = 0; cluesUsed = 0; step1Pts = 0; step2Pts = 0;
   decision = null; actionChoice = null; confidence = null; humanUnlocked = false;
+  step2Marked = false; step3Marked = false;
   document.getElementById('score-display').textContent = '0';
   document.getElementById('score-max').textContent = '100';
   gsap.set('#score-tracker', { boxShadow: 'none' });
@@ -1116,6 +1196,7 @@ function resetActivity() {
   document.getElementById('scorecard').classList.add('hidden');
   document.getElementById('br-clues').classList.add('hidden');
   document.getElementById('br-total').classList.add('hidden');
+  document.getElementById('cost-reveal').classList.add('hidden');
   resetStep2UI(); resetStep3UI();
 
   [1,2,3].forEach(function(n) {
