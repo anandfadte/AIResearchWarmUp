@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Which Lens Decides? — Warm-Up</title>
+<title>The AI ranked it. What would you do? — Warm-Up</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -579,6 +579,15 @@ button:focus-visible {
 
 .feedback-box.soft-bg .fb-desc { color: var(--muted); opacity: 1; }
 
+.feedback-box.warn-bg {
+  background: #FFFBEB;
+  border: 1px solid #F59E0B;
+  color: #78350F;
+}
+.feedback-box.warn-bg .fb-eyebrow { color: #B45309; opacity: 1; }
+.feedback-box.warn-bg .fb-title { color: #78350F; }
+.feedback-box.warn-bg .fb-desc { color: #92400E; opacity: 1; }
+
 /* Cost box */
 .cost-box {
   background: var(--accent-soft);
@@ -671,8 +680,8 @@ button:focus-visible {
   <!-- 1. HEADER -->
   <header class="header">
     <p class="eyebrow">Warm-Up &middot; 3 Minutes &middot; AI for Research &amp; Analytics</p>
-    <h1 class="title font-display">Which lens decides?</h1>
-    <p class="subtitle">AI can rank. Human must validate. Set the context for today&rsquo;s workshop.</p>
+    <h1 class="title font-display">The AI ranked it.<br>What would you do?</h1>
+    <p class="subtitle">The data is in front of you. So is a human check. Take three minutes and make your call.</p>
   </header>
 
   <!-- 2. CONTEXT BAR -->
@@ -791,32 +800,32 @@ button:focus-visible {
   <section class="section" id="step1" aria-label="Step 1 decision">
     <div class="section-header-row">
       <div>
-        <p class="step-eyebrow">Step 1 &middot; Decision</p>
-        <h2 class="section-title font-display">Which lens decides?</h2>
+        <p class="step-eyebrow">Step 1 &middot; Your Call</p>
+        <h2 class="section-title font-display">Which explanation do you act on?</h2>
       </div>
-      <p class="section-hint">One choice. No perfect answer without the human check.</p>
+      <p class="section-hint">Pick one. There is no hedging in a real decision.</p>
     </div>
 
     <div class="choice-grid">
       <button class="choice-btn" id="btn-keep" onclick="chooseDecision('keep')" aria-pressed="false">
         <span class="choice-btn-top">
-          <span class="choice-btn-label">Keep AI&rsquo;s No.1 &mdash; More users</span>
+          <span class="choice-btn-label">Go with the AI &mdash; user growth drove the cost</span>
           <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </span>
-        <span class="choice-btn-desc">Trust the ranking.</span>
+        <span class="choice-btn-desc">The numbers are clear. Act on what AI found.</span>
       </button>
       <button class="choice-btn" id="btn-overrule" onclick="chooseDecision('overrule')" aria-pressed="false">
         <span class="choice-btn-top">
-          <span class="choice-btn-label">Overrule to Human View &mdash; Waste</span>
+          <span class="choice-btn-label">Look past the data &mdash; this looks like waste</span>
           <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </span>
-        <span class="choice-btn-desc">Act on the ground check.</span>
+        <span class="choice-btn-desc">The human check changes the picture.</span>
       </button>
     </div>
 
-    <div id="step1-feedback" class="feedback-box accent-bg hidden" role="status">
+    <div id="step1-feedback" class="feedback-box hidden" role="status">
       <p class="fb-eyebrow">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg id="step1-feedback-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         <span id="step1-feedback-label"></span>
       </p>
       <p class="fb-title font-display" id="step1-feedback-title"></p>
@@ -826,12 +835,12 @@ button:focus-visible {
 
   <!-- 6. STEP 2 — COST + ACTION -->
   <section class="section hidden" id="step2" aria-label="Step 2 cost of being wrong and action decision">
-    <p class="step-eyebrow">Step 2 &middot; Cost of Being Wrong</p>
-    <h2 class="section-title font-display">What is the cost of being wrong?</h2>
+    <p class="step-eyebrow">Step 2 &middot; Now What?</p>
+    <h2 class="section-title font-display">What does your decision actually cost?</h2>
 
     <div class="cost-box" id="cost-box"></div>
 
-    <p class="h3-label">What do you do next?</p>
+    <p class="h3-label">If you were the manager, what do you do first?</p>
 
     <div class="action-grid">
       <button class="action-btn" id="btn-a" onclick="chooseAction('A')" aria-pressed="false">
@@ -859,23 +868,23 @@ button:focus-visible {
 
   <!-- 7. STEP 3 — CONFIDENCE -->
   <section class="section hidden" id="step3" aria-label="Step 3 confidence">
-    <p class="step-eyebrow">Step 3 &middot; Confidence</p>
-    <h2 class="section-title font-display">How confident are you in your decision?</h2>
+    <p class="step-eyebrow">Step 3 &middot; Honest Check</p>
+    <h2 class="section-title font-display">How confident are you, really?</h2>
 
     <div class="choice-grid">
       <button class="choice-btn" id="btn-high" onclick="chooseConfidence('high')" aria-pressed="false">
         <span class="choice-btn-top">
-          <span class="choice-btn-label">High Confidence</span>
+          <span class="choice-btn-label">Yes, I am confident</span>
           <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </span>
-        <span class="choice-btn-desc">The evidence and next step are clear.</span>
+        <span class="choice-btn-desc">The evidence is clear enough. I would act.</span>
       </button>
       <button class="choice-btn" id="btn-low" onclick="chooseConfidence('low')" aria-pressed="false">
         <span class="choice-btn-top">
-          <span class="choice-btn-label">Low Confidence</span>
+          <span class="choice-btn-label">Not quite — I need more</span>
           <svg class="choice-btn-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </span>
-        <span class="choice-btn-desc">I still need a check before acting.</span>
+        <span class="choice-btn-desc">I would want one more check before committing.</span>
       </button>
     </div>
 
@@ -884,8 +893,8 @@ button:focus-visible {
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         Final debrief
       </p>
-      <p class="fb-title font-display">AI ranked what it could count. Human added what it could not see. Then human chose the action and owned the risk. That is the human-in-the-loop.</p>
-      <p class="fb-desc">Best sequence in this case: Overrule to Human View + Audit all teams first + Verify with HR.</p>
+      <p class="fb-title font-display">AI did the analysis. A human checked what the numbers actually meant. Then a human made the call and owned the outcome. That is the loop we are here to practise.</p>
+      <p class="fb-desc">Strongest path in this case: Look past the data &rarr; Audit all teams first &rarr; Verify with HR &rarr; then act.</p>
     </div>
   </section>
 
@@ -919,9 +928,9 @@ var actionChoice = null;
 var confidence = null;
 
 var ACTION_FEEDBACK = {
-  A: "Fast, but risky. You have not verified with HR. In consulting, speed without verification creates a new problem.",
-  B: "Best consulting move. You check if the problem is bigger than one team, then cancel with evidence. This is Insight to Action.",
-  C: "Slow, and vendor has an incentive to keep licenses. Useful as a cross-check, not as the first action."
+  A: "Fast, but you have skipped a step. You have not confirmed with HR whether those 25 people truly have no active needs. Speed without verification just creates the next problem.",
+  B: "This is the right move. You check whether the issue is bigger than one team, then cancel with evidence in hand. That is how insight turns into a defensible action.",
+  C: "Useful as a cross-check, but not as your first move. The vendor has every incentive to keep those licenses active. Go to HR first, then use the vendor report to validate."
 };
 
 function formatTime(s) {
@@ -983,28 +992,33 @@ function chooseDecision(choice) {
   document.getElementById('btn-overrule').className = 'choice-btn' + (choice === 'overrule' ? ' selected' : '');
   document.getElementById('btn-overrule').setAttribute('aria-pressed', choice === 'overrule' ? 'true' : 'false');
 
-  // Show feedback
+  // Show feedback with correct colour per choice
   var fb = document.getElementById('step1-feedback');
   var label = document.getElementById('step1-feedback-label');
   var title = document.getElementById('step1-feedback-title');
   var desc = document.getElementById('step1-feedback-desc');
-  fb.classList.remove('hidden');
+  var icon = document.getElementById('step1-feedback-icon');
 
   if (choice === 'overrule') {
-    label.textContent = 'Correct';
-    title.textContent = 'Correct: You overruled. Human check reveals waste from orphan licenses.';
+    fb.className = 'feedback-box accent-bg';
+    icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    label.textContent = 'Good call';
+    title.textContent = 'You looked past the data and caught what the AI missed. The count was correct. The meaning was not.';
+    desc.textContent = 'That gap — between what AI counted and what actually happened — is exactly what today\'s session is about.';
   } else {
-    label.textContent = 'Check';
-    title.textContent = 'Check: You kept the AI ranking. The human check shows the cost is waste, not growth.';
+    fb.className = 'feedback-box warn-bg';
+    icon.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+    label.textContent = 'Worth a second look';
+    title.textContent = 'The AI ranking was built on what it could count — invoices and license numbers. It could not see that 25 of those licenses belong to people who already left.';
+    desc.textContent = 'Acting on this output means paying $2,000 a month for nothing. This is what happens when data is correct but incomplete.';
   }
-  desc.textContent = 'AI ranked what it could count. Human added what it could not see.';
 
   // Show step 2, fill cost box, reset step 2 and 3 state
   var costBox = document.getElementById('cost-box');
   if (choice === 'keep') {
-    costBox.innerHTML = '<strong>If you keep AI:</strong> You keep paying for 25 unused licenses. At $80 per license, that is <strong>$2,000 per month, $24,000 per year</strong>, and you miss the waste.';
+    costBox.innerHTML = '<strong>If you go with the AI:</strong> You keep paying for 25 unused licenses — <strong>$80 each, $2,000 a month, $24,000 a year</strong>. The waste stays hidden, and nothing changes.';
   } else {
-    costBox.innerHTML = '<strong>If you overrule:</strong> You can save <strong>$2,000 per month, $24,000 per year</strong>, but you must verify with HR before cancelling, so you do not cancel a license someone still needs.';
+    costBox.innerHTML = '<strong>If you look past the data:</strong> You can recover <strong>$2,000 a month, $24,000 a year</strong>. But first you need to verify with HR — you do not want to cancel a license someone still actually needs.';
   }
 
   resetStep2UI();
