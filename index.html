@@ -662,6 +662,89 @@ button:focus-visible {
 
 .btn-reset:hover { border-color: var(--accent); }
 
+/* ── Scenario card ── */
+.scenario-card {
+  margin-top: 28px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 20px;
+  padding: 28px 32px;
+}
+
+@media (max-width: 640px) {
+  .scenario-card { padding: 20px; }
+}
+
+.scenario-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  margin: 0 0 12px;
+}
+
+.scenario-text {
+  font-size: clamp(15px, 2vw, 17px);
+  line-height: 1.65;
+  margin: 0;
+  color: rgba(255,255,255,0.88);
+}
+
+.scenario-text strong { color: #fff; }
+
+.scenario-hint {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 0;
+}
+
+/* ── Reconsider nudge ── */
+.reconsider-nudge {
+  margin-top: 16px;
+  background: #FFFBEB;
+  border: 1px solid #F59E0B;
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.reconsider-nudge p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #78350F;
+  flex: 1;
+  min-width: 200px;
+}
+
+.reconsider-nudge p strong { color: #92400E; }
+
+.btn-reconsider {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #D97706;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-reconsider:hover { background: #FEF3C7; }
+
 /* ── Utility ── */
 .hidden { display: none !important; }
 
@@ -701,6 +784,15 @@ button:focus-visible {
       <button class="btn-primary" id="btn-start" onclick="startTimer()">Start Timer</button>
       <button class="btn-secondary" onclick="resetTimer()">Reset</button>
     </span>
+  </div>
+
+  <!-- 3b. SCENARIO CARD -->
+  <div class="scenario-card">
+    <p class="scenario-eyebrow">Your situation</p>
+    <p class="scenario-text">
+      You manage operations for a 200-person business unit. Last month, your team&rsquo;s software licensing costs jumped by <strong>$5,000 &mdash; a 23% spike</strong>. Your CFO has asked for an explanation by Friday. You asked AI to analyse three months of invoice and license data to find the cause.
+    </p>
+    <p class="scenario-hint">Below: what AI found &mdash; and what a human check uncovered when someone dug into the same data.</p>
   </div>
 
   <!-- 4. SPLIT VIEW -->
@@ -830,6 +922,14 @@ button:focus-visible {
       </p>
       <p class="fb-title font-display" id="step1-feedback-title"></p>
       <p class="fb-desc" id="step1-feedback-desc"></p>
+    </div>
+
+    <div id="reconsider-nudge" class="reconsider-nudge hidden">
+      <p><strong>Take another look at the human check on the right.</strong> The AI counted all licenses — but it could not see who was actually still using them. Does that change your answer?</p>
+      <button class="btn-reconsider" onclick="reconsider()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        Change my answer
+      </button>
     </div>
   </section>
 
@@ -1005,27 +1105,33 @@ function chooseDecision(choice) {
     label.textContent = 'Good call';
     title.textContent = 'You looked past the data and caught what the AI missed. The count was correct. The meaning was not.';
     desc.textContent = 'That gap — between what AI counted and what actually happened — is exactly what today\'s session is about.';
+    // Show Step 2
+    document.getElementById('reconsider-nudge').classList.add('hidden');
+    var costBox = document.getElementById('cost-box');
+    costBox.innerHTML = '<strong>Now you need to act.</strong> You can recover <strong>$2,000 a month, $24,000 a year</strong> in wasted spend — but you need to verify with HR first. You do not want to cancel a license someone still actually needs.';
+    resetStep2UI();
+    resetStep3UI();
+    document.getElementById('step2').classList.remove('hidden');
+    document.getElementById('step3').classList.add('hidden');
+    setTimeout(function() {
+      document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
   } else {
     fb.className = 'feedback-box warn-bg';
     icon.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
     label.textContent = 'Worth a second look';
     title.textContent = 'The AI ranking was built on what it could count — invoices and license numbers. It could not see that 25 of those licenses belong to people who already left.';
     desc.textContent = 'Acting on this output means paying $2,000 a month for nothing. This is what happens when data is correct but incomplete.';
+    // Show nudge, hide Step 2
+    document.getElementById('reconsider-nudge').classList.remove('hidden');
+    resetStep2UI();
+    resetStep3UI();
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.add('hidden');
+    setTimeout(function() {
+      document.getElementById('reconsider-nudge').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
   }
-
-  // Show step 2, fill cost box, reset step 2 and 3 state
-  var costBox = document.getElementById('cost-box');
-  if (choice === 'keep') {
-    costBox.innerHTML = '<strong>If you go with the AI:</strong> You keep paying for 25 unused licenses — <strong>$80 each, $2,000 a month, $24,000 a year</strong>. The waste stays hidden, and nothing changes.';
-  } else {
-    costBox.innerHTML = '<strong>If you look past the data:</strong> You can recover <strong>$2,000 a month, $24,000 a year</strong>. But first you need to verify with HR — you do not want to cancel a license someone still actually needs.';
-  }
-
-  resetStep2UI();
-  resetStep3UI();
-  document.getElementById('step2').classList.remove('hidden');
-  document.getElementById('step3').classList.add('hidden');
-  document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function resetStep2UI() {
@@ -1085,6 +1191,21 @@ function chooseConfidence(choice) {
   }, 100);
 }
 
+function reconsider() {
+  decision = null;
+  document.getElementById('btn-keep').className = 'choice-btn';
+  document.getElementById('btn-keep').setAttribute('aria-pressed', 'false');
+  document.getElementById('btn-overrule').className = 'choice-btn';
+  document.getElementById('btn-overrule').setAttribute('aria-pressed', 'false');
+  document.getElementById('step1-feedback').className = 'feedback-box hidden';
+  document.getElementById('reconsider-nudge').classList.add('hidden');
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step3').classList.add('hidden');
+  resetStep2UI();
+  resetStep3UI();
+  document.getElementById('step1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function resetActivity() {
   resetTimer();
   decision = null;
@@ -1096,7 +1217,8 @@ function resetActivity() {
   document.getElementById('btn-keep').setAttribute('aria-pressed', 'false');
   document.getElementById('btn-overrule').className = 'choice-btn';
   document.getElementById('btn-overrule').setAttribute('aria-pressed', 'false');
-  document.getElementById('step1-feedback').classList.add('hidden');
+  document.getElementById('step1-feedback').className = 'feedback-box hidden';
+  document.getElementById('reconsider-nudge').classList.add('hidden');
 
   // Step 2
   document.getElementById('step2').classList.add('hidden');
