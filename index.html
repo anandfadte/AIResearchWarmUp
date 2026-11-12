@@ -538,7 +538,7 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
         </div>
         <p class="lock-title">Human finding</p>
         <p class="lock-desc">See what actually happened on the ground when someone dug into this data.</p>
-        <button class="btn-reveal-human" onclick="unlockHumanLens()">
+        <button class="btn-reveal-human" id="btn-reveal-human" onclick="unlockHumanLensManual(this)">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
           Reveal the finding
         </button>
@@ -811,8 +811,8 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
         <span class="breakdown-pts" id="br-step2-pts"></span>
       </div>
       <div class="breakdown-row">
-        <span class="breakdown-label"><strong>Step 3:</strong> Confidence check</span>
-        <span class="breakdown-pts">+20</span>
+        <span class="breakdown-label" id="br-step3-label"><strong>Step 3:</strong> Confidence check</span>
+        <span class="breakdown-pts" id="br-step3-pts">+20</span>
       </div>
       <div class="breakdown-row hidden" id="br-clues">
         <span class="breakdown-label" id="br-clues-label"></span>
@@ -870,10 +870,10 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 
 <script>
 /* ─── State ─── */
-var score = 0, cluesUsed = 0, step1Pts = 0, step2Pts = 0;
+var score = 0, cluesUsed = 0, step1Pts = 0, step2Pts = 0, confidencePts = 0;
 var decision = null, actionChoice = null, confidence = null, humanUnlocked = false;
 var step2Marked = false, step3Marked = false;
-var timerSeconds = 180, timerRunning = false, timerInterval = null;
+var timerSeconds = 240, timerRunning = false, timerInterval = null;
 
 var ACTION_FEEDBACK = {
   A: "Fast, but you have skipped a step. You have not confirmed with HR whether those 25 people truly have no active needs. Speed without verification just creates the next problem.",
@@ -881,10 +881,10 @@ var ACTION_FEEDBACK = {
   C: "Useful as a cross-check, but not as your first move. The vendor has every incentive to keep those licenses active. Go to HR first, then use the vendor report to validate."
 };
 var TIERS = [
-  { min: 95, label: "Full marks",  desc: "No clues needed. You read the data, trusted your read, and acted on it cleanly." },
-  { min: 80, label: "Sharp eye",   desc: "Right call, right action. You used evidence wisely and kept your score high." },
-  { min: 65, label: "Strong call", desc: "Right direction. The clues helped — just trust your read a step earlier next time." },
-  { min: 0,  label: "Right track", desc: "Good instinct on the core call. The follow-through needed one more check." }
+  { min: 100, label: "Perfect score",  desc: "No clues used. You read the data, trusted your judgment, and acted cleanly." },
+  { min: 85,  label: "Sharp eye",      desc: "Right call, right action. You used minimal evidence and kept your score high." },
+  { min: 65,  label: "Strong call",    desc: "Right direction. The clues helped — just trust your read a step earlier next time." },
+  { min: 0,   label: "Right track",    desc: "Good instinct on the core call. The follow-through needed one more check." }
 ];
 
 function getFinalScore() { return Math.max(0, score - cluesUsed * 5); }
@@ -928,11 +928,12 @@ function spawnPtsBadge(pts, refEl) {
   document.body.appendChild(badge);
   var rect = refEl.getBoundingClientRect();
   gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 0, rotation: -20 });
-  gsap.to(badge, { scale: 1.3, rotation: 0, duration: 0.22, ease: 'back.out(2.5)',
-    onComplete: function() {
-      gsap.to(badge, { y: -90, opacity: 0, scale: 0.9, duration: 1.1, ease: 'power2.out', onComplete: function() { badge.remove(); } });
-    }
-  });
+  gsap.timeline()
+    .to(badge, { scale: 1.3, rotation: 0, duration: 0.22, ease: 'back.out(2.5)' })
+    .to(badge, { scale: 1.1, duration: 0.14, ease: 'power2.inOut' })
+    .to(badge, { duration: 1.1 })   /* hold visible */
+    .to(badge, { y: -80, opacity: 0, scale: 0.9, duration: 0.9, ease: 'power2.in',
+        onComplete: function() { badge.remove(); } });
 }
 function spawnMinusBadge(pts, refEl) {
   var badge = document.createElement('div');
@@ -940,8 +941,13 @@ function spawnMinusBadge(pts, refEl) {
   badge.textContent = '−' + pts;
   document.body.appendChild(badge);
   var rect = refEl.getBoundingClientRect();
-  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 1.4 });
-  gsap.to(badge, { y: 65, opacity: 0, scale: 0.8, duration: 1.2, ease: 'power2.in', onComplete: function() { badge.remove(); } });
+  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 0 });
+  gsap.timeline()
+    .to(badge, { scale: 1.3, duration: 0.22, ease: 'back.out(2.5)' })
+    .to(badge, { scale: 1.05, duration: 0.14, ease: 'power2.inOut' })
+    .to(badge, { duration: 1.1 })   /* hold visible */
+    .to(badge, { y: 60, opacity: 0, scale: 0.85, duration: 0.9, ease: 'power2.in',
+        onComplete: function() { badge.remove(); } });
 }
 
 /* ─── Star burst (Mario-style) ─── */
@@ -982,7 +988,7 @@ function showGameNotification(text) {
   gsap.set(el, { y: -40, x: '-50%', opacity: 0 });
   gsap.to(el, { y: 20, opacity: 1, duration: 0.4, ease: 'back.out(1.5)',
     onComplete: function() {
-      gsap.to(el, { y: -20, opacity: 0, duration: 0.4, delay: 1.6, ease: 'power2.in',
+      gsap.to(el, { y: -20, opacity: 0, duration: 0.4, delay: 2.6, ease: 'power2.in',
         onComplete: function() { el.remove(); }
       });
     }
@@ -996,6 +1002,17 @@ function animateScore(from, to) {
     onUpdate: function() { el.textContent = Math.round(this.targets()[0].v); }
   });
   gsap.fromTo(el, { scale: 1.3, color: '#0E8578' }, { scale: 1, color: '#0B6B61', duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+}
+
+function unlockHumanLensManual(btn) {
+  if (humanUnlocked || btn.disabled) return;
+  btn.disabled = true;
+  var orig = btn.innerHTML;
+  btn.innerHTML = '<svg class="spin-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.86L23 10"/></svg>&nbsp;Revealing…';
+  setTimeout(function() {
+    spawnStars(btn, 10, 80);
+    unlockHumanLens();
+  }, 1100);
 }
 
 function unlockHumanLens() {
@@ -1107,7 +1124,7 @@ function startTimer() {
   if (timerRunning || timerSeconds===0) return; timerRunning = true; syncTimer();
   timerInterval = setInterval(function() { timerSeconds--; if (timerSeconds<=0) { timerSeconds=0; timerRunning=false; clearInterval(timerInterval); timerInterval=null; } syncTimer(); }, 1000);
 }
-function resetTimer() { clearInterval(timerInterval); timerInterval=null; timerRunning=false; timerSeconds=180; syncTimer(); }
+function resetTimer() { clearInterval(timerInterval); timerInterval=null; timerRunning=false; timerSeconds=240; syncTimer(); }
 
 /* ─── Step 1 ─── */
 function chooseDecision(choice) {
@@ -1115,9 +1132,9 @@ function chooseDecision(choice) {
   /* Reverse all previously accumulated pts before switching */
   score -= step1Pts;
   score -= step2Pts;
-  if (confidence !== null) score -= 20;
+  if (confidence !== null) score -= confidencePts;
   document.getElementById('score-display').textContent = Math.max(0, score);
-  decision = choice; actionChoice = null; confidence = null;
+  decision = choice; actionChoice = null; confidence = null; confidencePts = 0;
   var keepBtn = document.getElementById('btn-keep');
   var overBtn = document.getElementById('btn-overrule');
   var fb = document.getElementById('step1-feedback');
@@ -1208,19 +1225,23 @@ function chooseAction(key) {
 function resetStep3UI() {
   document.getElementById('btn-high').className = 'choice-btn';
   document.getElementById('btn-low').className  = 'choice-btn';
-  confidence = null; step3Marked = false;
+  confidence = null; confidencePts = 0; step3Marked = false;
 }
 function chooseConfidence(choice) {
   if (!decision || !actionChoice || confidence === choice) return;
-  /* Reverse previous +20 if re-picking */
-  if (confidence !== null) score -= 20;
+  /* Reverse previous pts if re-picking */
+  if (confidence !== null) score -= confidencePts;
   confidence = choice;
-  var prev = score; score += 20;
+  /* Calibrated = confident when correct, uncertain when wrong; +20 else +15 */
+  var calibrated = (decision === 'overrule' && choice === 'high') || (decision === 'keep' && choice === 'low');
+  confidencePts = calibrated ? 20 : 15;
+  var prev = score; score += confidencePts;
   document.getElementById('btn-high').className = 'choice-btn' + (choice==='high' ? ' selected' : '');
   document.getElementById('btn-low').className  = 'choice-btn' + (choice==='low'  ? ' selected' : '');
-  spawnPtsBadge(20, document.getElementById('btn-'+choice));
+  spawnPtsBadge(confidencePts, document.getElementById('btn-'+choice));
   animateScore(prev, score);
-  if (!step3Marked) { step3Marked = true; markTrackerStep(3, 20); }
+  if (!step3Marked) { step3Marked = true; markTrackerStep(3, confidencePts); }
+  else { var el = document.getElementById('step3-pts-label'); if (el) el.textContent = '+'+confidencePts+' pts'; }
   setTimeout(function() { showScorecard(); }, 700);
 }
 
@@ -1245,6 +1266,11 @@ function showScorecard() {
   document.getElementById('br-step2-label').innerHTML = '<strong>Step 2:</strong> ' + (s2labels[actionChoice] || '');
   document.getElementById('br-step2-pts').textContent = step2Pts > 0 ? '+'+step2Pts : '0';
   document.getElementById('br-step2-pts').className = 'breakdown-pts' + (step2Pts===0 ? ' zero' : '');
+  /* Step 3 label reflects calibration */
+  var calibrated = (decision === 'overrule' && confidence === 'high') || (decision === 'keep' && confidence === 'low');
+  document.getElementById('br-step3-label').innerHTML = '<strong>Step 3:</strong> ' + (calibrated ? 'Well-calibrated confidence' : 'Confidence — slight mismatch');
+  document.getElementById('br-step3-pts').textContent = '+' + confidencePts;
+  document.getElementById('br-step3-pts').className = 'breakdown-pts' + (confidencePts < 20 ? ' deduct' : '');
   if (cluePenalty > 0) {
     document.getElementById('br-clues-label').innerHTML = '<strong>Clues used:</strong> ' + cluesUsed + ' × −5 pts';
     document.getElementById('br-clues-pts').textContent = '−' + cluePenalty;
@@ -1256,10 +1282,14 @@ function showScorecard() {
     document.getElementById('br-total').classList.add('hidden');
   }
   var takeaway;
-  if (finalScore >= 95)      takeaway = '<strong>Perfect sequence, no clues needed.</strong> You identified the gap in the AI’s data, acted on the human finding, and chose the most defensible path forward.';
-  else if (finalScore >= 80) takeaway = '<strong>Right call, right action.</strong> You verified before you acted and kept your score high. The clue cost was worth it — better to confirm than guess at $2,000/month.';
-  else if (finalScore >= 65) takeaway = '<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.';
-  else                        takeaway = '<strong>Right instinct on the core call.</strong> The follow-through needed one more check — verify with HR before any cancellation.';
+  if (cluesUsed === 0 && decision === ‘overrule’)
+    takeaway = ‘<strong>Perfect sequence, no clues needed.</strong> You identified the gap in the AI\’s data, acted on the human finding, and chose the most defensible path forward. That is the human-in-the-loop working exactly as it should.’;
+  else if (finalScore >= 85)
+    takeaway = ‘<strong>Right call, right action.</strong> You correctly overruled the AI and chose the best follow-up. Using ‘ + cluesUsed + (cluesUsed === 1 ? ‘ clue’ : ‘ clues’) + ‘ was a reasonable call — the goal next time is to reach the same conclusion with less scaffolding.’;
+  else if (finalScore >= 65)
+    takeaway = ‘<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.’;
+  else
+    takeaway = ‘<strong>Right instinct on the core call.</strong> The follow-through needed one more check — verify with HR before any cancellation.’;
   document.getElementById('scorecard-takeaway-text').innerHTML = takeaway;
   /* Cost Reveal */
   var humanMins = 15 + cluesUsed * 10;
@@ -1298,7 +1328,7 @@ function showScorecard() {
 /* ─── Reset ─── */
 function resetActivity() {
   resetTimer();
-  score = 0; cluesUsed = 0; step1Pts = 0; step2Pts = 0;
+  score = 0; cluesUsed = 0; step1Pts = 0; step2Pts = 0; confidencePts = 0;
   decision = null; actionChoice = null; confidence = null; humanUnlocked = false;
   step2Marked = false; step3Marked = false;
   document.getElementById('score-display').textContent = '0';
@@ -1334,6 +1364,8 @@ function resetActivity() {
   overlay.style.display = '';
   gsap.set(overlay, { opacity: 1, scale: 1 });
   gsap.set('#human-lens-card', { boxShadow: 'none' });
+  var revBtn = document.getElementById('btn-reveal-human');
+  if (revBtn) { revBtn.disabled = false; revBtn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Reveal the finding'; }
 
   [1,2,3].forEach(function(n) { var d = document.getElementById('dot-'+n); d.classList.remove('done','active'); d.innerHTML = n; });
   document.getElementById('dot-1').classList.add('active');
