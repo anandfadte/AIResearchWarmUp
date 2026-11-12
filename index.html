@@ -126,10 +126,48 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .lock-desc { font-size: 13px; color: rgba(255,255,255,0.65); margin: 0; line-height: 1.5; }
 
 /* ── Evidence / Clue section ── */
-.evidence-section { margin-top: 20px; }
-.evidence-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
-.evidence-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 0; }
-.evidence-hint { font-size: 13px; color: var(--muted); margin: 0; }
+.evidence-section { margin-top: 48px; }
+
+/* AI cost hero banner */
+.ai-cost-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  background: var(--accent-soft);
+  border: 1.5px solid rgba(11,107,97,0.22);
+  border-radius: 20px; padding: 24px 28px; margin-bottom: 18px;
+}
+@media (max-width: 640px) { .ai-cost-banner { padding: 18px 20px; } }
+.ai-cost-banner-left { flex: 1; min-width: 220px; }
+.ai-cost-banner-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 8px;
+  display: flex; align-items: center; gap: 7px;
+}
+.ai-cost-banner-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(18px, 2.5vw, 22px); font-weight: 600; line-height: 1.25;
+  color: var(--ink); margin: 0 0 8px;
+}
+.ai-cost-banner-desc {
+  font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; max-width: 480px;
+}
+.ai-cost-banner-right {
+  flex-shrink: 0;
+  background: var(--accent); color: #fff;
+  border-radius: 16px; padding: 16px 24px; text-align: center; min-width: 136px;
+}
+@media (max-width: 640px) { .ai-cost-banner-right { width: 100%; } }
+.ai-cost-right-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); margin: 0 0 4px;
+}
+.ai-cost-right-price {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 30px; font-weight: 600; line-height: 1; color: #7EC8C0; margin: 0 0 4px;
+}
+.ai-cost-right-pts {
+  font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.65); margin: 0;
+}
 .clue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 @media (max-width: 640px) { .clue-grid { grid-template-columns: 1fr; } }
 
@@ -494,9 +532,20 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 
   <!-- EVIDENCE SECTION -->
   <div class="evidence-section anim-ready" id="evidence-section">
-    <div class="evidence-header">
-      <p class="evidence-eyebrow">Ask before you decide</p>
-      <p class="evidence-hint">Each question uses AI &mdash; actual cost revealed at the end &middot; &minus;5 pts each</p>
+    <div class="ai-cost-banner">
+      <div class="ai-cost-banner-left">
+        <p class="ai-cost-banner-eyebrow">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+          AI-powered &middot; real cost
+        </p>
+        <p class="ai-cost-banner-title">Want AI to unlock more context?</p>
+        <p class="ai-cost-banner-desc">Each question below is answered by AI &mdash; the model runs, tokens are consumed. The cost is tiny but real. Total shown at the end.</p>
+      </div>
+      <div class="ai-cost-banner-right">
+        <p class="ai-cost-right-label">Per question</p>
+        <p class="ai-cost-right-price">~$0.001</p>
+        <p class="ai-cost-right-pts">&minus;5 pts each</p>
+      </div>
     </div>
     <div class="clue-grid">
 
