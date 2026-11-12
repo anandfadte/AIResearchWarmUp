@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1117,7 +1117,7 @@ function syncTimer() {
   var sb = document.getElementById('btn-start');
   el.textContent = formatTime(timerSeconds);
   el.className = 'timer-display' + (timerSeconds===0 ? ' done' : timerSeconds<=30 && timerRunning ? ' urgent' : '');
-  st.textContent = timerSeconds===0 ? "Time’s up — make the call" : timerRunning ? "Time is running" : "Ready when you are";
+  st.textContent = timerSeconds===0 ? "Time's up — make the call" : timerRunning ? "Time is running" : "Ready when you are";
   sb.disabled = timerRunning || timerSeconds===0;
 }
 function startTimer() {
@@ -1148,7 +1148,7 @@ function chooseDecision(choice) {
     document.getElementById('step1-icon').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
     document.getElementById('step1-label').textContent = 'Good call — +40 pts';
     document.getElementById('step1-title').textContent = 'You looked past the data and caught what the AI missed. The count was correct. The meaning was not.';
-    document.getElementById('step1-desc').textContent = 'That gap — between what AI counted and what actually happened — is exactly what today’s session is about.';
+    document.getElementById('step1-desc').textContent = 'That gap — between what AI counted and what actually happened — is exactly what today\'s session is about.';
     revealEl(fb); nudge.classList.add('hidden');
     spawnPtsBadge(40, overBtn); animateScore(prev, score); markTrackerStep(1, 40);
     document.getElementById('cost-box').innerHTML = '<strong>Now you need to act.</strong> You can recover <strong>$2,000 a month, $24,000 a year</strong> in wasted spend — but you need to verify with HR first.';
@@ -1282,14 +1282,14 @@ function showScorecard() {
     document.getElementById('br-total').classList.add('hidden');
   }
   var takeaway;
-  if (cluesUsed === 0 && decision === ‘overrule’)
-    takeaway = ‘<strong>Perfect sequence, no clues needed.</strong> You identified the gap in the AI\’s data, acted on the human finding, and chose the most defensible path forward. That is the human-in-the-loop working exactly as it should.’;
+  if (cluesUsed === 0 && decision === 'overrule')
+    takeaway = '<strong>Perfect sequence, no clues needed.</strong> You identified the gap in the AI\'s data, acted on the human finding, and chose the most defensible path forward. That is the human-in-the-loop working exactly as it should.';
   else if (finalScore >= 85)
-    takeaway = ‘<strong>Right call, right action.</strong> You correctly overruled the AI and chose the best follow-up. Using ‘ + cluesUsed + (cluesUsed === 1 ? ‘ clue’ : ‘ clues’) + ‘ was a reasonable call — the goal next time is to reach the same conclusion with less scaffolding.’;
+    takeaway = '<strong>Right call, right action.</strong> You correctly overruled the AI and chose the best follow-up. Using ' + cluesUsed + (cluesUsed === 1 ? ' clue' : ' clues') + ' was a reasonable call — the goal next time is to reach the same conclusion with less scaffolding.';
   else if (finalScore >= 65)
-    takeaway = ‘<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.’;
+    takeaway = '<strong>Right direction.</strong> You correctly overruled the AI. Next time, trust your read a step earlier — fewer clues, same conclusion.';
   else
-    takeaway = ‘<strong>Right instinct on the core call.</strong> The follow-through needed one more check — verify with HR before any cancellation.’;
+    takeaway = '<strong>Right instinct on the core call.</strong> The follow-through needed one more check — verify with HR before any cancellation.';
   document.getElementById('scorecard-takeaway-text').innerHTML = takeaway;
   /* Cost Reveal */
   var humanMins = 15 + cluesUsed * 10;
@@ -1312,7 +1312,7 @@ function showScorecard() {
   if (decision === 'overrule' && cluesUsed === 0) {
     insightHtml = '<strong>Optimal balance.</strong> AI did the data work in seconds for under a cent. You read the gap from the numbers alone and acted — no manual digging needed.';
   } else if (decision === 'overrule') {
-    insightHtml = '<strong>Good balance.</strong> AI flagged the spike. The ' + humanStr + ' human check confirmed what it couldn’t see. That manual work recovered $24,000 a year.';
+    insightHtml = '<strong>Good balance.</strong> AI flagged the spike. The ' + humanStr + ' human check confirmed what it could not see. That manual work recovered $24,000 a year.';
   } else {
     insightHtml = '<strong>Reframe the cost.</strong> The AI analysis cost $0.003. Acting on it unverified costs $2,000 a month. The cheap step was not the risky one — the unverified step was.';
   }
