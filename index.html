@@ -172,9 +172,25 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .clue-hint-text { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0; }
 .clue-unlock-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .clue-cost-badge { font-size: 11px; font-weight: 700; color: #92400E; background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-.btn-unlock { font-size: 13px; font-weight: 700; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 999px; padding: 7px 16px; transition: background 0.15s; will-change: transform; display: inline-flex; align-items: center; gap: 5px; }
-.btn-unlock:hover:not(:disabled) { background: var(--accent-soft); }
-.btn-unlock:disabled { opacity: 0.6; cursor: default; }
+.btn-unlock {
+  font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+  color: #78350F;
+  background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 45%, #F59E0B 100%);
+  border: 2px solid #D97706;
+  border-radius: 10px;
+  padding: 8px 18px;
+  box-shadow: 0 4px 0 #92400E, 0 5px 12px rgba(245,158,11,0.25);
+  transition: transform 0.07s ease, box-shadow 0.07s ease;
+  will-change: transform;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-unlock:hover:not(:disabled) {
+  background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 45%, #FDE68A 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 0 #92400E, 0 8px 20px rgba(245,158,11,0.35);
+}
+.btn-unlock:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #92400E; }
+.btn-unlock:disabled { opacity: 0.55; cursor: default; }
 .spin-icon { animation: spin-cw 0.8s linear infinite; display: inline-block; }
 
 .clue-revealed-view { padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
@@ -274,17 +290,38 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .btn-reconsider { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--warn-border); background: #fff; font-size: 13px; font-weight: 700; color: #92400E; cursor: pointer; transition: background 0.15s; will-change: transform; }
 .btn-reconsider:hover { background: #FEF3C7; }
 
-/* ── Floating point badges ── */
-.pts-badge { position: fixed; z-index: 9999; pointer-events: none; font-family: 'Fraunces', Georgia, serif; font-size: 22px; font-weight: 700; color: var(--accent); background: #fff; border: 2px solid var(--accent); border-radius: 999px; padding: 6px 16px; white-space: nowrap; box-shadow: 0 4px 20px rgba(11,107,97,0.25); }
-.minus-badge { position: fixed; z-index: 9999; pointer-events: none; font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 700; color: #92400E; background: var(--warn-bg); border: 2px solid var(--warn-border); border-radius: 999px; padding: 5px 14px; white-space: nowrap; box-shadow: 0 4px 16px rgba(180,83,9,0.2); }
+/* ── Floating point badges (Mario coin style) ── */
+.pts-badge {
+  position: fixed; z-index: 9999; pointer-events: none;
+  font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 700;
+  color: #78350F;
+  background: linear-gradient(135deg, #FEF9C3 0%, #FDE68A 40%, #F59E0B 100%);
+  border: 2.5px solid #D97706;
+  border-radius: 999px; padding: 6px 18px; white-space: nowrap;
+  box-shadow: 0 4px 0 #92400E, 0 6px 20px rgba(245,158,11,0.4);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
+.minus-badge {
+  position: fixed; z-index: 9999; pointer-events: none;
+  font-family: 'Fraunces', Georgia, serif; font-size: 18px; font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border: 2px solid #991B1B;
+  border-radius: 999px; padding: 5px 14px; white-space: nowrap;
+  box-shadow: 0 3px 0 #7F1D1D, 0 5px 14px rgba(220,38,38,0.3);
+}
+/* Star particles */
+.star-particle { position: fixed; z-index: 10000; pointer-events: none; line-height: 1; }
 
 /* ── Game notification banner ── */
 .game-notification {
   position: fixed; top: 0; left: 50%; z-index: 10001; pointer-events: none;
-  background: var(--ink); color: #fff;
-  font-family: 'Fraunces', Georgia, serif; font-size: 15px; font-weight: 600;
+  background: linear-gradient(135deg, #1E3A5F 0%, #172A3A 100%);
+  color: #FDE68A;
+  font-family: 'Fraunces', Georgia, serif; font-size: 15px; font-weight: 700;
   padding: 10px 24px; border-radius: 999px; white-space: nowrap;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 0 #0A1628, 0 8px 32px rgba(0,0,0,0.4);
+  border: 1.5px solid rgba(253,230,138,0.3);
 }
 
 /* ── Final scorecard ── */
@@ -458,8 +495,8 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
   <!-- EVIDENCE SECTION -->
   <div class="evidence-section anim-ready" id="evidence-section">
     <div class="evidence-header">
-      <p class="evidence-eyebrow">Dig deeper before you decide</p>
-      <p class="evidence-hint">Each clue costs 5 pts &mdash; use only what you need.</p>
+      <p class="evidence-eyebrow">Ask before you decide</p>
+      <p class="evidence-hint">Each question uses AI &mdash; actual cost revealed at the end &middot; &minus;5 pts each</p>
     </div>
     <div class="clue-grid">
 
@@ -822,41 +859,50 @@ function shakeEl(el) {
 function spawnPtsBadge(pts, refEl) {
   var badge = document.createElement('div');
   badge.className = 'pts-badge';
-  badge.textContent = '+' + pts + ' pts';
+  badge.textContent = '+' + pts;
   document.body.appendChild(badge);
   var rect = refEl.getBoundingClientRect();
-  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50 });
-  gsap.to(badge, { y: -75, opacity: 0, scale: 1.15, duration: 1.4, ease: 'power2.out', onComplete: function() { badge.remove(); } });
+  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 0, rotation: -20 });
+  gsap.to(badge, { scale: 1.3, rotation: 0, duration: 0.22, ease: 'back.out(2.5)',
+    onComplete: function() {
+      gsap.to(badge, { y: -90, opacity: 0, scale: 0.9, duration: 1.1, ease: 'power2.out', onComplete: function() { badge.remove(); } });
+    }
+  });
 }
 function spawnMinusBadge(pts, refEl) {
   var badge = document.createElement('div');
   badge.className = 'minus-badge';
-  badge.textContent = '−' + pts + ' pts';
+  badge.textContent = '−' + pts;
   document.body.appendChild(badge);
   var rect = refEl.getBoundingClientRect();
-  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 1.3 });
-  gsap.to(badge, { y: 60, opacity: 0, scale: 0.85, duration: 1.3, ease: 'power2.in', onComplete: function() { badge.remove(); } });
+  gsap.set(badge, { left: rect.left + rect.width/2, top: rect.top + rect.height/2, xPercent: -50, yPercent: -50, scale: 1.4 });
+  gsap.to(badge, { y: 65, opacity: 0, scale: 0.8, duration: 1.2, ease: 'power2.in', onComplete: function() { badge.remove(); } });
 }
 
-/* ─── Particle burst ─── */
+/* ─── Star burst (Mario-style) ─── */
 function spawnParticles(refEl) {
   var rect = refEl.getBoundingClientRect();
   var cx = rect.left + rect.width / 2;
   var cy = rect.top + rect.height / 2;
-  var colors = ['#0B6B61','#7EC8C0','#F59E0B','#0E8578','#E7F2F0','#FDE68A'];
-  for (var i = 0; i < 12; i++) {
+  var chars = ['★','★','✦','◆','●','✦','★','◆'];
+  var colors = ['#F59E0B','#FDE68A','#FBBF24','#0E8578','#7EC8C0','#FCD34D','#F97316','#A3E635'];
+  for (var i = 0; i < 14; i++) {
     (function(idx) {
-      var dot = document.createElement('div');
-      dot.style.cssText = 'position:fixed;z-index:10000;pointer-events:none;border-radius:50%;width:8px;height:8px;';
-      dot.style.background = colors[idx % colors.length];
-      document.body.appendChild(dot);
-      var angle = (idx / 12) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-      var dist = 40 + Math.random() * 55;
-      gsap.set(dot, { left: cx - 4, top: cy - 4 });
-      gsap.to(dot, {
+      var star = document.createElement('div');
+      star.className = 'star-particle';
+      star.textContent = chars[idx % chars.length];
+      star.style.color = colors[idx % colors.length];
+      star.style.fontSize = (11 + Math.random() * 11) + 'px';
+      document.body.appendChild(star);
+      var angle = (idx / 14) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+      var dist = 48 + Math.random() * 72;
+      gsap.set(star, { left: cx, top: cy, xPercent: -50, yPercent: -50, scale: 0 });
+      gsap.to(star, {
         x: Math.cos(angle) * dist, y: Math.sin(angle) * dist,
-        opacity: 0, scale: 0, duration: 0.65 + Math.random() * 0.4, ease: 'power2.out',
-        onComplete: function() { dot.remove(); }
+        opacity: 0, scale: 1.1 + Math.random() * 0.9,
+        rotation: (Math.random() - 0.5) * 400,
+        duration: 0.65 + Math.random() * 0.45, ease: 'power2.out',
+        onComplete: function() { star.remove(); }
       });
     })(i);
   }
@@ -924,10 +970,13 @@ function unlockClue(n) {
   var iconWrap = document.getElementById('clue-icon-' + n);
   if (!card || card.classList.contains('unlocked') || card.classList.contains('unlocking')) return;
 
-  /* Stage 1 — Begin scanning */
+  /* Stage 1 — Block hit bounce + begin scanning */
   card.classList.add('unlocking');
   btn.disabled = true;
   btn.innerHTML = '<svg class="spin-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.86L23 10"/></svg>&nbsp;Scanning…';
+  gsap.to(card, { y: -10, duration: 0.1, ease: 'power2.out', yoyo: true, repeat: 1,
+    onComplete: function() { gsap.set(card, { y: 0 }); }
+  });
 
   /* Stage 2 — Shake the icon at 500ms */
   gsap.delayedCall(0.5, function() {
@@ -946,8 +995,8 @@ function unlockClue(n) {
     gsap.fromTo(maxEl, { color: '#F59E0B', scale: 1.5 }, { color: '#5E6E7B', scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.4)' });
 
     spawnParticles(btn);
-    spawnMinusBadge(10, btn);
-    showGameNotification('Evidence unlocked — −5 pts');
+    spawnMinusBadge(5, btn);
+    showGameNotification('★ Evidence unlocked — −5 pts');
 
     /* Card border flash amber → teal → gone */
     gsap.fromTo(card,
