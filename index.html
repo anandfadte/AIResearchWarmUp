@@ -124,6 +124,18 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 .lock-icon { width: 52px; height: 52px; background: rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .lock-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #fff; margin: 0; }
 .lock-desc { font-size: 13px; color: rgba(255,255,255,0.65); margin: 0; line-height: 1.5; }
+.btn-reveal-human {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 4px;
+  padding: 10px 22px;
+  background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 45%, #F59E0B 100%);
+  border: 2px solid #D97706; border-radius: 10px;
+  color: #78350F; font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #92400E, 0 5px 12px rgba(245,158,11,0.3);
+  transition: transform 0.07s ease, box-shadow 0.07s ease;
+}
+.btn-reveal-human:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #92400E, 0 8px 20px rgba(245,158,11,0.4); }
+.btn-reveal-human:active { transform: translateY(2px); box-shadow: 0 1px 0 #92400E; }
 
 /* ── Evidence / Clue section ── */
 .evidence-section { margin-top: 48px; }
@@ -520,12 +532,16 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
         <p class="human-note"><strong>AI counted licenses.</strong> Human checked who actually uses them.</p>
       </div>
       <div class="human-lens-footer"><p>The count was correct. The meaning was not.</p></div>
-      <div class="human-lock" id="human-lock" style="display:none">
+      <div class="human-lock" id="human-lock">
         <div class="lock-icon">
           <svg width="22" height="22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
-        <p class="lock-title">Locked for now</p>
-        <p class="lock-desc">Make your Step 1 decision to unlock the human finding.</p>
+        <p class="lock-title">Human finding</p>
+        <p class="lock-desc">See what actually happened on the ground when someone dug into this data.</p>
+        <button class="btn-reveal-human" onclick="unlockHumanLens()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+          Reveal the finding
+        </button>
       </div>
     </article>
   </section>
@@ -855,7 +871,7 @@ button:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; 
 <script>
 /* ─── State ─── */
 var score = 0, cluesUsed = 0, step1Pts = 0, step2Pts = 0;
-var decision = null, actionChoice = null, confidence = null, humanUnlocked = true;
+var decision = null, actionChoice = null, confidence = null, humanUnlocked = false;
 var step2Marked = false, step3Marked = false;
 var timerSeconds = 180, timerRunning = false, timerInterval = null;
 
@@ -1283,7 +1299,7 @@ function showScorecard() {
 function resetActivity() {
   resetTimer();
   score = 0; cluesUsed = 0; step1Pts = 0; step2Pts = 0;
-  decision = null; actionChoice = null; confidence = null; humanUnlocked = true;
+  decision = null; actionChoice = null; confidence = null; humanUnlocked = false;
   step2Marked = false; step3Marked = false;
   document.getElementById('score-display').textContent = '0';
   document.getElementById('score-max').textContent = '100';
@@ -1315,7 +1331,8 @@ function resetActivity() {
   });
 
   var overlay = document.getElementById('human-lock');
-  overlay.style.display = 'none';
+  overlay.style.display = '';
+  gsap.set(overlay, { opacity: 1, scale: 1 });
   gsap.set('#human-lens-card', { boxShadow: 'none' });
 
   [1,2,3].forEach(function(n) { var d = document.getElementById('dot-'+n); d.classList.remove('done','active'); d.innerHTML = n; });
